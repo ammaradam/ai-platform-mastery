@@ -1,5 +1,5 @@
 /* Offline-first service worker. Bump VERSION when shell files change. */
-const VERSION = "apm-v2-ebfc62bb0c";
+const VERSION = "apm-v2-0a8e4d0caf";
 const SHELL = ["./", "index.html", "styles.css", "art.js", "app.js", "data/curriculum.json", "manifest.webmanifest",
   "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png",
   "icons/favicon-32.png", "icons/favicon-64.png", "icons/logo-192.png", "img/hero.jpg", ...["cap","calendar-check","calendar-star","calendar-medal","hourglass","stopwatch","books","trophy","target","pipeline","server","chip","evals","shield","megaphone","rocket"].map(n => `img/badges/${n}.png`), ...["p1", "p2", "p3", "p4", "p5", "p6"].flatMap(p => [`img/${p}.jpg`, `img/${p}-sm.jpg`])];

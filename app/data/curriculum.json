@@ -97,7 +97,7 @@
       {
        "q": "Model B is trained on Model A's output to handle a new region. What risk does this create?",
        "options": [
-        "Correction cascade — improving A can degrade B",
+        "Correction cascade, improving A can degrade B",
         "Training-serving skew",
         "Config debt",
         "Label leakage"
@@ -174,7 +174,7 @@
      "reflection": [
       "Which debt type has actually cost you a production incident? What would have caught it earlier?"
      ],
-     "lesson_html": "<h2>The core idea</h2>\n<p>In 2015 Google's <em>Hidden Technical Debt in Machine Learning Systems</em> made one\npicture famous: a tiny box labelled \"ML code\" surrounded by much bigger boxes —\nconfiguration, data collection, feature extraction, data verification, serving\ninfrastructure, monitoring, process management. The point: <strong>most of the cost\nand risk of an ML system lives outside the model.</strong></p>\n<h2>Debt patterns you must be able to name</h2>\n<ul>\n<li><strong>Entanglement (CACE)</strong> — <em>Changing Anything Changes Everything</em>. Features\n  interact, so adding, removing or rescaling one input can shift the whole\n  model's behaviour. You cannot make isolated improvements.</li>\n<li><strong>Correction cascades</strong> — model B is trained on model A's output to \"fix\"\n  a new case. Now improving A can break B.</li>\n<li><strong>Undeclared consumers</strong> — other systems silently read your predictions or\n  log files. You change the model; their behaviour changes; nobody knows why.</li>\n<li><strong>Unstable data dependencies</strong> — an input signal owned by another team\n  changes meaning or distribution without notice.</li>\n<li><strong>Underutilised data dependencies</strong> — features that add almost nothing but\n  still add breakage risk (legacy, bundled, epsilon features).</li>\n<li><strong>Feedback loops</strong> — direct (the model picks the data it learns from, like a\n  recommender) and hidden (two systems influence each other through the world).\n  Pricing models are especially prone: your predicted price shifts seller\n  behaviour, which shifts future prices.</li>\n<li><strong>Glue code and pipeline jungles</strong> — large amounts of code exist only to\n  move data in and out of generic packages; pipelines grow by accretion.</li>\n<li><strong>Dead experimental codepaths</strong> and <strong>configuration debt</strong> — configuration\n  often outgrows code and is rarely tested.</li>\n</ul>\n<h2>Rules of ML worth memorising</h2>\n<p>From Martin Zinkevich's <em>Rules of Machine Learning</em> (Google):\n- Rule #1: Don't be afraid to launch a product without ML.\n- Rule #4: Keep the first model simple and get the infrastructure right.\n- Rule #5: Test the infrastructure independently from the ML.\n- Rule #29: The best way to make sure you train like you serve is to save the\n  set of features used at serving time and pipe them to a log for training.\n- Rule #32: Re-use code between your training pipeline and serving pipeline.</p>\n<h2>How a staff engineer uses this</h2>\n<p>When you review a system, walk the \"boxes\" around the ML code and ask, for each:\n<em>who owns it, how is it tested, what happens when it silently changes?</em> That\nquestion list is your review template for the capstone.</p>"
+     "lesson_html": "<h2>The core idea</h2>\n<p>In 2015 Google's <em>Hidden Technical Debt in Machine Learning Systems</em> made one\npicture famous: a tiny box labelled \"ML code\" surrounded by much bigger boxes -\nconfiguration, data collection, feature extraction, data verification, serving\ninfrastructure, monitoring, process management. The point: <strong>most of the cost\nand risk of an ML system lives outside the model.</strong></p>\n<h2>Debt patterns you must be able to name</h2>\n<ul>\n<li><strong>Entanglement (CACE)</strong>: <em>Changing Anything Changes Everything</em>. Features\n  interact, so adding, removing or rescaling one input can shift the whole\n  model's behaviour. You cannot make isolated improvements.</li>\n<li><strong>Correction cascades</strong>: model B is trained on model A's output to \"fix\"\n  a new case. Now improving A can break B.</li>\n<li><strong>Undeclared consumers</strong>: other systems silently read your predictions or\n  log files. You change the model; their behaviour changes; nobody knows why.</li>\n<li><strong>Unstable data dependencies</strong>: an input signal owned by another team\n  changes meaning or distribution without notice.</li>\n<li><strong>Underutilised data dependencies</strong>: features that add almost nothing but\n  still add breakage risk (legacy, bundled, epsilon features).</li>\n<li><strong>Feedback loops</strong>: direct (the model picks the data it learns from, like a\n  recommender) and hidden (two systems influence each other through the world).\n  Pricing models are especially prone: your predicted price shifts seller\n  behaviour, which shifts future prices.</li>\n<li><strong>Glue code and pipeline jungles</strong>: large amounts of code exist only to\n  move data in and out of generic packages; pipelines grow by accretion.</li>\n<li><strong>Dead experimental codepaths</strong> and <strong>configuration debt</strong>: configuration\n  often outgrows code and is rarely tested.</li>\n</ul>\n<h2>Rules of ML worth memorising</h2>\n<p>From Martin Zinkevich's <em>Rules of Machine Learning</em> (Google):\n- Rule #1: Don't be afraid to launch a product without ML.\n- Rule #4: Keep the first model simple and get the infrastructure right.\n- Rule #5: Test the infrastructure independently from the ML.\n- Rule #29: The best way to make sure you train like you serve is to save the\n  set of features used at serving time and pipe them to a log for training.\n- Rule #32: Re-use code between your training pipeline and serving pipeline.</p>\n<h2>How a staff engineer uses this</h2>\n<p>When you review a system, walk the \"boxes\" around the ML code and ask, for each:\n<em>who owns it, how is it tested, what happens when it silently changes?</em> That\nquestion list is your review template for the capstone.</p>"
     },
     {
      "id": "p1m2",
@@ -196,7 +196,7 @@
        "focus": "The feature store section and why shared features matter."
       },
       {
-       "title": "Feast documentation — Concepts",
+       "title": "Feast documentation: Concepts",
        "author": "Feast",
        "url": "https://docs.feast.dev/",
        "type": "docs",
@@ -229,7 +229,7 @@
        "options": [
         "Class imbalance",
         "Underfitting",
-        "Point-in-time leakage — features came from after the label timestamp",
+        "Point-in-time leakage, features came from after the label timestamp",
         "Concept drift"
        ],
        "answer": 2,
@@ -283,7 +283,7 @@
        "q": "Where is the best place to enforce a data contract?",
        "options": [
         "In the dashboard",
-        "Nowhere — monitor instead",
+        "Nowhere, monitor instead",
         "Only in the model",
         "At the producer, before data lands"
        ],
@@ -325,7 +325,7 @@
      "reflection": [
       "Where in your pipelines would a silent upstream schema change hurt most today?"
      ],
-     "lesson_html": "<h2>Training-serving skew</h2>\n<p>Skew is any difference between what the model saw in training and what it sees\nin production. Three root causes:\n1. <strong>Code skew</strong> — features computed by different code paths (a Spark job for\n   training, a Python function at serving).\n2. <strong>Data skew</strong> — the serving data distribution differs from training\n   (often a symptom of a pipeline bug, not real-world drift).\n3. <strong>Time skew / leakage</strong> — training rows used information that would not have\n   been available at prediction time.</p>\n<h2>Point-in-time correctness</h2>\n<p>When you join features to labels for training, each feature value must be the\nvalue <strong>as of the label's timestamp</strong>, never later. Getting this wrong is label\nleakage: offline metrics look great, production performance collapses. A\npoint-in-time (as-of) join is the fix; feature stores automate it.</p>\n<h2>Feature stores</h2>\n<p>A feature store gives you: one feature definition used for both training and\nserving; an <strong>offline store</strong> (history, for training via point-in-time joins);\nan <strong>online store</strong> (latest values, low latency, for serving); and\nmaterialisation jobs that keep them consistent. Uber's Michelangelo popularised\nthis; Feast is the main open-source option. A feature store is worth it when\nseveral models share features or need low-latency online lookups — not for a\nsingle batch model.</p>\n<h2>Data contracts</h2>\n<p>A data contract is an explicit, versioned agreement between a data producer and\nconsumers: schema, types, nullability, allowed ranges, semantics, freshness SLA,\nand an owner. The key design question is <strong>where it is enforced</strong>:\n- at the producer (best — bad data never lands),\n- at ingestion into your pipeline (good — fail fast),\n- at training/serving time (last line of defence).\nContracts should fail loudly in CI and in pipelines, and changes should go\nthrough versioning (additive changes are safe; renames and type changes are\nbreaking).</p>\n<h2>Contract propagation</h2>\n<p>Your MLOps-Toolbox idea of propagating contracts from data → features → model →\nAPI is exactly the staff-level move: the model signature becomes a contract that\nserving validates against, so a schema change upstream fails a build, not a\ncustomer request.</p>"
+     "lesson_html": "<h2>Training-serving skew</h2>\n<p>Skew is any difference between what the model saw in training and what it sees\nin production. Three root causes:\n1. <strong>Code skew</strong>: features computed by different code paths (a Spark job for\n   training, a Python function at serving).\n2. <strong>Data skew</strong>: the serving data distribution differs from training\n   (often a symptom of a pipeline bug, not real-world drift).\n3. <strong>Time skew / leakage</strong>: training rows used information that would not have\n   been available at prediction time.</p>\n<h2>Point-in-time correctness</h2>\n<p>When you join features to labels for training, each feature value must be the\nvalue <strong>as of the label's timestamp</strong>, never later. Getting this wrong is label\nleakage: offline metrics look great, production performance collapses. A\npoint-in-time (as-of) join is the fix; feature stores automate it.</p>\n<h2>Feature stores</h2>\n<p>A feature store gives you: one feature definition used for both training and\nserving; an <strong>offline store</strong> (history, for training via point-in-time joins);\nan <strong>online store</strong> (latest values, low latency, for serving); and\nmaterialisation jobs that keep them consistent. Uber's Michelangelo popularised\nthis; Feast is the main open-source option. A feature store is worth it when\nseveral models share features or need low-latency online lookups, not for a\nsingle batch model.</p>\n<h2>Data contracts</h2>\n<p>A data contract is an explicit, versioned agreement between a data producer and\nconsumers: schema, types, nullability, allowed ranges, semantics, freshness SLA,\nand an owner. The key design question is <strong>where it is enforced</strong>:\n- at the producer (best, bad data never lands),\n- at ingestion into your pipeline (good, fail fast),\n- at training/serving time (last line of defence).\nContracts should fail loudly in CI and in pipelines, and changes should go\nthrough versioning (additive changes are safe; renames and type changes are\nbreaking).</p>\n<h2>Contract propagation</h2>\n<p>Your MLOps-Toolbox idea of propagating contracts from data → features → model →\nAPI is exactly the staff-level move: the model signature becomes a contract that\nserving validates against, so a schema change upstream fails a build, not a\ncustomer request.</p>"
     },
     {
      "id": "p1m3",
@@ -457,7 +457,7 @@
      "reflection": [
       "What is your current ML Test Score minimum group, honestly?"
      ],
-     "lesson_html": "<h2>The ML Test Score</h2>\n<p>Breck et al. (Google) proposed 28 tests in four groups — <strong>data</strong>, <strong>model\ndevelopment</strong>, <strong>infrastructure</strong>, and <strong>monitoring</strong> — with a final score taken\nas the <em>minimum</em> of the four group scores. Using the minimum is deliberate: a\nsystem is only as ready as its weakest area. Examples: feature expectations are\ncaptured in a schema; model staleness impact is known; the full pipeline is\nintegration-tested; models can be rolled back; training and serving features are\nchecked for skew.</p>\n<h2>MLOps maturity (Google's levels)</h2>\n<ul>\n<li><strong>Level 0</strong> — manual, notebook-driven, rare releases, no monitoring.</li>\n<li><strong>Level 1</strong> — automated <em>training pipeline</em> with continuous training (CT),\n  data and model validation inside the pipeline, a model registry.</li>\n<li><strong>Level 2</strong> — CI/CD <em>of the pipeline itself</em>: pipeline code is tested, built\n  and deployed automatically.\nKey distinction: in ML you deploy a <strong>pipeline that produces models</strong>, not just a\nmodel.</li>\n</ul>\n<h2>Release strategies</h2>\n<ul>\n<li><strong>Shadow</strong> — new model receives a copy of live traffic; predictions are logged\n  but not used. Zero user risk; validates latency, errors and prediction\n  distribution. Cannot measure business impact.</li>\n<li><strong>Canary</strong> — a small percentage of real traffic uses the new model; expand if\n  healthy. Real impact on a few users; fast rollback.</li>\n<li><strong>A/B test</strong> — randomised split to measure causal business impact with\n  statistical power. Slow; needs enough traffic.</li>\n<li><strong>Blue-green</strong> — two full environments; switch all traffic at once; instant\n  rollback but no gradual exposure.</li>\n<li><strong>Interleaving / bandits</strong> — common for ranking; out of scope here.</li>\n</ul>\n<h2>Release gates</h2>\n<p>A gate is an automated check that blocks promotion: schema checks, offline\nmetric thresholds vs the champion, slice-level checks (no segment regresses by\nmore than X), latency and size budgets, and — for LLM systems — eval scores\n(Pillar 4). Gates must compare against the <strong>current champion</strong>, not a fixed\nnumber, or the bar slowly drifts down.</p>"
+     "lesson_html": "<h2>The ML Test Score</h2>\n<p>Breck et al. (Google) proposed 28 tests in four groups, <strong>data</strong>, <strong>model\ndevelopment</strong>, <strong>infrastructure</strong>, and <strong>monitoring</strong>: with a final score taken\nas the <em>minimum</em> of the four group scores. Using the minimum is deliberate: a\nsystem is only as ready as its weakest area. Examples: feature expectations are\ncaptured in a schema; model staleness impact is known; the full pipeline is\nintegration-tested; models can be rolled back; training and serving features are\nchecked for skew.</p>\n<h2>MLOps maturity (Google's levels)</h2>\n<ul>\n<li><strong>Level 0</strong>: manual, notebook-driven, rare releases, no monitoring.</li>\n<li><strong>Level 1</strong>: automated <em>training pipeline</em> with continuous training (CT),\n  data and model validation inside the pipeline, a model registry.</li>\n<li><strong>Level 2</strong>: CI/CD <em>of the pipeline itself</em>: pipeline code is tested, built\n  and deployed automatically.\nKey distinction: in ML you deploy a <strong>pipeline that produces models</strong>, not just a\nmodel.</li>\n</ul>\n<h2>Release strategies</h2>\n<ul>\n<li><strong>Shadow</strong>: new model receives a copy of live traffic; predictions are logged\n  but not used. Zero user risk; validates latency, errors and prediction\n  distribution. Cannot measure business impact.</li>\n<li><strong>Canary</strong>: a small percentage of real traffic uses the new model; expand if\n  healthy. Real impact on a few users; fast rollback.</li>\n<li><strong>A/B test</strong>: randomised split to measure causal business impact with\n  statistical power. Slow; needs enough traffic.</li>\n<li><strong>Blue-green</strong>: two full environments; switch all traffic at once; instant\n  rollback but no gradual exposure.</li>\n<li><strong>Interleaving / bandits</strong>: common for ranking; out of scope here.</li>\n</ul>\n<h2>Release gates</h2>\n<p>A gate is an automated check that blocks promotion: schema checks, offline\nmetric thresholds vs the champion, slice-level checks (no segment regresses by\nmore than X), latency and size budgets, and, for LLM systems, eval scores\n(Pillar 4). Gates must compare against the <strong>current champion</strong>, not a fixed\nnumber, or the bar slowly drifts down.</p>"
     },
     {
      "id": "p1m4",
@@ -473,7 +473,7 @@
      ],
      "readings": [
       {
-       "title": "Data drift — ML in production guide",
+       "title": "Data drift: ML in production guide",
        "author": "Evidently AI",
        "url": "https://www.evidentlyai.com/ml-in-production/data-drift",
        "type": "guide",
@@ -482,7 +482,7 @@
        "focus": "Drift types and why statistical tests over-alert at scale."
       },
       {
-       "title": "Site Reliability Engineering — Ch. 4: Service Level Objectives",
+       "title": "Site Reliability Engineering: Ch. 4: Service Level Objectives",
        "author": "Google SRE book",
        "url": "https://sre.google/sre-book/service-level-objectives/",
        "type": "book",
@@ -491,7 +491,7 @@
        "focus": "SLIs, SLOs, error budgets."
       },
       {
-       "title": "SRE book — Ch. 15: Postmortem Culture",
+       "title": "SRE book: Ch. 15: Postmortem Culture",
        "author": "Google SRE book",
        "url": "https://sre.google/sre-book/postmortem-culture/",
        "type": "book",
@@ -552,7 +552,7 @@
         "Moderate change"
        ],
        "answer": 0,
-       "explain": "Common rule of thumb — above 0.25 is a significant shift."
+       "explain": "Common rule of thumb, above 0.25 is a significant shift."
       },
       {
        "q": "Which monitoring layer typically catches the most ML incidents most cheaply?",
@@ -609,7 +609,7 @@
      "reflection": [
       "Which of your monitors has ever woken someone up for nothing? Why?"
      ],
-     "lesson_html": "<h2>Kinds of change</h2>\n<ul>\n<li><strong>Data (covariate) drift</strong> — P(X) changes: input distribution shifts (more\n  flood-damaged cars after a storm).</li>\n<li><strong>Prediction drift</strong> — the distribution of model outputs shifts. Often the\n  earliest signal you can see.</li>\n<li><strong>Concept drift</strong> — P(Y|X) changes: the relationship itself changes (same car,\n  different price because the market moved). Only detectable with labels or\n  proxies.</li>\n<li><strong>Label shift</strong> — P(Y) changes.</li>\n</ul>\n<h2>Metrics</h2>\n<ul>\n<li><strong>PSI</strong> (Population Stability Index) — common in finance; rough guide: &lt;0.1 no\n  significant change, 0.1–0.25 moderate, &gt;0.25 significant.</li>\n<li><strong>KS test</strong>, <strong>Wasserstein distance</strong>, <strong>Jensen-Shannon divergence</strong> for\n  numeric features; <strong>chi-squared</strong> for categoricals.</li>\n<li>Caution: with large samples, statistical tests flag tiny, irrelevant shifts as\n  \"significant\". Prefer effect-size metrics with thresholds tuned on history.</li>\n</ul>\n<h2>What to monitor (in priority order)</h2>\n<ol>\n<li><strong>Service health</strong> — latency, errors, throughput (standard SRE).</li>\n<li><strong>Data quality</strong> — nulls, schema, ranges, freshness (cheapest, catches most\n   incidents).</li>\n<li><strong>Prediction distribution</strong> — drift in outputs.</li>\n<li><strong>Model quality</strong> — once labels arrive (for auctions: when the hammer price\n   is known), compute real error by segment.</li>\n<li><strong>Business KPIs</strong> — sell-through, margin.</li>\n</ol>\n<h2>SLOs and incidents</h2>\n<p>An SLO is a target on a user-visible indicator (e.g. 99.5% of pricing requests\nreturn in &lt;300 ms; weekly MAPE on settled auctions &lt; X%). The <strong>error budget</strong>\nis the allowed failure; spending it fast triggers action. Your public-holiday\npricing incident is a classic: a calendar effect the model had not seen → good\npostmortem material. Postmortems are <strong>blameless</strong> and end with owned, dated\nactions.</p>"
+     "lesson_html": "<h2>Kinds of change</h2>\n<ul>\n<li><strong>Data (covariate) drift</strong>: P(X) changes: input distribution shifts (more\n  flood-damaged cars after a storm).</li>\n<li><strong>Prediction drift</strong>: the distribution of model outputs shifts. Often the\n  earliest signal you can see.</li>\n<li><strong>Concept drift</strong>: P(Y|X) changes: the relationship itself changes (same car,\n  different price because the market moved). Only detectable with labels or\n  proxies.</li>\n<li><strong>Label shift</strong>: P(Y) changes.</li>\n</ul>\n<h2>Metrics</h2>\n<ul>\n<li><strong>PSI</strong> (Population Stability Index): common in finance; rough guide: &lt;0.1 no\n  significant change, 0.1–0.25 moderate, &gt;0.25 significant.</li>\n<li><strong>KS test</strong>, <strong>Wasserstein distance</strong>, <strong>Jensen-Shannon divergence</strong> for\n  numeric features; <strong>chi-squared</strong> for categoricals.</li>\n<li>Caution: with large samples, statistical tests flag tiny, irrelevant shifts as\n  \"significant\". Prefer effect-size metrics with thresholds tuned on history.</li>\n</ul>\n<h2>What to monitor (in priority order)</h2>\n<ol>\n<li><strong>Service health</strong>: latency, errors, throughput (standard SRE).</li>\n<li><strong>Data quality</strong>: nulls, schema, ranges, freshness (cheapest, catches most\n   incidents).</li>\n<li><strong>Prediction distribution</strong>: drift in outputs.</li>\n<li><strong>Model quality</strong>: once labels arrive (for auctions: when the hammer price\n   is known), compute real error by segment.</li>\n<li><strong>Business KPIs</strong>: sell-through, margin.</li>\n</ol>\n<h2>SLOs and incidents</h2>\n<p>An SLO is a target on a user-visible indicator (e.g. 99.5% of pricing requests\nreturn in &lt;300 ms; weekly MAPE on settled auctions &lt; X%). The <strong>error budget</strong>\nis the allowed failure; spending it fast triggers action. Your public-holiday\npricing incident is a classic: a calendar effect the model had not seen → good\npostmortem material. Postmortems are <strong>blameless</strong> and end with owned, dated\nactions.</p>"
     }
    ]
   },
@@ -618,11 +618,11 @@
    "order": 4,
    "title": "Evals and observability for LLM and agent systems",
    "status": "gap",
-   "goal": "Build evaluation systems that tell you, with evidence, whether an LLM or agent is good enough to ship — from error analysis and calibrated LLM judges to agent trajectory evals, production tracing and eval-gated releases — including for Malaysian language mixes.\n",
+   "goal": "Build evaluation systems that tell you, with evidence, whether an LLM or agent is good enough to ship, from error analysis and calibrated LLM judges to agent trajectory evals, production tracing and eval-gated releases, including for Malaysian language mixes.\n",
    "why_now": "Your biggest gap and the highest-demand skill. It also connects your platform work (release gates) with your Malaysian LLM evals startup idea.\n",
    "capstone": {
     "title": "Eval-gated release for a real agent",
-    "brief": "Build a complete eval system for the auction assistant (or a public stand-in): labelled dataset from error analysis, code-based checks, a calibrated LLM judge, agent trajectory checks, OpenTelemetry tracing, and a CI gate that blocks a regression — with a BM/Manglish slice.\n",
+    "brief": "Build a complete eval system for the auction assistant (or a public stand-in): labelled dataset from error analysis, code-based checks, a calibrated LLM judge, agent trajectory checks, OpenTelemetry tracing, and a CI gate that blocks a regression, with a BM/Manglish slice.\n",
     "deliverables": [
      "Failure taxonomy from error analysis of at least 100 traces",
      "Eval dataset (at least 150 cases, including a BM/Manglish slice) with provenance",
@@ -680,7 +680,7 @@
        "focus": "Tactical section on evaluation and monitoring."
       },
       {
-       "title": "AI Engineering (Ch. 3-4 — Evaluation)",
+       "title": "AI Engineering (Ch. 3-4: Evaluation)",
        "author": "Chip Huyen, O'Reilly 2025",
        "url": "https://www.oreilly.com/library/view/ai-engineering/9781098166298/",
        "type": "book",
@@ -740,7 +740,7 @@
         "Doesn't matter",
         "~0%",
         "~50%",
-        "~100% — these used to work"
+        "~100%, these used to work"
        ],
        "answer": 3,
        "explain": "Regression evals protect existing behaviour; capability evals measure progress on hard tasks."
@@ -801,11 +801,11 @@
      "reflection": [
       "What surprised you most in the traces compared to your expectations?"
      ],
-     "lesson_html": "<h2>What an eval is</h2>\n<p>An eval is a test for an AI system: an <strong>input/task</strong>, the system's\n<strong>output</strong> (or full transcript), and <strong>grading logic</strong>. Graders come in three\nkinds: <strong>code-based</strong> (assertions, regex, schema checks, exact match, unit\ntests on generated code), <strong>model-based</strong> (LLM-as-judge), and <strong>human</strong>.\nPrefer code where possible: cheap, fast, deterministic.</p>\n<h2>Three levels (Hamel Husain's framing)</h2>\n<ol>\n<li><strong>Unit tests / assertions</strong> — run on every change; cheap.</li>\n<li><strong>Human and model evaluation</strong> — on sampled traces; periodic.</li>\n<li><strong>A/B testing</strong> — real users; for significant changes.</li>\n</ol>\n<h2>Error analysis is the core skill</h2>\n<p>Before writing any metric, <strong>look at your data</strong>:\n1. Collect 50–100+ real or realistic traces.\n2. <strong>Open coding</strong> — read each, write free-text notes on what went wrong.\n   Focus on the first upstream failure in a trace.\n3. <strong>Axial coding</strong> — group notes into a small set of failure categories\n   (e.g. \"wrong auction date\", \"ignores lot condition\", \"replies in English to\n   a BM question\", \"hallucinated fee\").\n4. Count them. Fix the obvious ones directly (prompt or code); build evals\n   for the persistent, important ones.\n5. Repeat as the product changes.\nGeneric metrics like \"helpfulness 1–5\" or off-the-shelf \"faithfulness\" scores\nrarely track what actually breaks in <em>your</em> product.</p>\n<h2>Datasets</h2>\n<ul>\n<li>Start from real traces; add <strong>synthetic inputs</strong> by varying dimensions\n  (persona × feature × scenario) — generate inputs, not expected outputs.</li>\n<li>Keep provenance and version datasets like code.</li>\n<li>Separate <strong>capability evals</strong> (can it do hard new things — expected pass\n  rate lower) from <strong>regression evals</strong> (it used to work — expected ~100%).</li>\n</ul>\n<h2>Binary beats scales</h2>\n<p>Pass/fail judgments with a written critique are more reliable and actionable\nthan 1–5 scales, where nobody agrees what a \"3\" means.</p>"
+     "lesson_html": "<h2>What an eval is</h2>\n<p>An eval is a test for an AI system: an <strong>input/task</strong>, the system's\n<strong>output</strong> (or full transcript), and <strong>grading logic</strong>. Graders come in three\nkinds: <strong>code-based</strong> (assertions, regex, schema checks, exact match, unit\ntests on generated code), <strong>model-based</strong> (LLM-as-judge), and <strong>human</strong>.\nPrefer code where possible: cheap, fast, deterministic.</p>\n<h2>Three levels (Hamel Husain's framing)</h2>\n<ol>\n<li><strong>Unit tests / assertions</strong>: run on every change; cheap.</li>\n<li><strong>Human and model evaluation</strong>: on sampled traces; periodic.</li>\n<li><strong>A/B testing</strong>: real users; for significant changes.</li>\n</ol>\n<h2>Error analysis is the core skill</h2>\n<p>Before writing any metric, <strong>look at your data</strong>:\n1. Collect 50–100+ real or realistic traces.\n2. <strong>Open coding</strong>: read each, write free-text notes on what went wrong.\n   Focus on the first upstream failure in a trace.\n3. <strong>Axial coding</strong>: group notes into a small set of failure categories\n   (e.g. \"wrong auction date\", \"ignores lot condition\", \"replies in English to\n   a BM question\", \"hallucinated fee\").\n4. Count them. Fix the obvious ones directly (prompt or code); build evals\n   for the persistent, important ones.\n5. Repeat as the product changes.\nGeneric metrics like \"helpfulness 1–5\" or off-the-shelf \"faithfulness\" scores\nrarely track what actually breaks in <em>your</em> product.</p>\n<h2>Datasets</h2>\n<ul>\n<li>Start from real traces; add <strong>synthetic inputs</strong> by varying dimensions\n  (persona × feature × scenario), generate inputs, not expected outputs.</li>\n<li>Keep provenance and version datasets like code.</li>\n<li>Separate <strong>capability evals</strong> (can it do hard new things, expected pass\n  rate lower) from <strong>regression evals</strong> (it used to work, expected ~100%).</li>\n</ul>\n<h2>Binary beats scales</h2>\n<p>Pass/fail judgments with a written critique are more reliable and actionable\nthan 1–5 scales, where nobody agrees what a \"3\" means.</p>"
     },
     {
      "id": "p4m2",
-     "title": "LLM-as-judge — building judges you can trust",
+     "title": "LLM-as-judge: building judges you can trust",
      "hours": 8,
      "figures": [
       "judge-matrix"
@@ -929,7 +929,7 @@
         "For latency"
        ],
        "answer": 0,
-       "explain": "Same logic as ML — report on data you didn't tune against."
+       "explain": "Same logic as ML, report on data you didn't tune against."
       }
      ],
      "exercises": [
@@ -956,7 +956,7 @@
      "reflection": [
       "Where did your own criteria change while labelling?"
      ],
-     "lesson_html": "<h2>Why judges need validation</h2>\n<p>An LLM judge is itself a model making predictions. Zheng et al. (MT-Bench /\nChatbot Arena) showed strong judges can agree with humans at levels similar\nto human-human agreement — but also documented biases:\n- <strong>Position bias</strong> — favouring the first (or second) answer in pairwise\n  comparisons. Mitigate by swapping order and requiring consistency.\n- <strong>Verbosity bias</strong> — preferring longer answers.\n- <strong>Self-enhancement bias</strong> — favouring outputs from the same model family.\n- Limited ability to grade maths/reasoning it can't do itself.</p>\n<h2>Critique shadowing (Hamel Husain)</h2>\n<ol>\n<li>Find the <strong>principal domain expert</strong> (one person whose judgment defines\n   \"good\").</li>\n<li>Build a diverse dataset of real and synthetic interactions.</li>\n<li>The expert gives <strong>pass/fail + a written critique</strong> for each.</li>\n<li>Fix obvious errors in the product first.</li>\n<li>Build the judge prompt using expert critiques as few-shot examples.</li>\n<li>Measure agreement with the expert on held-out data; iterate the prompt.</li>\n<li>Use error analysis to create narrower, specialised judges where needed.</li>\n</ol>\n<h2>Measure the judge like a classifier</h2>\n<p>Treat expert labels as ground truth. Split into train (few-shot examples),\ndev (iterate), and test (final report). Report:\n- <strong>TPR</strong> (true positive rate) — of truly passing outputs, how many the judge\n  passes.\n- <strong>TNR</strong> (true negative rate) — of truly failing outputs, how many the judge\n  fails.\nRaw accuracy hides problems when classes are imbalanced (e.g. 90% pass).</p>\n<h2>Correcting the pass rate</h2>\n<p>With known TPR and TNR, the observed judge pass rate p_obs can be corrected:\n<code>p_true ≈ (p_obs + TNR − 1) / (TPR + TNR − 1)</code>.\nExample: TPR 0.9, TNR 0.8, observed 0.75 → (0.75 + 0.8 − 1)/(0.9 + 0.8 − 1)\n= 0.55/0.7 ≈ 0.79.</p>\n<h2>Criteria drift</h2>\n<p>Shankar et al. (\"Who Validates the Validators?\") found people's evaluation\ncriteria change as they grade outputs — you discover what \"good\" means by\nlooking. So judge building is iterative, and criteria must be re-checked when\nthe product changes.</p>\n<h2>Practical rules</h2>\n<p>One judge per failure mode, binary output, ask for reasoning before the\nverdict, use a strong model, pin the judge model version, and re-validate after\nany judge-prompt or model change.</p>"
+     "lesson_html": "<h2>Why judges need validation</h2>\n<p>An LLM judge is itself a model making predictions. Zheng et al. (MT-Bench /\nChatbot Arena) showed strong judges can agree with humans at levels similar\nto human-human agreement, but also documented biases:\n- <strong>Position bias</strong>: favouring the first (or second) answer in pairwise\n  comparisons. Mitigate by swapping order and requiring consistency.\n- <strong>Verbosity bias</strong>: preferring longer answers.\n- <strong>Self-enhancement bias</strong>: favouring outputs from the same model family.\n- Limited ability to grade maths/reasoning it can't do itself.</p>\n<h2>Critique shadowing (Hamel Husain)</h2>\n<ol>\n<li>Find the <strong>principal domain expert</strong> (one person whose judgment defines\n   \"good\").</li>\n<li>Build a diverse dataset of real and synthetic interactions.</li>\n<li>The expert gives <strong>pass/fail + a written critique</strong> for each.</li>\n<li>Fix obvious errors in the product first.</li>\n<li>Build the judge prompt using expert critiques as few-shot examples.</li>\n<li>Measure agreement with the expert on held-out data; iterate the prompt.</li>\n<li>Use error analysis to create narrower, specialised judges where needed.</li>\n</ol>\n<h2>Measure the judge like a classifier</h2>\n<p>Treat expert labels as ground truth. Split into train (few-shot examples),\ndev (iterate), and test (final report). Report:\n- <strong>TPR</strong> (true positive rate): of truly passing outputs, how many the judge\n  passes.\n- <strong>TNR</strong> (true negative rate): of truly failing outputs, how many the judge\n  fails.\nRaw accuracy hides problems when classes are imbalanced (e.g. 90% pass).</p>\n<h2>Correcting the pass rate</h2>\n<p>With known TPR and TNR, the observed judge pass rate p_obs can be corrected:\n<code>p_true ≈ (p_obs + TNR − 1) / (TPR + TNR − 1)</code>.\nExample: TPR 0.9, TNR 0.8, observed 0.75 → (0.75 + 0.8 − 1)/(0.9 + 0.8 − 1)\n= 0.55/0.7 ≈ 0.79.</p>\n<h2>Criteria drift</h2>\n<p>Shankar et al. (\"Who Validates the Validators?\") found people's evaluation\ncriteria change as they grade outputs, you discover what \"good\" means by\nlooking. So judge building is iterative, and criteria must be re-checked when\nthe product changes.</p>\n<h2>Practical rules</h2>\n<p>One judge per failure mode, binary output, ask for reasoning before the\nverdict, use a strong model, pin the judge model version, and re-validate after\nany judge-prompt or model change.</p>"
     },
     {
      "id": "p4m3",
@@ -1114,7 +1114,7 @@
      "reflection": [
       "Which of your agent's behaviours would users notice most if it became inconsistent?"
      ],
-     "lesson_html": "<h2>RAG: split the problem</h2>\n<ul>\n<li><strong>Retrieval</strong> — did we fetch the right context? Metrics: recall@k,\n  precision@k, MRR/nDCG against labelled relevant documents.</li>\n<li><strong>Generation</strong> — given the context, is the answer <strong>faithful/grounded</strong>\n  (claims supported by context) and <strong>relevant/correct</strong>?\nFrameworks like RAGAS compute reference-free metrics (faithfulness, answer\nrelevance, context precision/recall) — useful starting points, but validate\nthem against your own labels before trusting them.</li>\n</ul>\n<h2>Agents: transcript vs outcome</h2>\n<p>Anthropic's framing: the <strong>transcript</strong> is what the agent said and did; the\n<strong>outcome</strong> is the final state of the environment (was the booking made? does\nthe code pass tests?). Grade outcomes where possible; grade transcripts for\nprocess requirements (did it ask for confirmation before a payment? did it call\nthe right tool with valid arguments?).</p>\n<h2>What to evaluate in agents</h2>\n<ul>\n<li><strong>Task success</strong> — outcome-based.</li>\n<li><strong>Tool use</strong> — correct tool selection, valid arguments, handling errors.</li>\n<li><strong>Trajectory</strong> — efficiency (steps, tokens, cost), loops, unnecessary calls.</li>\n<li><strong>Policy adherence</strong> — e.g. τ-bench tests agents interacting with simulated\n  users under domain policies (retail, airline).</li>\n<li><strong>Safety</strong> — refuses out-of-policy actions; resists prompt injection from\n  tool outputs.</li>\n</ul>\n<h2>Non-determinism</h2>\n<p>Run each task multiple times (<strong>trials</strong>).\n- <strong>pass@k</strong> — probability at least one of k attempts succeeds (capability).\n- <strong>pass^k</strong> — probability <em>all</em> k attempts succeed (reliability). τ-bench\n  showed pass^k drops sharply as k grows — agents that \"can\" do a task often\n  can't do it consistently. For production, reliability is what users feel.</p>\n<h2>Benchmarks vs product evals</h2>\n<p>Public benchmarks (SWE-bench, τ-bench, GAIA) tell you about models; they don't\ntell you about <em>your</em> product. Use them to shortlist models, then rely on your\nown evals.</p>"
+     "lesson_html": "<h2>RAG: split the problem</h2>\n<ul>\n<li><strong>Retrieval</strong>: did we fetch the right context? Metrics: recall@k,\n  precision@k, MRR/nDCG against labelled relevant documents.</li>\n<li><strong>Generation</strong>: given the context, is the answer <strong>faithful/grounded</strong>\n  (claims supported by context) and <strong>relevant/correct</strong>?\nFrameworks like RAGAS compute reference-free metrics (faithfulness, answer\nrelevance, context precision/recall), useful starting points, but validate\nthem against your own labels before trusting them.</li>\n</ul>\n<h2>Agents: transcript vs outcome</h2>\n<p>Anthropic's framing: the <strong>transcript</strong> is what the agent said and did; the\n<strong>outcome</strong> is the final state of the environment (was the booking made? does\nthe code pass tests?). Grade outcomes where possible; grade transcripts for\nprocess requirements (did it ask for confirmation before a payment? did it call\nthe right tool with valid arguments?).</p>\n<h2>What to evaluate in agents</h2>\n<ul>\n<li><strong>Task success</strong>: outcome-based.</li>\n<li><strong>Tool use</strong>: correct tool selection, valid arguments, handling errors.</li>\n<li><strong>Trajectory</strong>: efficiency (steps, tokens, cost), loops, unnecessary calls.</li>\n<li><strong>Policy adherence</strong>: e.g. τ-bench tests agents interacting with simulated\n  users under domain policies (retail, airline).</li>\n<li><strong>Safety</strong>: refuses out-of-policy actions; resists prompt injection from\n  tool outputs.</li>\n</ul>\n<h2>Non-determinism</h2>\n<p>Run each task multiple times (<strong>trials</strong>).\n- <strong>pass@k</strong>: probability at least one of k attempts succeeds (capability).\n- <strong>pass^k</strong>: probability <em>all</em> k attempts succeed (reliability). τ-bench\n  showed pass^k drops sharply as k grows, agents that \"can\" do a task often\n  can't do it consistently. For production, reliability is what users feel.</p>\n<h2>Benchmarks vs product evals</h2>\n<p>Public benchmarks (SWE-bench, τ-bench, GAIA) tell you about models; they don't\ntell you about <em>your</em> product. Use them to shortlist models, then rely on your\nown evals.</p>"
     },
     {
      "id": "p4m4",
@@ -1127,7 +1127,7 @@
      ],
      "readings": [
       {
-       "title": "OpenTelemetry — Semantic conventions for generative AI systems",
+       "title": "OpenTelemetry: Semantic conventions for generative AI systems",
        "author": "OpenTelemetry",
        "url": "https://opentelemetry.io/docs/specs/semconv/gen-ai/",
        "type": "docs",
@@ -1145,7 +1145,7 @@
        "focus": "Data viewers, error analysis loop, empowering domain experts."
       },
       {
-       "title": "Langfuse documentation — Tracing and evaluation",
+       "title": "Langfuse documentation: Tracing and evaluation",
        "author": "Langfuse",
        "url": "https://langfuse.com/docs",
        "type": "docs",
@@ -1154,7 +1154,7 @@
        "focus": "An open-source example of trace + eval tooling."
       },
       {
-       "title": "Azure AI Foundry — Observability and evaluation",
+       "title": "Azure AI Foundry: Observability and evaluation",
        "author": "Microsoft Learn",
        "url": "https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/observability",
        "type": "docs",
@@ -1201,7 +1201,7 @@
        "q": "Your eval set for a slice has 30 cases and the pass rate dropped 3 points. What's the right reaction?",
        "options": [
         "Delete the slice",
-        "Consider confidence intervals — with 30 cases, 3 points may be noise",
+        "Consider confidence intervals, with 30 cases, 3 points may be noise",
         "Block immediately",
         "Ignore all small slices"
        ],
@@ -1255,7 +1255,7 @@
      "reflection": [
       "What would your Foundry platform need to offer this to every team by default?"
      ],
-     "lesson_html": "<h2>Tracing</h2>\n<p>An LLM app trace is a tree of spans: request → retrieval → LLM call(s) → tool\ncalls → response. OpenTelemetry's <strong>GenAI semantic conventions</strong> (still in\ndevelopment status — check the current version) standardise attributes like\n<code>gen_ai.operation.name</code>, <code>gen_ai.request.model</code>, <code>gen_ai.provider.name</code>, token\nusage, and agent/tool spans. Using the standard means any backend (Application\nInsights, Langfuse, Phoenix, Datadog…) can read your traces, and you avoid\nvendor lock-in. Capture prompts and completions only where privacy rules allow\n— the conventions say instrumentations must let you turn that off.</p>\n<h2>What to measure in production</h2>\n<ul>\n<li>Ops: latency (TTFT, total), errors, tokens and <strong>cost per request/team</strong>.</li>\n<li>Quality: online evals on a sample (cheap assertions on 100%, LLM judges on a\n  sample), user feedback (thumbs, edits, retries, abandonment).</li>\n<li>Safety: guardrail triggers, PII detection, injection attempts.</li>\n</ul>\n<h2>Offline ↔ online loop</h2>\n<p>Production traces → sampled for review → error analysis → new eval cases →\noffline suite grows → release gate gets stronger. This flywheel is the single\nmost valuable thing an AI platform can provide.</p>\n<h2>Eval-gated CI/CD</h2>\n<p>Treat prompts, model versions, retrieval configs and tool definitions as\n<strong>versioned artifacts</strong>. Any change triggers:\n1. Fast assertions (seconds) on every commit.\n2. Full offline suite (minutes) on PRs — compare to <strong>champion</strong>; fail if any\n   critical slice regresses beyond a threshold, with confidence intervals for\n   small sets.\n3. Shadow or canary in production with online evals before full rollout.\nThis is the LLM version of your champion-challenger gate (p1m3).</p>\n<h2>Guardrails</h2>\n<p>Input and output checks around the model (topic filters, PII, injection\ndetectors, schema validation). They're part of the system — so evaluate their\nfalse-positive and false-negative rates too.</p>"
+     "lesson_html": "<h2>Tracing</h2>\n<p>An LLM app trace is a tree of spans: request → retrieval → LLM call(s) → tool\ncalls → response. OpenTelemetry's <strong>GenAI semantic conventions</strong> (still in\ndevelopment status, check the current version) standardise attributes like\n<code>gen_ai.operation.name</code>, <code>gen_ai.request.model</code>, <code>gen_ai.provider.name</code>, token\nusage, and agent/tool spans. Using the standard means any backend (Application\nInsights, Langfuse, Phoenix, Datadog…) can read your traces, and you avoid\nvendor lock-in. Capture prompts and completions only where privacy rules allow, the conventions say instrumentations must let you turn that off.</p>\n<h2>What to measure in production</h2>\n<ul>\n<li>Ops: latency (TTFT, total), errors, tokens and <strong>cost per request/team</strong>.</li>\n<li>Quality: online evals on a sample (cheap assertions on 100%, LLM judges on a\n  sample), user feedback (thumbs, edits, retries, abandonment).</li>\n<li>Safety: guardrail triggers, PII detection, injection attempts.</li>\n</ul>\n<h2>Offline ↔ online loop</h2>\n<p>Production traces → sampled for review → error analysis → new eval cases →\noffline suite grows → release gate gets stronger. This flywheel is the single\nmost valuable thing an AI platform can provide.</p>\n<h2>Eval-gated CI/CD</h2>\n<p>Treat prompts, model versions, retrieval configs and tool definitions as\n<strong>versioned artifacts</strong>. Any change triggers:\n1. Fast assertions (seconds) on every commit.\n2. Full offline suite (minutes) on PRs, compare to <strong>champion</strong>; fail if any\n   critical slice regresses beyond a threshold, with confidence intervals for\n   small sets.\n3. Shadow or canary in production with online evals before full rollout.\nThis is the LLM version of your champion-challenger gate (p1m3).</p>\n<h2>Guardrails</h2>\n<p>Input and output checks around the model (topic filters, PII, injection\ndetectors, schema validation). They're part of the system, so evaluate their\nfalse-positive and false-negative rates too.</p>"
     },
     {
      "id": "p4m5",
@@ -1377,7 +1377,7 @@
        "title": "Malaysian code-switching eval set v0",
        "level": "core",
        "task": "Write 60 native-authored test inputs across language mix × register × task, with pass criteria. Run 2 models and report per-slice results.",
-       "deliverable": "Dataset (CSV/JSONL) + results table — the seed for your eval startup.",
+       "deliverable": "Dataset (CSV/JSONL) + results table, the seed for your eval startup.",
        "acceptance": [
         "At least 4 language-mix slices with 10+ items each",
         "Cultural items reviewed by someone other than you"
@@ -1396,7 +1396,7 @@
      "reflection": [
       "Which Malaysian failure mode do global vendors most underestimate?"
      ],
-     "lesson_html": "<h2>Why this is its own module</h2>\n<p>Most eval knowledge is English-first. Malaysian users code-switch within a\nsentence (\"Boleh check tak bila auction start, I nak bid lori tu\"), use\nManglish particles (lah, kan, meh), and mix scripts. Models can look fine on\nEnglish benchmarks and fail here — and few people in the world can evaluate it\nwell. This is your differentiator.</p>\n<h2>Benchmarks to know</h2>\n<ul>\n<li><strong>SEA-HELM</strong> (AI Singapore) — holistic SEA evaluation with five pillars: NLP\n  classics, LLM-specifics, SEA linguistics, SEA culture, and safety; public\n  leaderboard and open code.</li>\n<li><strong>MalayMMLU</strong> (Universiti Malaya × YTL AI Labs, EMNLP Findings 2024) — 24k+\n  multiple-choice questions across Malaysian school-curriculum subjects.</li>\n<li><strong>MyCulture</strong> (Universiti Malaya) — Malaysian culture knowledge with an\n  open-ended format to reduce MCQ shortcuts.\nLimits: MCQ benchmarks test knowledge, not conversational behaviour;\ncontamination risk; little coverage of colloquial code-switching.</li>\n</ul>\n<h2>Pitfalls of translated benchmarks</h2>\n<p>Machine-translated English sets carry <strong>translationese</strong>, lose cultural\ncontext (wrong holidays, names, prices in USD), and miss code-switching.\nPrefer native-authored items; if you translate, have native speakers review\nand localise.</p>\n<h2>Designing code-switching evals</h2>\n<p>Define dimensions and sample across them:\n- <strong>Language mix</strong> — pure BM, pure English, BM-English mix, Manglish, with\n  Mandarin/Cantonese/Tamil terms.\n- <strong>Register</strong> — formal (customer complaint letter) vs casual (WhatsApp).\n- <strong>Task</strong> — Q&amp;A, instruction following, extraction, refusal.\nFailure modes to check: <strong>language fidelity</strong> (replies in the user's language or\nmix?), comprehension of particles/slang, cultural correctness (local\ninstitutions, holidays, currency RM), and safety that still holds in BM (some\nguardrails are weaker in non-English).</p>\n<h2>Judges in other languages</h2>\n<p>LLM judges may be less reliable in BM/Manglish. Validate the judge <strong>per\nlanguage slice</strong> with native-speaker labels and report TPR/TNR per slice.</p>"
+     "lesson_html": "<h2>Why this is its own module</h2>\n<p>Most eval knowledge is English-first. Malaysian users code-switch within a\nsentence (\"Boleh check tak bila auction start, I nak bid lori tu\"), use\nManglish particles (lah, kan, meh), and mix scripts. Models can look fine on\nEnglish benchmarks and fail here, and few people in the world can evaluate it\nwell. This is your differentiator.</p>\n<h2>Benchmarks to know</h2>\n<ul>\n<li><strong>SEA-HELM</strong> (AI Singapore): holistic SEA evaluation with five pillars: NLP\n  classics, LLM-specifics, SEA linguistics, SEA culture, and safety; public\n  leaderboard and open code.</li>\n<li><strong>MalayMMLU</strong> (Universiti Malaya × YTL AI Labs, EMNLP Findings 2024): 24k+\n  multiple-choice questions across Malaysian school-curriculum subjects.</li>\n<li><strong>MyCulture</strong> (Universiti Malaya): Malaysian culture knowledge with an\n  open-ended format to reduce MCQ shortcuts.\nLimits: MCQ benchmarks test knowledge, not conversational behaviour;\ncontamination risk; little coverage of colloquial code-switching.</li>\n</ul>\n<h2>Pitfalls of translated benchmarks</h2>\n<p>Machine-translated English sets carry <strong>translationese</strong>, lose cultural\ncontext (wrong holidays, names, prices in USD), and miss code-switching.\nPrefer native-authored items; if you translate, have native speakers review\nand localise.</p>\n<h2>Designing code-switching evals</h2>\n<p>Define dimensions and sample across them:\n- <strong>Language mix</strong>: pure BM, pure English, BM-English mix, Manglish, with\n  Mandarin/Cantonese/Tamil terms.\n- <strong>Register</strong>: formal (customer complaint letter) vs casual (WhatsApp).\n- <strong>Task</strong>: Q&amp;A, instruction following, extraction, refusal.\nFailure modes to check: <strong>language fidelity</strong> (replies in the user's language or\nmix?), comprehension of particles/slang, cultural correctness (local\ninstitutions, holidays, currency RM), and safety that still holds in BM (some\nguardrails are weaker in non-English).</p>\n<h2>Judges in other languages</h2>\n<p>LLM judges may be less reliable in BM/Manglish. Validate the judge <strong>per\nlanguage slice</strong> with native-speaker labels and report TPR/TNR per slice.</p>"
     }
    ]
   },
@@ -1465,7 +1465,7 @@
        "focus": "Survey of optimisation methods; good map for p3m3."
       },
       {
-       "title": "AI Engineering (Ch. 9 — Inference Optimization)",
+       "title": "AI Engineering (Ch. 9: Inference Optimization)",
        "author": "Chip Huyen, O'Reilly 2025",
        "url": "https://www.oreilly.com/library/view/ai-engineering/9781098166298/",
        "type": "book",
@@ -1484,7 +1484,7 @@
         "Attention is quadratic"
        ],
        "answer": 0,
-       "explain": "Low arithmetic intensity — the weight read dominates."
+       "explain": "Low arithmetic intensity, the weight read dominates."
       },
       {
        "q": "Which phase dominates time to first token?",
@@ -1576,11 +1576,11 @@
      "reflection": [
       "Which latency metric matters most for the auction assistant, and why?"
      ],
-     "lesson_html": "<h2>Two phases</h2>\n<ul>\n<li><strong>Prefill</strong> — process the whole prompt in parallel. Large matrix-matrix\n  multiplies → <strong>compute-bound</strong>. Dominates <strong>time to first token (TTFT)</strong>.</li>\n<li><strong>Decode</strong> — generate one token at a time per sequence. Each step must read\n  all model weights from GPU memory to produce just one token per sequence →\n  <strong>memory-bandwidth-bound</strong> at small batch sizes. Dominates <strong>time per output\n  token (TPOT)</strong>, a.k.a. inter-token latency.</li>\n</ul>\n<h2>The key back-of-envelope</h2>\n<p>At batch size 1, a decode step reads every weight once. A 7B model in FP16 is\n~14 GB. On a GPU with ~2 TB/s memory bandwidth, the floor is roughly\n14 GB / 2 TB/s ≈ 7 ms per token, no matter how many FLOPs the GPU has.\n<strong>Batching</strong> amortises that weight read across many sequences, which is why\nthroughput rises with batch size until compute becomes the limit.</p>\n<h2>Arithmetic intensity</h2>\n<p>FLOPs per byte moved. Each GPU has a ratio (peak FLOPs / bandwidth). Below it\nyou're memory-bound; above it, compute-bound. Decode at small batch is far\nbelow; prefill is above.</p>\n<h2>KV cache</h2>\n<p>To avoid recomputing attention over past tokens, each layer stores keys and\nvalues for every token. Size per token:</p>\n<p><code>2 (K and V) × layers × kv_heads × head_dim × bytes_per_value</code></p>\n<p>Example (Llama-2-7B-like: 32 layers, 32 KV heads, head_dim 128, FP16 = 2 bytes):\n2 × 32 × 32 × 128 × 2 = 524,288 bytes ≈ <strong>0.5 MB per token</strong>. A 4,096-token\nsequence ≈ 2 GB. KV cache — not weights — usually limits how many concurrent\nrequests you can serve. <strong>Grouped-query attention (GQA)</strong> cuts KV heads (e.g.\n8 instead of 32), shrinking the cache 4×.</p>\n<h2>Memory budget</h2>\n<p>GPU memory = weights + KV cache + activations/overhead. Weights: params ×\nbytes (FP16 = 2, INT8 = 1, INT4 = 0.5). A 70B model in FP16 (~140 GB) doesn't\nfit on one 80 GB GPU → tensor parallelism across GPUs, or quantisation.</p>\n<h2>Metrics vocabulary</h2>\n<p>TTFT, TPOT/ITL, end-to-end latency = TTFT + TPOT × (output tokens − 1),\nthroughput (tokens/s across all users), goodput (throughput that meets the\nlatency SLO).</p>"
+     "lesson_html": "<h2>Two phases</h2>\n<ul>\n<li><strong>Prefill</strong>: process the whole prompt in parallel. Large matrix-matrix\n  multiplies → <strong>compute-bound</strong>. Dominates <strong>time to first token (TTFT)</strong>.</li>\n<li><strong>Decode</strong>: generate one token at a time per sequence. Each step must read\n  all model weights from GPU memory to produce just one token per sequence →\n  <strong>memory-bandwidth-bound</strong> at small batch sizes. Dominates <strong>time per output\n  token (TPOT)</strong>, a.k.a. inter-token latency.</li>\n</ul>\n<h2>The key back-of-envelope</h2>\n<p>At batch size 1, a decode step reads every weight once. A 7B model in FP16 is\n~14 GB. On a GPU with ~2 TB/s memory bandwidth, the floor is roughly\n14 GB / 2 TB/s ≈ 7 ms per token, no matter how many FLOPs the GPU has.\n<strong>Batching</strong> amortises that weight read across many sequences, which is why\nthroughput rises with batch size until compute becomes the limit.</p>\n<h2>Arithmetic intensity</h2>\n<p>FLOPs per byte moved. Each GPU has a ratio (peak FLOPs / bandwidth). Below it\nyou're memory-bound; above it, compute-bound. Decode at small batch is far\nbelow; prefill is above.</p>\n<h2>KV cache</h2>\n<p>To avoid recomputing attention over past tokens, each layer stores keys and\nvalues for every token. Size per token:</p>\n<p><code>2 (K and V) × layers × kv_heads × head_dim × bytes_per_value</code></p>\n<p>Example (Llama-2-7B-like: 32 layers, 32 KV heads, head_dim 128, FP16 = 2 bytes):\n2 × 32 × 32 × 128 × 2 = 524,288 bytes ≈ <strong>0.5 MB per token</strong>. A 4,096-token\nsequence ≈ 2 GB. KV cache, not weights, usually limits how many concurrent\nrequests you can serve. <strong>Grouped-query attention (GQA)</strong> cuts KV heads (e.g.\n8 instead of 32), shrinking the cache 4×.</p>\n<h2>Memory budget</h2>\n<p>GPU memory = weights + KV cache + activations/overhead. Weights: params ×\nbytes (FP16 = 2, INT8 = 1, INT4 = 0.5). A 70B model in FP16 (~140 GB) doesn't\nfit on one 80 GB GPU → tensor parallelism across GPUs, or quantisation.</p>\n<h2>Metrics vocabulary</h2>\n<p>TTFT, TPOT/ITL, end-to-end latency = TTFT + TPOT × (output tokens − 1),\nthroughput (tokens/s across all users), goodput (throughput that meets the\nlatency SLO).</p>"
     },
     {
      "id": "p3m2",
-     "title": "Serving engines — PagedAttention, continuous batching, prefix caching",
+     "title": "Serving engines: PagedAttention, continuous batching, prefix caching",
      "hours": 8,
      "figures": [
       "batching"
@@ -1737,11 +1737,11 @@
      "reflection": [
       "How would you restructure the auction assistant's prompt to maximise cache hits?"
      ],
-     "lesson_html": "<h2>Static vs continuous batching</h2>\n<p><strong>Static batching</strong> waits for a batch, runs it until the longest sequence\nfinishes; short requests wait and GPU slots sit idle. <strong>Continuous batching</strong>\n(introduced by Orca as iteration-level scheduling) re-forms the batch at every\ndecode step: finished sequences leave, new ones join. Large throughput gains on\nreal traffic with mixed output lengths.</p>\n<h2>PagedAttention (vLLM)</h2>\n<p>Naively, each request reserves a contiguous KV region sized for its maximum\nlength → internal and external fragmentation; the vLLM paper reports large\nwaste in prior systems. <strong>PagedAttention</strong> splits KV cache into fixed-size\n<strong>blocks</strong> (like OS memory pages) mapped through a block table, allocated on\ndemand. Near-zero waste → more concurrent sequences → higher throughput. Blocks\ncan also be <strong>shared</strong> (copy-on-write) for parallel sampling and common\nprefixes.</p>\n<h2>Prefix caching</h2>\n<p>Many requests share a prefix (system prompt, few-shot examples, a long\ndocument). Caching the KV for that prefix skips its prefill. SGLang's\n<strong>RadixAttention</strong> keeps prefixes in a radix tree for automatic reuse; vLLM\nsupports automatic prefix caching. Big win for agents with long, stable system\nprompts and tool definitions — order your prompt so stable parts come first.</p>\n<h2>Chunked prefill and disaggregation</h2>\n<p>A long prefill can stall everyone's decode steps (latency spikes). <strong>Chunked\nprefill</strong> splits prompts into chunks interleaved with decode. <strong>Prefill/decode\ndisaggregation</strong> runs the two phases on different GPU pools because they have\ndifferent bottlenecks.</p>\n<h2>The landscape</h2>\n<p>vLLM (most common open-source server), SGLang, TensorRT-LLM (NVIDIA-optimised),\nHugging Face TGI, plus managed endpoints. On Kubernetes: KServe or plain\nDeployments, ideally scaled on queue/KV metrics.</p>"
+     "lesson_html": "<h2>Static vs continuous batching</h2>\n<p><strong>Static batching</strong> waits for a batch, runs it until the longest sequence\nfinishes; short requests wait and GPU slots sit idle. <strong>Continuous batching</strong>\n(introduced by Orca as iteration-level scheduling) re-forms the batch at every\ndecode step: finished sequences leave, new ones join. Large throughput gains on\nreal traffic with mixed output lengths.</p>\n<h2>PagedAttention (vLLM)</h2>\n<p>Naively, each request reserves a contiguous KV region sized for its maximum\nlength → internal and external fragmentation; the vLLM paper reports large\nwaste in prior systems. <strong>PagedAttention</strong> splits KV cache into fixed-size\n<strong>blocks</strong> (like OS memory pages) mapped through a block table, allocated on\ndemand. Near-zero waste → more concurrent sequences → higher throughput. Blocks\ncan also be <strong>shared</strong> (copy-on-write) for parallel sampling and common\nprefixes.</p>\n<h2>Prefix caching</h2>\n<p>Many requests share a prefix (system prompt, few-shot examples, a long\ndocument). Caching the KV for that prefix skips its prefill. SGLang's\n<strong>RadixAttention</strong> keeps prefixes in a radix tree for automatic reuse; vLLM\nsupports automatic prefix caching. Big win for agents with long, stable system\nprompts and tool definitions, order your prompt so stable parts come first.</p>\n<h2>Chunked prefill and disaggregation</h2>\n<p>A long prefill can stall everyone's decode steps (latency spikes). <strong>Chunked\nprefill</strong> splits prompts into chunks interleaved with decode. <strong>Prefill/decode\ndisaggregation</strong> runs the two phases on different GPU pools because they have\ndifferent bottlenecks.</p>\n<h2>The landscape</h2>\n<p>vLLM (most common open-source server), SGLang, TensorRT-LLM (NVIDIA-optimised),\nHugging Face TGI, plus managed endpoints. On Kubernetes: KServe or plain\nDeployments, ideally scaled on queue/KV metrics.</p>"
     },
     {
      "id": "p3m3",
-     "title": "Optimisation — quantisation, speculative decoding, FlashAttention",
+     "title": "Optimisation: quantisation, speculative decoding, FlashAttention",
      "hours": 8,
      "objectives": [
       "Choose a quantisation scheme and measure its quality cost",
@@ -1877,7 +1877,7 @@
      "reflection": [
       "Which optimisation would you try first for the auction assistant and why?"
      ],
-     "lesson_html": "<h2>Quantisation</h2>\n<p>Store weights (and sometimes activations or KV cache) in fewer bits.\n- <strong>Weight-only INT8/INT4</strong> — shrinks memory and speeds memory-bound decode.\n  Methods: <strong>GPTQ</strong> (approximate second-order, layer-wise), <strong>AWQ</strong>\n  (activation-aware: protect the small fraction of salient weights).\n- <strong>FP8</strong> — on newer GPUs (e.g. H100), FP8 weights/activations with hardware\n  support; good quality/speed trade-off.\n- <strong>KV cache quantisation</strong> — more concurrent sequences.\nRule: quantisation is a <strong>quality</strong> change, so it must pass your evals\n(Pillar 4), not just perplexity. Quality loss is often uneven — check your\nlanguages (e.g. BM/Manglish) and tasks separately.</p>\n<h2>Speculative decoding</h2>\n<p>A small <strong>draft</strong> model proposes k tokens; the large <strong>target</strong> model verifies\nthem in one forward pass. Accepted tokens are kept; on the first mismatch the\ntarget's token is used. The sampling scheme guarantees the output distribution\nequals the target model's — <strong>no quality loss</strong>, just speed. Helps most when\nthe draft's acceptance rate is high and you're latency-bound at low batch\nsizes; gains shrink at high batch where you're compute-bound. Variants: n-gram\n/ prompt lookup, Medusa heads, EAGLE.</p>\n<h2>FlashAttention</h2>\n<p>Standard attention materialises the full N×N attention matrix in slow GPU HBM.\n<strong>FlashAttention</strong> tiles the computation so blocks stay in fast on-chip SRAM,\nusing an online softmax — exact attention with far fewer memory reads/writes.\nThe lesson generalises: on GPUs, <strong>moving data is often the cost, not maths</strong>.</p>\n<h2>Other levers</h2>\n<p>Smaller/distilled models, shorter prompts, output length limits, structured\noutput, routing easy requests to a small model, caching full responses for\nrepeated questions. Often the cheapest optimisation is not in the GPU at all.</p>"
+     "lesson_html": "<h2>Quantisation</h2>\n<p>Store weights (and sometimes activations or KV cache) in fewer bits.\n- <strong>Weight-only INT8/INT4</strong>: shrinks memory and speeds memory-bound decode.\n  Methods: <strong>GPTQ</strong> (approximate second-order, layer-wise), <strong>AWQ</strong>\n  (activation-aware: protect the small fraction of salient weights).\n- <strong>FP8</strong>: on newer GPUs (e.g. H100), FP8 weights/activations with hardware\n  support; good quality/speed trade-off.\n- <strong>KV cache quantisation</strong>: more concurrent sequences.\nRule: quantisation is a <strong>quality</strong> change, so it must pass your evals\n(Pillar 4), not just perplexity. Quality loss is often uneven, check your\nlanguages (e.g. BM/Manglish) and tasks separately.</p>\n<h2>Speculative decoding</h2>\n<p>A small <strong>draft</strong> model proposes k tokens; the large <strong>target</strong> model verifies\nthem in one forward pass. Accepted tokens are kept; on the first mismatch the\ntarget's token is used. The sampling scheme guarantees the output distribution\nequals the target model's, <strong>no quality loss</strong>, just speed. Helps most when\nthe draft's acceptance rate is high and you're latency-bound at low batch\nsizes; gains shrink at high batch where you're compute-bound. Variants: n-gram\n/ prompt lookup, Medusa heads, EAGLE.</p>\n<h2>FlashAttention</h2>\n<p>Standard attention materialises the full N×N attention matrix in slow GPU HBM.\n<strong>FlashAttention</strong> tiles the computation so blocks stay in fast on-chip SRAM,\nusing an online softmax, exact attention with far fewer memory reads/writes.\nThe lesson generalises: on GPUs, <strong>moving data is often the cost, not maths</strong>.</p>\n<h2>Other levers</h2>\n<p>Smaller/distilled models, shorter prompts, output length limits, structured\noutput, routing easy requests to a small model, caching full responses for\nrepeated questions. Often the cheapest optimisation is not in the GPU at all.</p>"
     },
     {
      "id": "p3m4",
@@ -1890,7 +1890,7 @@
      ],
      "readings": [
       {
-       "title": "vLLM documentation — Benchmarking",
+       "title": "vLLM documentation: Benchmarking",
        "author": "vLLM",
        "url": "https://docs.vllm.ai/",
        "type": "docs",
@@ -1917,7 +1917,7 @@
        "focus": "Latency vs throughput trade-off and hardware comparisons."
       },
       {
-       "title": "Azure API Management — AI gateway capabilities",
+       "title": "Azure API Management: AI gateway capabilities",
        "author": "Microsoft Learn",
        "url": "https://learn.microsoft.com/en-us/azure/api-management/genai-gateway-capabilities",
        "type": "docs",
@@ -2017,7 +2017,7 @@
      "reflection": [
       "What utilisation would the auction assistant realistically have across a week?"
      ],
-     "lesson_html": "<h2>Benchmark correctly</h2>\n<ul>\n<li>Use a <strong>realistic distribution</strong> of input and output lengths from real or\n  representative traffic, not one fixed prompt.</li>\n<li>Sweep <strong>concurrency</strong> (1, 2, 4 … 64+) and plot throughput vs latency\n  percentiles (p50/p95/p99 TTFT and TPOT). The curve's knee is your operating\n  point.</li>\n<li>Measure <strong>goodput</strong>: throughput where requests meet the SLO.</li>\n<li>Warm up first; separate cold-start from steady state.</li>\n<li>Tools: vLLM's benchmark scripts, NVIDIA GenAI-Perf, LLMPerf.</li>\n</ul>\n<h2>Cost per million tokens</h2>\n<p><code>cost per 1M tokens = (GPU hourly cost) / (tokens per second × 3600) × 1,000,000</code></p>\n<p>Example: a GPU at $4/hour sustaining 2,000 output tokens/s at your SLO:\n4 / (2,000 × 3,600) × 1,000,000 ≈ <strong>$0.56 per 1M output tokens</strong> — at 100%\nutilisation. At 25% average utilisation, effective cost is 4× higher\n(~$2.22). <strong>Utilisation is the whole game.</strong> APIs charge per token so you pay\nnothing when idle; self-hosting charges per hour.</p>\n<h2>Break-even thinking</h2>\n<p>Self-hosting wins when traffic is high and steady, data must stay in your\nenvironment, or you need a fine-tuned/custom model. APIs win for spiky or low\ntraffic, frontier-quality needs, and small teams (ops cost is real: on-call,\nupgrades, security patching). Include engineer time in the model.</p>\n<h2>Capacity planning</h2>\n<p>Required replicas ≈ peak tokens/s ÷ per-replica goodput, plus headroom (N+1\nfor failure, ~30% for spikes). Scale on queue depth / in-flight requests.\nConsider autoscaling lag: model loading can take minutes — keep a warm minimum\nor use faster loading (cached weights on local NVMe).</p>\n<h2>Gateway layer</h2>\n<p>An AI gateway (APIM in your Foundry platform; LiteLLM or Envoy-based gateways\nelsewhere) centralises auth, quotas, token metering per team, routing,\nfallback between providers and caching — essential for chargeback.</p>"
+     "lesson_html": "<h2>Benchmark correctly</h2>\n<ul>\n<li>Use a <strong>realistic distribution</strong> of input and output lengths from real or\n  representative traffic, not one fixed prompt.</li>\n<li>Sweep <strong>concurrency</strong> (1, 2, 4 … 64+) and plot throughput vs latency\n  percentiles (p50/p95/p99 TTFT and TPOT). The curve's knee is your operating\n  point.</li>\n<li>Measure <strong>goodput</strong>: throughput where requests meet the SLO.</li>\n<li>Warm up first; separate cold-start from steady state.</li>\n<li>Tools: vLLM's benchmark scripts, NVIDIA GenAI-Perf, LLMPerf.</li>\n</ul>\n<h2>Cost per million tokens</h2>\n<p><code>cost per 1M tokens = (GPU hourly cost) / (tokens per second × 3600) × 1,000,000</code></p>\n<p>Example: a GPU at $4/hour sustaining 2,000 output tokens/s at your SLO:\n4 / (2,000 × 3,600) × 1,000,000 ≈ <strong>$0.56 per 1M output tokens</strong>: at 100%\nutilisation. At 25% average utilisation, effective cost is 4× higher\n(~$2.22). <strong>Utilisation is the whole game.</strong> APIs charge per token so you pay\nnothing when idle; self-hosting charges per hour.</p>\n<h2>Break-even thinking</h2>\n<p>Self-hosting wins when traffic is high and steady, data must stay in your\nenvironment, or you need a fine-tuned/custom model. APIs win for spiky or low\ntraffic, frontier-quality needs, and small teams (ops cost is real: on-call,\nupgrades, security patching). Include engineer time in the model.</p>\n<h2>Capacity planning</h2>\n<p>Required replicas ≈ peak tokens/s ÷ per-replica goodput, plus headroom (N+1\nfor failure, ~30% for spikes). Scale on queue depth / in-flight requests.\nConsider autoscaling lag: model loading can take minutes, keep a warm minimum\nor use faster loading (cached weights on local NVMe).</p>\n<h2>Gateway layer</h2>\n<p>An AI gateway (APIM in your Foundry platform; LiteLLM or Envoy-based gateways\nelsewhere) centralises auth, quotas, token metering per team, routing,\nfallback between providers and caching, essential for chargeback.</p>"
     }
    ]
   },
@@ -2177,7 +2177,7 @@
       {
        "title": "Golden path spec for a model service",
        "level": "core",
-       "task": "Write the golden path for \"ship a new pricing model\" — steps, template contents, what is automated, what is optional.",
+       "task": "Write the golden path for \"ship a new pricing model\", steps, template contents, what is automated, what is optional.",
        "deliverable": "Golden path doc (max 2 pages).",
        "acceptance": [
         "Includes a time-to-first-deploy target and how you'd measure it"
@@ -2187,7 +2187,7 @@
      "reflection": [
       "Which part of your platform do data scientists avoid, and why?"
      ],
-     "lesson_html": "<h2>What a platform is</h2>\n<p>The CNCF Platforms white paper defines a platform as a collection of\ncapabilities, documentation and tools that support developing, deploying and\noperating products — offered as <strong>self-service</strong> and run <strong>as a product</strong> for\ninternal users. The test of a platform is not the tech; it is whether teams\nchoose to use it.</p>\n<h2>Team Topologies in one page</h2>\n<p>Four team types:\n- <strong>Stream-aligned</strong> — owns a slice of business value end to end (e.g. the\n  pricing data science team).\n- <strong>Platform</strong> — provides internal services that reduce stream-aligned teams'\n  cognitive load (your role).\n- <strong>Enabling</strong> — temporarily helps teams adopt new capabilities (coaching DS on\n  MLOps practices).\n- <strong>Complicated-subsystem</strong> — owns a part needing deep specialist knowledge\n  (e.g. a CV damage-detection model or an inference engine).\nThree interaction modes: <strong>collaboration</strong>, <strong>X-as-a-service</strong>,\n<strong>facilitating</strong>. A healthy platform moves from collaboration to\nX-as-a-service as it matures. The guiding metric is <strong>cognitive load</strong> on\nstream-aligned teams.</p>\n<h2>Golden paths</h2>\n<p>Spotify defines the Golden Path as \"the opinionated and supported path\" to\nbuild something. Key properties: optional (not mandated), opinionated,\ndocumented, supported, and kept short through templates and automation. For AI:\na template that gives a new model project CI, tests, registry, deployment,\nmonitoring and eval hooks on day one.</p>\n<h2>Measuring a platform</h2>\n<ul>\n<li>Adoption (voluntary usage rate), time-to-first-deploy for a new team.</li>\n<li>DORA metrics: deployment frequency, lead time for changes, change failure\n  rate, time to restore service.</li>\n<li>Developer satisfaction surveys; support ticket volume.\nYour \"two weeks to two days\" release story is a lead-time improvement — say it\nin DORA language.</li>\n</ul>"
+     "lesson_html": "<h2>What a platform is</h2>\n<p>The CNCF Platforms white paper defines a platform as a collection of\ncapabilities, documentation and tools that support developing, deploying and\noperating products, offered as <strong>self-service</strong> and run <strong>as a product</strong> for\ninternal users. The test of a platform is not the tech; it is whether teams\nchoose to use it.</p>\n<h2>Team Topologies in one page</h2>\n<p>Four team types:\n- <strong>Stream-aligned</strong>: owns a slice of business value end to end (e.g. the\n  pricing data science team).\n- <strong>Platform</strong>: provides internal services that reduce stream-aligned teams'\n  cognitive load (your role).\n- <strong>Enabling</strong>: temporarily helps teams adopt new capabilities (coaching DS on\n  MLOps practices).\n- <strong>Complicated-subsystem</strong>: owns a part needing deep specialist knowledge\n  (e.g. a CV damage-detection model or an inference engine).\nThree interaction modes: <strong>collaboration</strong>, <strong>X-as-a-service</strong>,\n<strong>facilitating</strong>. A healthy platform moves from collaboration to\nX-as-a-service as it matures. The guiding metric is <strong>cognitive load</strong> on\nstream-aligned teams.</p>\n<h2>Golden paths</h2>\n<p>Spotify defines the Golden Path as \"the opinionated and supported path\" to\nbuild something. Key properties: optional (not mandated), opinionated,\ndocumented, supported, and kept short through templates and automation. For AI:\na template that gives a new model project CI, tests, registry, deployment,\nmonitoring and eval hooks on day one.</p>\n<h2>Measuring a platform</h2>\n<ul>\n<li>Adoption (voluntary usage rate), time-to-first-deploy for a new team.</li>\n<li>DORA metrics: deployment frequency, lead time for changes, change failure\n  rate, time to restore service.</li>\n<li>Developer satisfaction surveys; support ticket volume.\nYour \"two weeks to two days\" release story is a lead-time improvement, say it\nin DORA language.</li>\n</ul>"
     },
     {
      "id": "p2m2",
@@ -2203,7 +2203,7 @@
      ],
      "readings": [
       {
-       "title": "Kubernetes docs — Controllers",
+       "title": "Kubernetes docs: Controllers",
        "author": "Kubernetes",
        "url": "https://kubernetes.io/docs/concepts/architecture/controller/",
        "type": "docs",
@@ -2212,7 +2212,7 @@
        "focus": "Control loops and desired vs actual state."
       },
       {
-       "title": "Kubernetes docs — Operator pattern",
+       "title": "Kubernetes docs: Operator pattern",
        "author": "Kubernetes",
        "url": "https://kubernetes.io/docs/concepts/extend-kubernetes/operator/",
        "type": "docs",
@@ -2221,7 +2221,7 @@
        "focus": "CRDs and custom controllers."
       },
       {
-       "title": "Kubernetes docs — Resource management for Pods and Containers",
+       "title": "Kubernetes docs: Resource management for Pods and Containers",
        "author": "Kubernetes",
        "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
        "type": "docs",
@@ -2348,7 +2348,7 @@
      "reflection": [
       "Which Kubernetes concept do you still treat as magic?"
      ],
-     "lesson_html": "<h2>The control loop</h2>\n<p>Kubernetes is a set of <strong>controllers</strong> that continuously compare <strong>desired\nstate</strong> (objects stored in etcd via the API server) to <strong>actual state</strong> and act\nto close the gap. This is level-triggered reconciliation, not one-off scripts.</p>\n<h2>kubectl apply to running pod</h2>\n<ol>\n<li><code>kubectl</code> sends the object to the <strong>API server</strong> (authn → authz/RBAC →\n   admission controllers, including mutating and validating webhooks).</li>\n<li>Object persisted in <strong>etcd</strong>.</li>\n<li>The Deployment controller creates a ReplicaSet; the ReplicaSet controller\n   creates Pods.</li>\n<li>The <strong>scheduler</strong> picks a node for each unscheduled Pod (filtering, then\n   scoring), writes the binding.</li>\n<li>The <strong>kubelet</strong> on that node sees the Pod, asks the container runtime (via\n   CRI) to pull images and start containers, sets up networking (CNI) and volumes\n   (CSI), and reports status.</li>\n</ol>\n<h2>Operators and CRDs</h2>\n<p>A <strong>CustomResourceDefinition</strong> adds a new API type; an <strong>operator</strong> is a custom\ncontroller that reconciles it using domain knowledge (e.g. KServe's\nInferenceService, the NVIDIA GPU Operator). This is how ML platforms extend\nKubernetes.</p>\n<h2>Resources and QoS</h2>\n<ul>\n<li><strong>Requests</strong> are what the scheduler reserves; <strong>limits</strong> cap usage.</li>\n<li>CPU over limit → throttled. Memory over limit → <strong>OOMKilled</strong>.</li>\n<li>QoS classes: <strong>Guaranteed</strong> (requests = limits for all containers),\n  <strong>Burstable</strong>, <strong>BestEffort</strong> (none set; evicted first).</li>\n</ul>\n<h2>Autoscaling</h2>\n<ul>\n<li><strong>HPA</strong> scales replicas on metrics (CPU, custom metrics like queue depth).</li>\n<li><strong>VPA</strong> adjusts requests.</li>\n<li><strong>Cluster Autoscaler / Karpenter</strong> add or remove nodes when pods can't schedule.</li>\n<li><strong>KEDA</strong> scales on event sources and can scale to zero.\nFor LLM serving, CPU is a poor scaling signal — use queue length, in-flight\nrequests or KV-cache utilisation (Pillar 3).</li>\n</ul>"
+     "lesson_html": "<h2>The control loop</h2>\n<p>Kubernetes is a set of <strong>controllers</strong> that continuously compare <strong>desired\nstate</strong> (objects stored in etcd via the API server) to <strong>actual state</strong> and act\nto close the gap. This is level-triggered reconciliation, not one-off scripts.</p>\n<h2>kubectl apply to running pod</h2>\n<ol>\n<li><code>kubectl</code> sends the object to the <strong>API server</strong> (authn → authz/RBAC →\n   admission controllers, including mutating and validating webhooks).</li>\n<li>Object persisted in <strong>etcd</strong>.</li>\n<li>The Deployment controller creates a ReplicaSet; the ReplicaSet controller\n   creates Pods.</li>\n<li>The <strong>scheduler</strong> picks a node for each unscheduled Pod (filtering, then\n   scoring), writes the binding.</li>\n<li>The <strong>kubelet</strong> on that node sees the Pod, asks the container runtime (via\n   CRI) to pull images and start containers, sets up networking (CNI) and volumes\n   (CSI), and reports status.</li>\n</ol>\n<h2>Operators and CRDs</h2>\n<p>A <strong>CustomResourceDefinition</strong> adds a new API type; an <strong>operator</strong> is a custom\ncontroller that reconciles it using domain knowledge (e.g. KServe's\nInferenceService, the NVIDIA GPU Operator). This is how ML platforms extend\nKubernetes.</p>\n<h2>Resources and QoS</h2>\n<ul>\n<li><strong>Requests</strong> are what the scheduler reserves; <strong>limits</strong> cap usage.</li>\n<li>CPU over limit → throttled. Memory over limit → <strong>OOMKilled</strong>.</li>\n<li>QoS classes: <strong>Guaranteed</strong> (requests = limits for all containers),\n  <strong>Burstable</strong>, <strong>BestEffort</strong> (none set; evicted first).</li>\n</ul>\n<h2>Autoscaling</h2>\n<ul>\n<li><strong>HPA</strong> scales replicas on metrics (CPU, custom metrics like queue depth).</li>\n<li><strong>VPA</strong> adjusts requests.</li>\n<li><strong>Cluster Autoscaler / Karpenter</strong> add or remove nodes when pods can't schedule.</li>\n<li><strong>KEDA</strong> scales on event sources and can scale to zero.\nFor LLM serving, CPU is a poor scaling signal, use queue length, in-flight\nrequests or KV-cache utilisation (Pillar 3).</li>\n</ul>"
     },
     {
      "id": "p2m3",
@@ -2361,7 +2361,7 @@
      ],
      "readings": [
       {
-       "title": "Kubernetes docs — Schedule GPUs",
+       "title": "Kubernetes docs: Schedule GPUs",
        "author": "Kubernetes",
        "url": "https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/",
        "type": "docs",
@@ -2379,7 +2379,7 @@
        "focus": "Components it manages; MIG and time-slicing configuration pages."
       },
       {
-       "title": "Kueue documentation — Overview",
+       "title": "Kueue documentation: Overview",
        "author": "Kubernetes SIG Scheduling",
        "url": "https://kueue.sigs.k8s.io/docs/overview/",
        "type": "docs",
@@ -2388,7 +2388,7 @@
        "focus": "ClusterQueues, LocalQueues, cohorts and borrowing."
       },
       {
-       "title": "Kubernetes docs — Multi-tenancy",
+       "title": "Kubernetes docs: Multi-tenancy",
        "author": "Kubernetes",
        "url": "https://kubernetes.io/docs/concepts/security/multi-tenancy/",
        "type": "docs",
@@ -2457,7 +2457,7 @@
        "q": "For untrusted external tenants, what's usually required?",
        "options": [
         "Just quotas",
-        "Hard multi-tenancy — separate clusters or strong sandboxing",
+        "Hard multi-tenancy, separate clusters or strong sandboxing",
         "Just RBAC",
         "Namespaces are enough"
        ],
@@ -2497,7 +2497,7 @@
      "reflection": [
       "What would your GPU utilisation be if you measured it honestly today?"
      ],
-     "lesson_html": "<h2>How GPUs reach a Pod</h2>\n<p>GPUs are <strong>extended resources</strong> advertised by a <strong>device plugin</strong> (e.g.\n<code>nvidia.com/gpu</code>). Pods request them in <code>limits</code>; GPUs are not overcommitted —\na requested GPU is exclusively assigned by default. The <strong>NVIDIA GPU Operator</strong>\ninstalls and manages the drivers, container toolkit, device plugin, DCGM\nmonitoring and MIG manager as Kubernetes-managed components.</p>\n<h2>Sharing a GPU</h2>\n<ul>\n<li><strong>MIG (Multi-Instance GPU)</strong> — on supported data-centre GPUs (e.g. A100,\n  H100), hardware-partitions one GPU into isolated instances with dedicated\n  memory and compute. Strong isolation; fixed profiles.</li>\n<li><strong>Time-slicing</strong> — multiple Pods share a GPU by taking turns. No memory\n  isolation; one tenant can OOM others. Fine for dev, notebooks, light\n  inference.</li>\n<li><strong>MPS</strong> — concurrent processes share a GPU with better utilisation than\n  time-slicing; limited isolation.</li>\n<li><strong>Dedicated</strong> — whole GPUs for training or large LLM serving.</li>\n</ul>\n<h2>Multi-tenancy</h2>\n<p>Soft multi-tenancy (trusted internal teams) usually means one namespace per\nteam or workload with: <strong>ResourceQuota</strong> (including GPU counts),\n<strong>LimitRange</strong>, <strong>RBAC</strong>, <strong>NetworkPolicy</strong>, and separate node pools via\n<strong>taints/tolerations</strong> and node affinity for GPU nodes. Hard multi-tenancy\n(untrusted tenants) usually needs separate clusters or strong sandboxing.</p>\n<h2>Batch and fair-share</h2>\n<p>The default scheduler places Pods one at a time; distributed training needs\n<strong>gang scheduling</strong> (all workers or none). <strong>Kueue</strong> adds job queueing, quotas\nper queue, borrowing between teams, and preemption on top of the standard\nscheduler. Volcano is an alternative batch scheduler.</p>\n<h2>Cost</h2>\n<p>GPUs dominate AI platform cost. Track utilisation via DCGM metrics; idle\nreserved GPUs are the biggest waste. Scale-to-zero for spiky inference, spot\nnodes for fault-tolerant training.</p>"
+     "lesson_html": "<h2>How GPUs reach a Pod</h2>\n<p>GPUs are <strong>extended resources</strong> advertised by a <strong>device plugin</strong> (e.g.\n<code>nvidia.com/gpu</code>). Pods request them in <code>limits</code>; GPUs are not overcommitted -\na requested GPU is exclusively assigned by default. The <strong>NVIDIA GPU Operator</strong>\ninstalls and manages the drivers, container toolkit, device plugin, DCGM\nmonitoring and MIG manager as Kubernetes-managed components.</p>\n<h2>Sharing a GPU</h2>\n<ul>\n<li><strong>MIG (Multi-Instance GPU)</strong>: on supported data-centre GPUs (e.g. A100,\n  H100), hardware-partitions one GPU into isolated instances with dedicated\n  memory and compute. Strong isolation; fixed profiles.</li>\n<li><strong>Time-slicing</strong>: multiple Pods share a GPU by taking turns. No memory\n  isolation; one tenant can OOM others. Fine for dev, notebooks, light\n  inference.</li>\n<li><strong>MPS</strong>: concurrent processes share a GPU with better utilisation than\n  time-slicing; limited isolation.</li>\n<li><strong>Dedicated</strong>: whole GPUs for training or large LLM serving.</li>\n</ul>\n<h2>Multi-tenancy</h2>\n<p>Soft multi-tenancy (trusted internal teams) usually means one namespace per\nteam or workload with: <strong>ResourceQuota</strong> (including GPU counts),\n<strong>LimitRange</strong>, <strong>RBAC</strong>, <strong>NetworkPolicy</strong>, and separate node pools via\n<strong>taints/tolerations</strong> and node affinity for GPU nodes. Hard multi-tenancy\n(untrusted tenants) usually needs separate clusters or strong sandboxing.</p>\n<h2>Batch and fair-share</h2>\n<p>The default scheduler places Pods one at a time; distributed training needs\n<strong>gang scheduling</strong> (all workers or none). <strong>Kueue</strong> adds job queueing, quotas\nper queue, borrowing between teams, and preemption on top of the standard\nscheduler. Volcano is an alternative batch scheduler.</p>\n<h2>Cost</h2>\n<p>GPUs dominate AI platform cost. Track utilisation via DCGM metrics; idle\nreserved GPUs are the biggest waste. Scale-to-zero for spiky inference, spot\nnodes for fault-tolerant training.</p>"
     },
     {
      "id": "p2m4",
@@ -2510,7 +2510,7 @@
      ],
      "readings": [
       {
-       "title": "Terraform docs — Modules",
+       "title": "Terraform docs: Modules",
        "author": "HashiCorp",
        "url": "https://developer.hashicorp.com/terraform/language/modules",
        "type": "docs",
@@ -2528,7 +2528,7 @@
        "focus": "The four principles."
       },
       {
-       "title": "Argo CD documentation — Core concepts",
+       "title": "Argo CD documentation: Core concepts",
        "author": "Argo Project",
        "url": "https://argo-cd.readthedocs.io/en/stable/core_concepts/",
        "type": "docs",
@@ -2646,7 +2646,7 @@
      "reflection": [
       "Which manual step in your current infra still lives in someone's head?"
      ],
-     "lesson_html": "<h2>Terraform structure</h2>\n<ul>\n<li><strong>Modules</strong> are reusable building blocks (e.g. a \"foundry-workload\" module).</li>\n<li><strong>Root modules</strong> per environment/workload compose modules.</li>\n<li><strong>Remote state</strong> with locking; one state per blast-radius unit (don't put all\n  environments in one state).</li>\n<li>Pin provider and module versions; run <code>plan</code> in CI and require review on\n  <code>apply</code>.</li>\n<li>Detect <strong>drift</strong> (resources changed outside Terraform) with scheduled plans.</li>\n</ul>\n<h2>GitOps</h2>\n<p>GitOps (OpenGitOps principles): desired state is <strong>declarative</strong>, <strong>versioned\nand immutable</strong> in git, <strong>pulled automatically</strong> by agents, and <strong>continuously\nreconciled</strong>. Argo CD runs in the cluster, watches git, and syncs manifests —\nthe same control-loop idea as Kubernetes itself. Benefits: audit trail,\nrollback via git revert, no CI system holding cluster-admin credentials.\nTypical split: Terraform for cloud resources (clusters, networks, identities),\nGitOps for in-cluster resources.</p>\n<h2>Policy as code</h2>\n<p>Admission controllers enforce rules at the API server:\n- <strong>Kyverno</strong> — policies written as Kubernetes YAML; validate, mutate,\n  generate, verify images.\n- <strong>OPA Gatekeeper</strong> — policies in Rego via ConstraintTemplates.\nExample AI-platform guardrails: no containers without resource limits; GPU\npods only in approved namespaces; images only from your registry and signed;\nno public LoadBalancers; required labels for cost allocation (team, model).\nAlso run the same policies in CI (shift-left) so developers see failures\nbefore deploying.</p>\n<h2>Secrets and identity</h2>\n<p>Prefer workload identity (Azure Workload Identity, IRSA on AWS) over static\nsecrets. You already used workload identity federation for Foundry agents —\nthat's the pattern.</p>"
+     "lesson_html": "<h2>Terraform structure</h2>\n<ul>\n<li><strong>Modules</strong> are reusable building blocks (e.g. a \"foundry-workload\" module).</li>\n<li><strong>Root modules</strong> per environment/workload compose modules.</li>\n<li><strong>Remote state</strong> with locking; one state per blast-radius unit (don't put all\n  environments in one state).</li>\n<li>Pin provider and module versions; run <code>plan</code> in CI and require review on\n  <code>apply</code>.</li>\n<li>Detect <strong>drift</strong> (resources changed outside Terraform) with scheduled plans.</li>\n</ul>\n<h2>GitOps</h2>\n<p>GitOps (OpenGitOps principles): desired state is <strong>declarative</strong>, <strong>versioned\nand immutable</strong> in git, <strong>pulled automatically</strong> by agents, and <strong>continuously\nreconciled</strong>. Argo CD runs in the cluster, watches git, and syncs manifests -\nthe same control-loop idea as Kubernetes itself. Benefits: audit trail,\nrollback via git revert, no CI system holding cluster-admin credentials.\nTypical split: Terraform for cloud resources (clusters, networks, identities),\nGitOps for in-cluster resources.</p>\n<h2>Policy as code</h2>\n<p>Admission controllers enforce rules at the API server:\n- <strong>Kyverno</strong>: policies written as Kubernetes YAML; validate, mutate,\n  generate, verify images.\n- <strong>OPA Gatekeeper</strong>: policies in Rego via ConstraintTemplates.\nExample AI-platform guardrails: no containers without resource limits; GPU\npods only in approved namespaces; images only from your registry and signed;\nno public LoadBalancers; required labels for cost allocation (team, model).\nAlso run the same policies in CI (shift-left) so developers see failures\nbefore deploying.</p>\n<h2>Secrets and identity</h2>\n<p>Prefer workload identity (Azure Workload Identity, IRSA on AWS) over static\nsecrets. You already used workload identity federation for Foundry agents -\nthat's the pattern.</p>"
     }
    ]
   },
@@ -2655,7 +2655,7 @@
    "order": 5,
    "title": "AI governance, risk and security",
    "status": "partial",
-   "goal": "Turn governance frameworks and regulation into concrete platform controls: risk tiers, documentation, audit trails, human oversight and LLM security — mapped to NIST, ISO/IEC 42001, the EU AI Act and Malaysian/Singapore guidance.\n",
+   "goal": "Turn governance frameworks and regulation into concrete platform controls: risk tiers, documentation, audit trails, human oversight and LLM security - mapped to NIST, ISO/IEC 42001, the EU AI Act and Malaysian/Singapore guidance.\n",
    "why_now": "Regulated enterprises (PETRONAS, banks, GLCs) hire people who can translate \"responsible AI\" into controls engineers can implement and auditors can verify.\n",
    "capstone": {
     "title": "Governance-by-design pack for your agent platform",
@@ -2677,7 +2677,7 @@
    "modules": [
     {
      "id": "p5m1",
-     "title": "Risk frameworks — NIST AI RMF and ISO/IEC 42001",
+     "title": "Risk frameworks: NIST AI RMF and ISO/IEC 42001",
      "hours": 6,
      "figures": [
       "nist-rmf"
@@ -2707,7 +2707,7 @@
        "focus": "The list of GenAI risks and suggested actions."
       },
       {
-       "title": "ISO/IEC 42001:2023 — AI management systems",
+       "title": "ISO/IEC 42001:2023: AI management systems",
        "author": "ISO",
        "url": "https://www.iso.org/standard/81230.html",
        "type": "standard",
@@ -2807,11 +2807,11 @@
      "reflection": [
       "Which controls in your platform exist only on paper?"
      ],
-     "lesson_html": "<h2>NIST AI Risk Management Framework (AI RMF 1.0, 2023)</h2>\n<p>Voluntary US framework. Four functions:\n- <strong>Govern</strong> — culture, policies, roles, accountability (cross-cutting).\n- <strong>Map</strong> — understand context, intended use, stakeholders, risks.\n- <strong>Measure</strong> — assess and track risks with metrics (evals live here).\n- <strong>Manage</strong> — prioritise, respond to, and monitor risks.\nIt also describes characteristics of trustworthy AI: valid and reliable; safe;\nsecure and resilient; accountable and transparent; explainable and\ninterpretable; privacy-enhanced; fair with harmful bias managed.\nThe <strong>Generative AI Profile (NIST AI 600-1, 2024)</strong> applies the RMF to GenAI\nand lists GenAI-specific risks such as confabulation, information integrity,\ninformation security, harmful bias, data privacy and IP.</p>\n<h2>ISO/IEC 42001:2023</h2>\n<p>The first international <strong>management system</strong> standard for AI — like ISO 27001\nbut for AI. It specifies requirements for establishing, implementing,\nmaintaining and continually improving an AI management system (AIMS):\npolicy, roles, risk assessment, AI impact assessment, controls (Annex A),\nmonitoring, internal audit, management review. It is <strong>certifiable</strong>, which is\nwhy enterprises and vendors care.</p>\n<h2>Risk tiering — the practical bridge</h2>\n<p>Not every use case needs the same controls. A tiering scheme uses criteria\nlike: impact on individuals' rights or finances, autonomy (advice vs action),\naudience (internal vs public), reversibility, data sensitivity, and scale.\nExample:\n- <strong>Tier 1 (low)</strong> — internal productivity, human reviews all outputs.\n  Controls: basic evals, logging.\n- <strong>Tier 2 (medium)</strong> — customer-facing information (auction assistant).\n  Adds: eval gate, guardrails, monitoring, incident process, agent card.\n- <strong>Tier 3 (high)</strong> — decisions affecting people's money or rights (credit,\n  hiring) or autonomous actions. Adds: human oversight, bias testing,\n  independent review, sign-off, audit trail.\nThe platform's job: make Tier-2 controls the default golden path.</p>"
+     "lesson_html": "<h2>NIST AI Risk Management Framework (AI RMF 1.0, 2023)</h2>\n<p>Voluntary US framework. Four functions:\n- <strong>Govern</strong>: culture, policies, roles, accountability (cross-cutting).\n- <strong>Map</strong>: understand context, intended use, stakeholders, risks.\n- <strong>Measure</strong>: assess and track risks with metrics (evals live here).\n- <strong>Manage</strong>: prioritise, respond to, and monitor risks.\nIt also describes characteristics of trustworthy AI: valid and reliable; safe;\nsecure and resilient; accountable and transparent; explainable and\ninterpretable; privacy-enhanced; fair with harmful bias managed.\nThe <strong>Generative AI Profile (NIST AI 600-1, 2024)</strong> applies the RMF to GenAI\nand lists GenAI-specific risks such as confabulation, information integrity,\ninformation security, harmful bias, data privacy and IP.</p>\n<h2>ISO/IEC 42001:2023</h2>\n<p>The first international <strong>management system</strong> standard for AI, like ISO 27001\nbut for AI. It specifies requirements for establishing, implementing,\nmaintaining and continually improving an AI management system (AIMS):\npolicy, roles, risk assessment, AI impact assessment, controls (Annex A),\nmonitoring, internal audit, management review. It is <strong>certifiable</strong>, which is\nwhy enterprises and vendors care.</p>\n<h2>Risk tiering, the practical bridge</h2>\n<p>Not every use case needs the same controls. A tiering scheme uses criteria\nlike: impact on individuals' rights or finances, autonomy (advice vs action),\naudience (internal vs public), reversibility, data sensitivity, and scale.\nExample:\n- <strong>Tier 1 (low)</strong>: internal productivity, human reviews all outputs.\n  Controls: basic evals, logging.\n- <strong>Tier 2 (medium)</strong>: customer-facing information (auction assistant).\n  Adds: eval gate, guardrails, monitoring, incident process, agent card.\n- <strong>Tier 3 (high)</strong>: decisions affecting people's money or rights (credit,\n  hiring) or autonomous actions. Adds: human oversight, bias testing,\n  independent review, sign-off, audit trail.\nThe platform's job: make Tier-2 controls the default golden path.</p>"
     },
     {
      "id": "p5m2",
-     "title": "Regulation and guidance — EU AI Act, Malaysia, Singapore",
+     "title": "Regulation and guidance: EU AI Act, Malaysia, Singapore",
      "hours": 6,
      "objectives": [
       "Explain the EU AI Act's risk-based structure and current timeline",
@@ -2820,7 +2820,7 @@
      ],
      "readings": [
       {
-       "title": "EU AI Act — official text, Regulation (EU) 2024/1689",
+       "title": "EU AI Act: official text, Regulation (EU) 2024/1689",
        "author": "EUR-Lex",
        "url": "https://eur-lex.europa.eu/eli/reg/2024/1689/oj",
        "type": "law",
@@ -2838,7 +2838,7 @@
        "focus": "High-level summary and the high-risk requirements."
       },
       {
-       "title": "The AI Act Implementation Timeline — What Changes Under the AI Omnibus?",
+       "title": "The AI Act Implementation Timeline: What Changes Under the AI Omnibus?",
        "author": "Future of Privacy Forum",
        "url": "https://fpf.org/?p=250371",
        "type": "guide",
@@ -2891,7 +2891,7 @@
       {
        "q": "A Malaysian company's AI system scores job applicants in Germany for a client. Can the EU AI Act apply?",
        "options": [
-        "Yes — it applies when the output is used in the EU",
+        "Yes, it applies when the output is used in the EU",
         "Only for GPAI",
         "No, it's a Malaysian company",
         "Only if hosted in the EU"
@@ -2956,7 +2956,7 @@
      "reflection": [
       "Which of your projects would change design if it had EU users?"
      ],
-     "lesson_html": "<h2>EU AI Act (Regulation (EU) 2024/1689)</h2>\n<p>Risk-based:\n- <strong>Prohibited practices</strong> (e.g. social scoring, certain manipulative or\n  exploitative systems, untargeted facial-image scraping) — banned since\n  February 2025.\n- <strong>High-risk systems</strong> — Annex III use cases (e.g. employment, education,\n  credit scoring, critical infrastructure, law enforcement) and AI in regulated\n  products (Annex I). Obligations: risk management, data governance, technical\n  documentation, logging, transparency, human oversight, accuracy/robustness,\n  conformity assessment, registration.\n- <strong>Transparency obligations</strong> (Article 50) — e.g. telling people they're\n  interacting with AI, marking AI-generated content.\n- <strong>General-purpose AI (GPAI) models</strong> — obligations for model providers since\n  August 2025, extra duties for systemic-risk models.\n<strong>Timeline update:</strong> the 2026 Digital Omnibus on AI postponed high-risk\nobligations — to 2 December 2027 for Annex III systems and 2 August 2028 for\nAnnex I product-embedded systems. Regulation changes; always check the current\ntext before advising.\n<strong>Extraterritorial reach:</strong> it applies to providers placing AI on the EU market\nand to providers/deployers outside the EU when the system's <strong>output is used in\nthe EU</strong>.</p>\n<h2>Malaysia — National Guidelines on AI Governance &amp; Ethics (AIGE)</h2>\n<p>Launched by MOSTI on 20 September 2024. <strong>Voluntary.</strong> Seven principles\n(fairness; reliability, safety and control; privacy and security;\ninclusiveness; transparency; accountability; pursuit of human benefit and\nhappiness) with guidance for three stakeholder groups: end users, policymakers,\nand developers/technology providers. Malaysia's PDPA still applies to personal\ndata. Watch the National AI Office and the National AI Action Plan 2026–2030\nfor what comes next.</p>\n<h2>Singapore — Model AI Governance Framework for Generative AI (2024)</h2>\n<p>From IMDA and the AI Verify Foundation; voluntary; <strong>nine dimensions</strong>:\naccountability, data, trusted development and deployment, incident reporting,\ntesting and assurance, security, content provenance, safety and alignment R&amp;D,\nand AI for public good. AI Verify offers testing tools — practical reference for\nregional companies.</p>\n<h2>How to use this as an engineer</h2>\n<p>You don't need to be a lawyer. You need to (1) classify the use case, (2) know\nwhich obligations attach, and (3) implement them as platform controls with\nevidence. Get legal to confirm classification.</p>"
+     "lesson_html": "<h2>EU AI Act (Regulation (EU) 2024/1689)</h2>\n<p>Risk-based:\n- <strong>Prohibited practices</strong> (e.g. social scoring, certain manipulative or\n  exploitative systems, untargeted facial-image scraping), banned since\n  February 2025.\n- <strong>High-risk systems</strong>: Annex III use cases (e.g. employment, education,\n  credit scoring, critical infrastructure, law enforcement) and AI in regulated\n  products (Annex I). Obligations: risk management, data governance, technical\n  documentation, logging, transparency, human oversight, accuracy/robustness,\n  conformity assessment, registration.\n- <strong>Transparency obligations</strong> (Article 50): e.g. telling people they're\n  interacting with AI, marking AI-generated content.\n- <strong>General-purpose AI (GPAI) models</strong>: obligations for model providers since\n  August 2025, extra duties for systemic-risk models.\n<strong>Timeline update:</strong> the 2026 Digital Omnibus on AI postponed high-risk\nobligations, to 2 December 2027 for Annex III systems and 2 August 2028 for\nAnnex I product-embedded systems. Regulation changes; always check the current\ntext before advising.\n<strong>Extraterritorial reach:</strong> it applies to providers placing AI on the EU market\nand to providers/deployers outside the EU when the system's <strong>output is used in\nthe EU</strong>.</p>\n<h2>Malaysia, National Guidelines on AI Governance &amp; Ethics (AIGE)</h2>\n<p>Launched by MOSTI on 20 September 2024. <strong>Voluntary.</strong> Seven principles\n(fairness; reliability, safety and control; privacy and security;\ninclusiveness; transparency; accountability; pursuit of human benefit and\nhappiness) with guidance for three stakeholder groups: end users, policymakers,\nand developers/technology providers. Malaysia's PDPA still applies to personal\ndata. Watch the National AI Office and the National AI Action Plan 2026–2030\nfor what comes next.</p>\n<h2>Singapore, Model AI Governance Framework for Generative AI (2024)</h2>\n<p>From IMDA and the AI Verify Foundation; voluntary; <strong>nine dimensions</strong>:\naccountability, data, trusted development and deployment, incident reporting,\ntesting and assurance, security, content provenance, safety and alignment R&amp;D,\nand AI for public good. AI Verify offers testing tools, practical reference for\nregional companies.</p>\n<h2>How to use this as an engineer</h2>\n<p>You don't need to be a lawyer. You need to (1) classify the use case, (2) know\nwhich obligations attach, and (3) implement them as platform controls with\nevidence. Get legal to confirm classification.</p>"
     },
     {
      "id": "p5m3",
@@ -3056,10 +3056,10 @@
       {
        "q": "An agent loops calling a paid API 10,000 times. Which risk and fix?",
        "options": [
-        "LLM08 — re-embed",
+        "LLM08, re-embed",
         "None",
-        "LLM10 Unbounded Consumption — step limits, quotas and budgets",
-        "LLM01 — better prompts"
+        "LLM10 Unbounded Consumption, step limits, quotas and budgets",
+        "LLM01, better prompts"
        ],
        "answer": 2,
        "explain": "Bound steps, tokens and spend at the gateway and in the agent loop."
@@ -3100,11 +3100,11 @@
      "reflection": [
       "Which agent on your platform has the full lethal trifecta today?"
      ],
-     "lesson_html": "<h2>OWASP Top 10 for LLM Applications (2025)</h2>\n<p>LLM01 Prompt Injection · LLM02 Sensitive Information Disclosure · LLM03 Supply\nChain · LLM04 Data and Model Poisoning · LLM05 Improper Output Handling · LLM06\nExcessive Agency · LLM07 System Prompt Leakage · LLM08 Vector and Embedding\nWeaknesses · LLM09 Misinformation · LLM10 Unbounded Consumption.</p>\n<h2>Prompt injection</h2>\n<ul>\n<li><strong>Direct</strong> — the user types instructions to override the system.</li>\n<li><strong>Indirect</strong> — instructions hidden in content the model reads: web pages,\n  emails, documents, tool outputs (Greshake et al., 2023). For agents this is\n  the big one: any data source becomes an attack surface.\nThere is <strong>no complete fix</strong> today. Defence in depth:</li>\n<li><strong>Least privilege</strong> — tools with minimal scopes; read-only by default.</li>\n<li><strong>Human confirmation</strong> for consequential actions (payments, emails, deletes).</li>\n<li><strong>Separate trusted instructions from untrusted data</strong>; never let untrusted\n   content choose which tools to call with high-privilege arguments.</li>\n<li><strong>Output handling</strong> — treat model output as untrusted input to downstream\n   systems (escape, validate against schemas, never <code>eval</code>).</li>\n<li>Detection classifiers and monitoring — helpful, not sufficient.\nA useful rule of thumb (Simon Willison's \"lethal trifecta\"): danger is highest\nwhen an agent has <strong>access to private data</strong>, <strong>exposure to untrusted\ncontent</strong>, and <strong>a way to communicate externally</strong>. Remove one leg.</li>\n</ul>\n<h2>Excessive agency</h2>\n<p>Too much functionality, permission or autonomy. Fix with narrow tools, scoped\nidentities (workload identity per agent), rate limits and approvals.</p>\n<h2>Unbounded consumption</h2>\n<p>Token floods and runaway agent loops cost money. Gateway quotas, max steps,\nmax tokens and budget alerts per team.</p>\n<h2>MITRE ATLAS</h2>\n<p>A knowledge base of adversary tactics and techniques against AI systems,\nmodelled on ATT&amp;CK — useful for red-team planning.</p>"
+     "lesson_html": "<h2>OWASP Top 10 for LLM Applications (2025)</h2>\n<p>LLM01 Prompt Injection · LLM02 Sensitive Information Disclosure · LLM03 Supply\nChain · LLM04 Data and Model Poisoning · LLM05 Improper Output Handling · LLM06\nExcessive Agency · LLM07 System Prompt Leakage · LLM08 Vector and Embedding\nWeaknesses · LLM09 Misinformation · LLM10 Unbounded Consumption.</p>\n<h2>Prompt injection</h2>\n<ul>\n<li><strong>Direct</strong>: the user types instructions to override the system.</li>\n<li><strong>Indirect</strong>: instructions hidden in content the model reads: web pages,\n  emails, documents, tool outputs (Greshake et al., 2023). For agents this is\n  the big one: any data source becomes an attack surface.\nThere is <strong>no complete fix</strong> today. Defence in depth:</li>\n<li><strong>Least privilege</strong>: tools with minimal scopes; read-only by default.</li>\n<li><strong>Human confirmation</strong> for consequential actions (payments, emails, deletes).</li>\n<li><strong>Separate trusted instructions from untrusted data</strong>; never let untrusted\n   content choose which tools to call with high-privilege arguments.</li>\n<li><strong>Output handling</strong>: treat model output as untrusted input to downstream\n   systems (escape, validate against schemas, never <code>eval</code>).</li>\n<li>Detection classifiers and monitoring, helpful, not sufficient.\nA useful rule of thumb (Simon Willison's \"lethal trifecta\"): danger is highest\nwhen an agent has <strong>access to private data</strong>, <strong>exposure to untrusted\ncontent</strong>, and <strong>a way to communicate externally</strong>. Remove one leg.</li>\n</ul>\n<h2>Excessive agency</h2>\n<p>Too much functionality, permission or autonomy. Fix with narrow tools, scoped\nidentities (workload identity per agent), rate limits and approvals.</p>\n<h2>Unbounded consumption</h2>\n<p>Token floods and runaway agent loops cost money. Gateway quotas, max steps,\nmax tokens and budget alerts per team.</p>\n<h2>MITRE ATLAS</h2>\n<p>A knowledge base of adversary tactics and techniques against AI systems,\nmodelled on ATT&amp;CK, useful for red-team planning.</p>"
     },
     {
      "id": "p5m4",
-     "title": "Operational governance — documentation, lineage and human oversight",
+     "title": "Operational governance: documentation, lineage and human oversight",
      "hours": 6,
      "objectives": [
       "Write model cards, datasheets and agent cards",
@@ -3128,7 +3128,7 @@
        "type": "paper",
        "required": true,
        "minutes": 30,
-       "focus": "The question list — reuse it as a template."
+       "focus": "The question list, reuse it as a template."
       },
       {
        "title": "NIST AI RMF Playbook",
@@ -3156,7 +3156,7 @@
        "q": "Reviewers approve 99.9% of AI decisions without changes. What's the most likely concern?",
        "options": [
         "Latency",
-        "Automation bias — review may be rubber-stamping",
+        "Automation bias, review may be rubber-stamping",
         "Too many reviewers",
         "The model is perfect"
        ],
@@ -3220,7 +3220,7 @@
      "reflection": [
       "Could you answer an auditor's \"why did the system say this?\" within an hour today?"
      ],
-     "lesson_html": "<h2>Documentation artefacts</h2>\n<ul>\n<li><strong>Model cards</strong> (Mitchell et al., 2019) — intended use, out-of-scope use,\n  training data summary, evaluation results disaggregated by relevant groups,\n  ethical considerations, caveats.</li>\n<li><strong>Datasheets for datasets</strong> (Gebru et al., 2018) — motivation, composition,\n  collection, preprocessing, uses, distribution, maintenance.</li>\n<li><strong>Agent/system cards</strong> — for LLM systems: purpose, model(s) and versions,\n  tools and their permissions, data accessed, guardrails, eval results by slice,\n  known limitations, owner, risk tier, escalation path.\nGenerate as much as possible <strong>from the platform</strong> (registry metadata, eval\nruns) so cards don't rot.</li>\n</ul>\n<h2>Lineage and audit trails</h2>\n<p>For any decision you should be able to answer: which model version, which\nprompt version, which data/features, which tools were called with what\narguments, who approved the release, and what the user saw. Pieces: model\nregistry with lineage to data and code commit; versioned prompts; trace logs\nwith retention policy; release approvals recorded in CI.</p>\n<h2>Human oversight that actually works</h2>\n<p>\"Human in the loop\" fails when reviewers rubber-stamp (<strong>automation bias</strong>).\nMake it meaningful:\n- Review only where it matters (risk-based sampling, low-confidence cases,\n  consequential actions).\n- Show the reviewer the evidence (sources, tool calls), not just the answer.\n- Measure reviewer agreement and overturn rates; if overturns are ~0%, either\n  the system is perfect or the review is theatre.\n- Clear authority to stop or roll back the system.</p>\n<h2>Incident management for AI</h2>\n<p>Define what counts as an AI incident (harmful output, data leak, major quality\nregression), severity levels, who is paged, how to disable a feature (kill\nswitch / feature flag), and how incidents feed back into evals.</p>"
+     "lesson_html": "<h2>Documentation artefacts</h2>\n<ul>\n<li><strong>Model cards</strong> (Mitchell et al., 2019): intended use, out-of-scope use,\n  training data summary, evaluation results disaggregated by relevant groups,\n  ethical considerations, caveats.</li>\n<li><strong>Datasheets for datasets</strong> (Gebru et al., 2018): motivation, composition,\n  collection, preprocessing, uses, distribution, maintenance.</li>\n<li><strong>Agent/system cards</strong>: for LLM systems: purpose, model(s) and versions,\n  tools and their permissions, data accessed, guardrails, eval results by slice,\n  known limitations, owner, risk tier, escalation path.\nGenerate as much as possible <strong>from the platform</strong> (registry metadata, eval\nruns) so cards don't rot.</li>\n</ul>\n<h2>Lineage and audit trails</h2>\n<p>For any decision you should be able to answer: which model version, which\nprompt version, which data/features, which tools were called with what\narguments, who approved the release, and what the user saw. Pieces: model\nregistry with lineage to data and code commit; versioned prompts; trace logs\nwith retention policy; release approvals recorded in CI.</p>\n<h2>Human oversight that actually works</h2>\n<p>\"Human in the loop\" fails when reviewers rubber-stamp (<strong>automation bias</strong>).\nMake it meaningful:\n- Review only where it matters (risk-based sampling, low-confidence cases,\n  consequential actions).\n- Show the reviewer the evidence (sources, tool calls), not just the answer.\n- Measure reviewer agreement and overturn rates; if overturns are ~0%, either\n  the system is perfect or the review is theatre.\n- Clear authority to stop or roll back the system.</p>\n<h2>Incident management for AI</h2>\n<p>Define what counts as an AI incident (harmful output, data leak, major quality\nregression), severity levels, who is paged, how to disable a feature (kill\nswitch / feature flag), and how incidents feed back into evals.</p>"
     }
    ]
   },
@@ -3229,7 +3229,7 @@
    "order": 6,
    "title": "Public proof and technical leadership",
    "status": "gap",
-   "goal": "Become known for your expertise: write design docs and public posts that people share, give talks, maintain open source, and operate at staff level — leading without authority.\n",
+   "goal": "Become known for your expertise: write design docs and public posts that people share, give talks, maintain open source, and operate at staff level, leading without authority.\n",
    "why_now": "\"Global level\" means people outside your company know your work. This pillar runs in parallel with all others: every module's exercises are raw material.\n",
    "capstone": {
     "title": "Public body of work",
@@ -3251,7 +3251,7 @@
    "modules": [
     {
      "id": "p6m1",
-     "title": "Technical writing — design docs, ADRs and posts",
+     "title": "Technical writing: design docs, ADRs and posts",
      "hours": 6,
      "objectives": [
       "Write design docs that get decisions made",
@@ -3357,7 +3357,7 @@
      "reflection": [
       "What have you learned this month that 100 engineers would want to know?"
      ],
-     "lesson_html": "<h2>Design docs</h2>\n<p>Google-style design docs capture context and scope, goals and <strong>non-goals</strong>,\nthe proposed design, <strong>alternatives considered</strong>, and cross-cutting concerns\n(security, privacy, cost, observability). Their main value is surfacing\ndisagreement early and recording <em>why</em>. Keep them as short as the decision\nallows; a doc nobody reads didn't help.</p>\n<h2>ADRs</h2>\n<p>Michael Nygard's Architecture Decision Record: <strong>Title, Status, Context,\nDecision, Consequences</strong>. One decision per record, immutable once accepted\n(supersede, don't edit). You already use ADRs — make \"Consequences\" honest,\nincluding the downsides you accept.</p>\n<h2>Public posts</h2>\n<p>What works for practitioner writing:\n- <strong>One idea per post</strong>, with evidence from real work (numbers, diagrams,\n  code).\n- <strong>Write what you just learned</strong> — \"TIL\"-style posts are valuable and quick.\n- Show the failure, not only the success.\n- Title says the takeaway.\n- Never invent results; anonymise company data.\nSimon Willison's advice: write about things you've done and learned; a short\npost published beats a long one in drafts.</p>\n<h2>Your pipeline</h2>\n<p>Every module's exercises produce material. Convert each pillar capstone into a\npost on ammaradam.dev, then a short LinkedIn version linking to it.</p>"
+     "lesson_html": "<h2>Design docs</h2>\n<p>Google-style design docs capture context and scope, goals and <strong>non-goals</strong>,\nthe proposed design, <strong>alternatives considered</strong>, and cross-cutting concerns\n(security, privacy, cost, observability). Their main value is surfacing\ndisagreement early and recording <em>why</em>. Keep them as short as the decision\nallows; a doc nobody reads didn't help.</p>\n<h2>ADRs</h2>\n<p>Michael Nygard's Architecture Decision Record: <strong>Title, Status, Context,\nDecision, Consequences</strong>. One decision per record, immutable once accepted\n(supersede, don't edit). You already use ADRs, make \"Consequences\" honest,\nincluding the downsides you accept.</p>\n<h2>Public posts</h2>\n<p>What works for practitioner writing:\n- <strong>One idea per post</strong>, with evidence from real work (numbers, diagrams,\n  code).\n- <strong>Write what you just learned</strong>: \"TIL\"-style posts are valuable and quick.\n- Show the failure, not only the success.\n- Title says the takeaway.\n- Never invent results; anonymise company data.\nSimon Willison's advice: write about things you've done and learned; a short\npost published beats a long one in drafts.</p>\n<h2>Your pipeline</h2>\n<p>Every module's exercises produce material. Convert each pillar capstone into a\npost on ammaradam.dev, then a short LinkedIn version linking to it.</p>"
     },
     {
      "id": "p6m2",
@@ -3370,7 +3370,7 @@
      ],
      "readings": [
       {
-       "title": "Open Source Guides — Building Community (for speaking and community)",
+       "title": "Open Source Guides: Building Community (for speaking and community)",
        "author": "GitHub",
        "url": "https://opensource.guide/building-community/",
        "type": "guide",
@@ -3457,7 +3457,7 @@
      "reflection": [
       "What story from your work makes people lean in when you tell it?"
      ],
-     "lesson_html": "<h2>Where to speak (ladder)</h2>\n<p>Local meetups (PyData KL, Kubernetes/CNCF KL, GDG, AWS/Azure user groups) →\nPyCon MY / regional conferences (PyCon APAC, KubeCon + CloudNativeCon events,\nMLOps-focused conferences) → global conferences. You've spoken at PyCon\nMalaysia — you're already on the ladder.</p>\n<h2>Writing a CFP that works</h2>\n<p>Reviewers read hundreds. Make theirs easy:\n- <strong>Title</strong> — specific, promises a takeaway (\"What 100 agent traces taught us\n  about evals in Manglish\").\n- <strong>Abstract</strong> — problem, why it matters, what you'll show, what attendees\n  leave with. Concrete beats clever.\n- <strong>Audience and level</strong> stated clearly.\n- <strong>Evidence you can deliver</strong> — real system, real numbers, links to prior\n  talks or posts.\n- Original material: talks about your own production experience beat survey\n  talks.</p>\n<h2>Structuring a 25-minute talk</h2>\n<ol>\n<li>Hook: the problem in one story (2 min).</li>\n<li>Context: just enough background (3 min).</li>\n<li>3 key points max, each with evidence or a demo (15 min).</li>\n<li>What to do Monday morning (3 min).</li>\n<li>Resources slide (2 min).\nRehearse out loud at least three times; time it; cut 20%.</li>\n</ol>\n<h2>Reuse</h2>\n<p>One body of work → blog post → meetup talk → conference talk → video → posts.</p>"
+     "lesson_html": "<h2>Where to speak (ladder)</h2>\n<p>Local meetups (PyData KL, Kubernetes/CNCF KL, GDG, AWS/Azure user groups) →\nPyCon MY / regional conferences (PyCon APAC, KubeCon + CloudNativeCon events,\nMLOps-focused conferences) → global conferences. You've spoken at PyCon\nMalaysia, you're already on the ladder.</p>\n<h2>Writing a CFP that works</h2>\n<p>Reviewers read hundreds. Make theirs easy:\n- <strong>Title</strong>: specific, promises a takeaway (\"What 100 agent traces taught us\n  about evals in Manglish\").\n- <strong>Abstract</strong>: problem, why it matters, what you'll show, what attendees\n  leave with. Concrete beats clever.\n- <strong>Audience and level</strong> stated clearly.\n- <strong>Evidence you can deliver</strong>: real system, real numbers, links to prior\n  talks or posts.\n- Original material: talks about your own production experience beat survey\n  talks.</p>\n<h2>Structuring a 25-minute talk</h2>\n<ol>\n<li>Hook: the problem in one story (2 min).</li>\n<li>Context: just enough background (3 min).</li>\n<li>3 key points max, each with evidence or a demo (15 min).</li>\n<li>What to do Monday morning (3 min).</li>\n<li>Resources slide (2 min).\nRehearse out loud at least three times; time it; cut 20%.</li>\n</ol>\n<h2>Reuse</h2>\n<p>One body of work → blog post → meetup talk → conference talk → video → posts.</p>"
     },
     {
      "id": "p6m3",
@@ -3470,7 +3470,7 @@
      ],
      "readings": [
       {
-       "title": "Open Source Guides — How to Contribute to Open Source",
+       "title": "Open Source Guides: How to Contribute to Open Source",
        "author": "GitHub",
        "url": "https://opensource.guide/how-to-contribute/",
        "type": "guide",
@@ -3479,7 +3479,7 @@
        "focus": "Finding a project and making a first contribution."
       },
       {
-       "title": "Open Source Guides — Starting an Open Source Project",
+       "title": "Open Source Guides: Starting an Open Source Project",
        "author": "GitHub",
        "url": "https://opensource.guide/starting-a-project/",
        "type": "guide",
@@ -3557,7 +3557,7 @@
      "reflection": [
       "Which of your side projects should you pause to make room for this?"
      ],
-     "lesson_html": "<h2>Your own project: MLOps-Toolbox</h2>\n<p>Adoption depends less on code quality than on: a README that explains the\nproblem in one paragraph, a 5-minute quickstart, a realistic demo\n(PriceCatcher), clear contribution guide, tagged releases, and issues labelled\n\"good first issue\". Write the docs for a stranger.</p>\n<h2>Upstream contributions</h2>\n<p>Start with docs and small fixes in projects you use (vLLM, Feast, Kueue,\nOpenTelemetry, Langfuse, Evidently). Steps: read CONTRIBUTING, find a\nwell-scoped issue, comment before starting, keep the PR small, include tests,\nrespond to review quickly. One merged PR in a well-known project carries real\nsignal.</p>\n<h2>Small finished things beat big unfinished ones</h2>\n<p>A published eval dataset, a tiny CLI, a Kubernetes manifest example, a\nbenchmark notebook — each is shareable proof. Your side-project list is long;\nchoose open-source work that <strong>reinforces your expertise story</strong> (platform +\nevals + Malaysia) and pause the rest.</p>"
+     "lesson_html": "<h2>Your own project: MLOps-Toolbox</h2>\n<p>Adoption depends less on code quality than on: a README that explains the\nproblem in one paragraph, a 5-minute quickstart, a realistic demo\n(PriceCatcher), clear contribution guide, tagged releases, and issues labelled\n\"good first issue\". Write the docs for a stranger.</p>\n<h2>Upstream contributions</h2>\n<p>Start with docs and small fixes in projects you use (vLLM, Feast, Kueue,\nOpenTelemetry, Langfuse, Evidently). Steps: read CONTRIBUTING, find a\nwell-scoped issue, comment before starting, keep the PR small, include tests,\nrespond to review quickly. One merged PR in a well-known project carries real\nsignal.</p>\n<h2>Small finished things beat big unfinished ones</h2>\n<p>A published eval dataset, a tiny CLI, a Kubernetes manifest example, a\nbenchmark notebook, each is shareable proof. Your side-project list is long;\nchoose open-source work that <strong>reinforces your expertise story</strong> (platform +\nevals + Malaysia) and pause the rest.</p>"
     },
     {
      "id": "p6m4",
@@ -3638,7 +3638,7 @@
       {
        "title": "Technical vision doc",
        "level": "core",
-       "task": "Write a 2-page, 12-18 month technical vision for AI at Pickles (or a target employer) — platform, evals, governance.",
+       "task": "Write a 2-page, 12-18 month technical vision for AI at Pickles (or a target employer), platform, evals, governance.",
        "deliverable": "Vision doc.",
        "acceptance": [
         "States current state, target state, and 3 bets with how you'll measure them"
@@ -3657,7 +3657,7 @@
      "reflection": [
       "Who are your sponsors today, and who should they be?"
      ],
-     "lesson_html": "<h2>Staff archetypes (Will Larson)</h2>\n<ul>\n<li><strong>Tech Lead</strong> — guides one team's approach and execution.</li>\n<li><strong>Architect</strong> — direction and quality across a critical area.</li>\n<li><strong>Solver</strong> — parachutes into hard problems.</li>\n<li><strong>Right Hand</strong> — extends an executive's leadership across the org.\nYour current role (platform direction, governance, coaching DS) mixes Tech\nLead and Architect.</li>\n</ul>\n<h2>Staff work (Tanya Reilly's framing)</h2>\n<p>Three pillars: <strong>big-picture thinking</strong> (strategy, vision, technical\ndirection), <strong>project execution</strong> (leading hard, ambiguous projects to done),\nand <strong>levelling up others</strong> (mentoring, setting standards, reviews). Much of it\nis \"glue work\" — make it visible and tie it to outcomes.</p>\n<h2>Influence tools</h2>\n<ul>\n<li>Written strategy and vision docs (connect to p6m1).</li>\n<li>Getting sponsors: managers and execs who will spend capital on your ideas.</li>\n<li>Being \"in the room\" — and earning it by bringing data.</li>\n<li>Making others successful (coaching DS to \"drive on the roads\").</li>\n</ul>\n<h2>IC vs manager</h2>\n<p>Managers own people outcomes (hiring, performance, growth); staff ICs own\ntechnical outcomes across teams. Both lead. Look at your energy: do you prefer\n1:1s and growing people, or deep technical direction? Your coaching + visionary\nstyle fits either; the job you pick should match what you want to spend most\ndays doing.</p>"
+     "lesson_html": "<h2>Staff archetypes (Will Larson)</h2>\n<ul>\n<li><strong>Tech Lead</strong>: guides one team's approach and execution.</li>\n<li><strong>Architect</strong>: direction and quality across a critical area.</li>\n<li><strong>Solver</strong>: parachutes into hard problems.</li>\n<li><strong>Right Hand</strong>: extends an executive's leadership across the org.\nYour current role (platform direction, governance, coaching DS) mixes Tech\nLead and Architect.</li>\n</ul>\n<h2>Staff work (Tanya Reilly's framing)</h2>\n<p>Three pillars: <strong>big-picture thinking</strong> (strategy, vision, technical\ndirection), <strong>project execution</strong> (leading hard, ambiguous projects to done),\nand <strong>levelling up others</strong> (mentoring, setting standards, reviews). Much of it\nis \"glue work\", make it visible and tie it to outcomes.</p>\n<h2>Influence tools</h2>\n<ul>\n<li>Written strategy and vision docs (connect to p6m1).</li>\n<li>Getting sponsors: managers and execs who will spend capital on your ideas.</li>\n<li>Being \"in the room\": and earning it by bringing data.</li>\n<li>Making others successful (coaching DS to \"drive on the roads\").</li>\n</ul>\n<h2>IC vs manager</h2>\n<p>Managers own people outcomes (hiring, performance, growth); staff ICs own\ntechnical outcomes across teams. Both lead. Look at your energy: do you prefer\n1:1s and growing people, or deep technical direction? Your coaching + visionary\nstyle fits either; the job you pick should match what you want to spend most\ndays doing.</p>"
     }
    ]
   }

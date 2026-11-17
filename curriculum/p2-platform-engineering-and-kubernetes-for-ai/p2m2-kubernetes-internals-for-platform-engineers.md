@@ -44,16 +44,16 @@ Kubernetes.
 - **VPA** adjusts requests.
 - **Cluster Autoscaler / Karpenter** add or remove nodes when pods can't schedule.
 - **KEDA** scales on event sources and can scale to zero.
-For LLM serving, CPU is a poor scaling signal — use queue length, in-flight
+For LLM serving, CPU is a poor scaling signal, use queue length, in-flight
 requests or KV-cache utilisation (Pillar 3).
 
 ## Readings
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| **Required** | [Kubernetes docs — Controllers](https://kubernetes.io/docs/concepts/architecture/controller/) — Kubernetes | docs | 15 min | Control loops and desired vs actual state. |
-| **Required** | [Kubernetes docs — Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) — Kubernetes | docs | 15 min | CRDs and custom controllers. |
-| **Required** | [Kubernetes docs — Resource management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) — Kubernetes | docs | 30 min | Requests, limits and what happens when they're exceeded. |
+| **Required** | [Kubernetes docs: Controllers](https://kubernetes.io/docs/concepts/architecture/controller/) — Kubernetes | docs | 15 min | Control loops and desired vs actual state. |
+| **Required** | [Kubernetes docs: Operator pattern](https://kubernetes.io/docs/concepts/extend-kubernetes/operator/) — Kubernetes | docs | 15 min | CRDs and custom controllers. |
+| **Required** | [Kubernetes docs: Resource management for Pods and Containers](https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/) — Kubernetes | docs | 30 min | Requests, limits and what happens when they're exceeded. |
 | Optional | [Kubernetes The Hard Way](https://github.com/kelseyhightower/kubernetes-the-hard-way) — Kelsey Hightower | tutorial | 480 min | Build a cluster by hand once; you'll never forget the components. |
 | Optional | [KEDA documentation](https://keda.sh/docs/) — KEDA | docs | 30 min | Event-driven autoscaling and scale-to-zero. |
 

@@ -13,12 +13,11 @@
 ## Tracing
 An LLM app trace is a tree of spans: request → retrieval → LLM call(s) → tool
 calls → response. OpenTelemetry's **GenAI semantic conventions** (still in
-development status — check the current version) standardise attributes like
+development status, check the current version) standardise attributes like
 `gen_ai.operation.name`, `gen_ai.request.model`, `gen_ai.provider.name`, token
 usage, and agent/tool spans. Using the standard means any backend (Application
 Insights, Langfuse, Phoenix, Datadog…) can read your traces, and you avoid
-vendor lock-in. Capture prompts and completions only where privacy rules allow
-— the conventions say instrumentations must let you turn that off.
+vendor lock-in. Capture prompts and completions only where privacy rules allow, the conventions say instrumentations must let you turn that off.
 
 ## What to measure in production
 - Ops: latency (TTFT, total), errors, tokens and **cost per request/team**.
@@ -35,7 +34,7 @@ most valuable thing an AI platform can provide.
 Treat prompts, model versions, retrieval configs and tool definitions as
 **versioned artifacts**. Any change triggers:
 1. Fast assertions (seconds) on every commit.
-2. Full offline suite (minutes) on PRs — compare to **champion**; fail if any
+2. Full offline suite (minutes) on PRs, compare to **champion**; fail if any
    critical slice regresses beyond a threshold, with confidence intervals for
    small sets.
 3. Shadow or canary in production with online evals before full rollout.
@@ -43,17 +42,17 @@ This is the LLM version of your champion-challenger gate (p1m3).
 
 ## Guardrails
 Input and output checks around the model (topic filters, PII, injection
-detectors, schema validation). They're part of the system — so evaluate their
+detectors, schema validation). They're part of the system, so evaluate their
 false-positive and false-negative rates too.
 
 ## Readings
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| **Required** | [OpenTelemetry — Semantic conventions for generative AI systems](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — OpenTelemetry | docs | 40 min | Spans for inference, agents and tools; the stability/transition note. |
+| **Required** | [OpenTelemetry: Semantic conventions for generative AI systems](https://opentelemetry.io/docs/specs/semconv/gen-ai/) — OpenTelemetry | docs | 40 min | Spans for inference, agents and tools; the stability/transition note. |
 | **Required** | [A Field Guide to Rapidly Improving AI Products](https://hamel.dev/blog/posts/field-guide/) — Hamel Husain | blog | 40 min | Data viewers, error analysis loop, empowering domain experts. |
-| Optional | [Langfuse documentation — Tracing and evaluation](https://langfuse.com/docs) — Langfuse | docs | 30 min | An open-source example of trace + eval tooling. |
-| Optional | [Azure AI Foundry — Observability and evaluation](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/observability) — Microsoft Learn | docs | 30 min | Map concepts to your current Foundry platform. |
+| Optional | [Langfuse documentation: Tracing and evaluation](https://langfuse.com/docs) — Langfuse | docs | 30 min | An open-source example of trace + eval tooling. |
+| Optional | [Azure AI Foundry: Observability and evaluation](https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/observability) — Microsoft Learn | docs | 30 min | Map concepts to your current Foundry platform. |
 
 ## Quiz
 
@@ -83,7 +82,7 @@ Answer without notes first. Answers are in the collapsible section below.
 **Q4.** Your eval set for a slice has 30 cases and the pass rate dropped 3 points. What's the right reaction?
 
 - A) Delete the slice
-- B) Consider confidence intervals — with 30 cases, 3 points may be noise
+- B) Consider confidence intervals, with 30 cases, 3 points may be noise
 - C) Block immediately
 - D) Ignore all small slices
 

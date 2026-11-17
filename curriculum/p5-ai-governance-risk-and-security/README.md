@@ -1,10 +1,10 @@
 # P5 · AI governance, risk and security
 
-**Your current level:** 🟡 partial
+**Your current level:** Partial
 
 ## Goal
 
-Turn governance frameworks and regulation into concrete platform controls: risk tiers, documentation, audit trails, human oversight and LLM security — mapped to NIST, ISO/IEC 42001, the EU AI Act and Malaysian/Singapore guidance.
+Turn governance frameworks and regulation into concrete platform controls: risk tiers, documentation, audit trails, human oversight and LLM security - mapped to NIST, ISO/IEC 42001, the EU AI Act and Malaysian/Singapore guidance.
 
 ## Why this matters for you
 
@@ -16,10 +16,10 @@ Total: ~26 hours
 
 | Module | Hours | Quiz | Exercises |
 |---|---|---|---|
-| [P5M1 · Risk frameworks — NIST AI RMF and ISO/IEC 42001](p5m1-risk-frameworks-nist-ai-rmf-and-iso-iec-42001.md) | 6 | 6 Qs | 2 |
-| [P5M2 · Regulation and guidance — EU AI Act, Malaysia, Singapore](p5m2-regulation-and-guidance-eu-ai-act-malaysia-singapore.md) | 6 | 6 Qs | 2 |
+| [P5M1 · Risk frameworks: NIST AI RMF and ISO/IEC 42001](p5m1-risk-frameworks-nist-ai-rmf-and-iso-iec-42001.md) | 6 | 6 Qs | 2 |
+| [P5M2 · Regulation and guidance: EU AI Act, Malaysia, Singapore](p5m2-regulation-and-guidance-eu-ai-act-malaysia-singapore.md) | 6 | 6 Qs | 2 |
 | [P5M3 · LLM and agent security](p5m3-llm-and-agent-security.md) | 8 | 6 Qs | 2 |
-| [P5M4 · Operational governance — documentation, lineage and human oversight](p5m4-operational-governance-documentation-lineage-and-human-oversight.md) | 6 | 5 Qs | 2 |
+| [P5M4 · Operational governance: documentation, lineage and human oversight](p5m4-operational-governance-documentation-lineage-and-human-oversight.md) | 6 | 5 Qs | 2 |
 
 ## Capstone: Governance-by-design pack for your agent platform
 

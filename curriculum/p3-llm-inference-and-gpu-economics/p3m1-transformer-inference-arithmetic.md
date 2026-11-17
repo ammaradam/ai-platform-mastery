@@ -11,9 +11,9 @@
 ## Lesson
 
 ## Two phases
-- **Prefill** — process the whole prompt in parallel. Large matrix-matrix
+- **Prefill**: process the whole prompt in parallel. Large matrix-matrix
   multiplies → **compute-bound**. Dominates **time to first token (TTFT)**.
-- **Decode** — generate one token at a time per sequence. Each step must read
+- **Decode**: generate one token at a time per sequence. Each step must read
   all model weights from GPU memory to produce just one token per sequence →
   **memory-bandwidth-bound** at small batch sizes. Dominates **time per output
   token (TPOT)**, a.k.a. inter-token latency.
@@ -38,7 +38,7 @@ values for every token. Size per token:
 
 Example (Llama-2-7B-like: 32 layers, 32 KV heads, head_dim 128, FP16 = 2 bytes):
 2 × 32 × 32 × 128 × 2 = 524,288 bytes ≈ **0.5 MB per token**. A 4,096-token
-sequence ≈ 2 GB. KV cache — not weights — usually limits how many concurrent
+sequence ≈ 2 GB. KV cache, not weights, usually limits how many concurrent
 requests you can serve. **Grouped-query attention (GQA)** cuts KV heads (e.g.
 8 instead of 32), shrinking the cache 4×.
 
@@ -59,7 +59,7 @@ latency SLO).
 | **Required** | [Transformer Inference Arithmetic](https://kipp.ly/transformer-inference-arithmetic/) — kipply | blog | 60 min | KV cache sizing, memory vs compute bound, the latency calculations. |
 | **Required** | [LLM Inference Performance Engineering: Best Practices](https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices) — Databricks / MosaicML | blog | 30 min | TTFT/TPOT definitions, memory bandwidth utilisation, batch-size trade-offs. |
 | Optional | [Large Transformer Model Inference Optimization](https://lilianweng.github.io/posts/2023-01-10-inference-optimization/) — Lilian Weng | blog | 60 min | Survey of optimisation methods; good map for p3m3. |
-| Optional | [AI Engineering (Ch. 9 — Inference Optimization)](https://www.oreilly.com/library/view/ai-engineering/9781098166298/) — Chip Huyen, O'Reilly 2025 | book | 90 min | Practitioner framing of latency, throughput and cost. |
+| Optional | [AI Engineering (Ch. 9: Inference Optimization)](https://www.oreilly.com/library/view/ai-engineering/9781098166298/) — Chip Huyen, O'Reilly 2025 | book | 90 min | Practitioner framing of latency, throughput and cost. |
 
 ## Quiz
 
@@ -116,7 +116,7 @@ Answer without notes first. Answers are in the collapsible section below.
 
 <details><summary>Answers and explanations</summary>
 
-- **Q1: A** — Low arithmetic intensity — the weight read dominates.
+- **Q1: A** — Low arithmetic intensity, the weight read dominates.
 - **Q2: A** — Prefill processes the whole prompt before the first token can be emitted.
 - **Q3: D** — 2 × 32 × 8 × 128 × 2 bytes = 131,072 bytes ≈ 128 KB (GQA shrinks it 4× vs 32 heads).
 - **Q4: C** — ~14 GB of weights / 2 TB/s ≈ 7 ms.

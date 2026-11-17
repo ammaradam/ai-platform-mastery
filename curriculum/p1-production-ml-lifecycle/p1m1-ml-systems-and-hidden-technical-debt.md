@@ -12,30 +12,30 @@
 
 ## The core idea
 In 2015 Google's *Hidden Technical Debt in Machine Learning Systems* made one
-picture famous: a tiny box labelled "ML code" surrounded by much bigger boxes —
+picture famous: a tiny box labelled "ML code" surrounded by much bigger boxes -
 configuration, data collection, feature extraction, data verification, serving
 infrastructure, monitoring, process management. The point: **most of the cost
 and risk of an ML system lives outside the model.**
 
 ## Debt patterns you must be able to name
-- **Entanglement (CACE)** — *Changing Anything Changes Everything*. Features
+- **Entanglement (CACE)**: *Changing Anything Changes Everything*. Features
   interact, so adding, removing or rescaling one input can shift the whole
   model's behaviour. You cannot make isolated improvements.
-- **Correction cascades** — model B is trained on model A's output to "fix"
+- **Correction cascades**: model B is trained on model A's output to "fix"
   a new case. Now improving A can break B.
-- **Undeclared consumers** — other systems silently read your predictions or
+- **Undeclared consumers**: other systems silently read your predictions or
   log files. You change the model; their behaviour changes; nobody knows why.
-- **Unstable data dependencies** — an input signal owned by another team
+- **Unstable data dependencies**: an input signal owned by another team
   changes meaning or distribution without notice.
-- **Underutilised data dependencies** — features that add almost nothing but
+- **Underutilised data dependencies**: features that add almost nothing but
   still add breakage risk (legacy, bundled, epsilon features).
-- **Feedback loops** — direct (the model picks the data it learns from, like a
+- **Feedback loops**: direct (the model picks the data it learns from, like a
   recommender) and hidden (two systems influence each other through the world).
   Pricing models are especially prone: your predicted price shifts seller
   behaviour, which shifts future prices.
-- **Glue code and pipeline jungles** — large amounts of code exist only to
+- **Glue code and pipeline jungles**: large amounts of code exist only to
   move data in and out of generic packages; pipelines grow by accretion.
-- **Dead experimental codepaths** and **configuration debt** — configuration
+- **Dead experimental codepaths** and **configuration debt**: configuration
   often outgrows code and is rarely tested.
 
 ## Rules of ML worth memorising
@@ -74,7 +74,7 @@ Answer without notes first. Answers are in the collapsible section below.
 
 **Q2.** Model B is trained on Model A's output to handle a new region. What risk does this create?
 
-- A) Correction cascade — improving A can degrade B
+- A) Correction cascade, improving A can degrade B
 - B) Training-serving skew
 - C) Config debt
 - D) Label leakage

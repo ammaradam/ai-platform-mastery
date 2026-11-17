@@ -6,7 +6,7 @@
 
 Recommended order: P1 → P4 → P3 → P2 → P5 (P6 runs in parallel throughout).
 
-## [P1 · Production ML lifecycle](curriculum/p1-production-ml-lifecycle/README.md) — 🟢 strong
+## [P1 · Production ML lifecycle](curriculum/p1-production-ml-lifecycle/README.md) — Strong
 
 Explain, design and defend an end-to-end production ML system at staff level: where technical debt hides, how data and model contracts stop silent failures, how releases are gated, and how drift is caught before the business notices.
 
@@ -29,15 +29,15 @@ Explain, design and defend an end-to-end production ML system at staff level: wh
 
 **Capstone:** Production-readiness review of Beacon or Atlas
 
-## [P4 · Evals and observability for LLM and agent systems](curriculum/p4-evals-and-observability-for-llm-and-agent-systems/README.md) — 🔴 gap
+## [P4 · Evals and observability for LLM and agent systems](curriculum/p4-evals-and-observability-for-llm-and-agent-systems/README.md) — Gap
 
-Build evaluation systems that tell you, with evidence, whether an LLM or agent is good enough to ship — from error analysis and calibrated LLM judges to agent trajectory evals, production tracing and eval-gated releases — including for Malaysian language mixes.
+Build evaluation systems that tell you, with evidence, whether an LLM or agent is good enough to ship, from error analysis and calibrated LLM judges to agent trajectory evals, production tracing and eval-gated releases, including for Malaysian language mixes.
 
 - **[P4M1](curriculum/p4-evals-and-observability-for-llm-and-agent-systems/p4m1-eval-fundamentals-and-error-analysis.md) Eval fundamentals and error analysis** (~8 h)
   - Define evals, graders and the three eval levels
   - Run error analysis (open coding → axial coding → failure taxonomy)
   - Choose metrics from observed failures, not from a generic list
-- **[P4M2](curriculum/p4-evals-and-observability-for-llm-and-agent-systems/p4m2-llm-as-judge-building-judges-you-can-trust.md) LLM-as-judge — building judges you can trust** (~8 h)
+- **[P4M2](curriculum/p4-evals-and-observability-for-llm-and-agent-systems/p4m2-llm-as-judge-building-judges-you-can-trust.md) LLM-as-judge: building judges you can trust** (~8 h)
   - Know the documented biases of LLM judges
   - Build a judge with critique shadowing and measure agreement
   - Report judge quality with TPR/TNR and correct the observed pass rate
@@ -56,7 +56,7 @@ Build evaluation systems that tell you, with evidence, whether an LLM or agent i
 
 **Capstone:** Eval-gated release for a real agent
 
-## [P3 · LLM inference and GPU economics](curriculum/p3-llm-inference-and-gpu-economics/README.md) — 🔴 gap
+## [P3 · LLM inference and GPU economics](curriculum/p3-llm-inference-and-gpu-economics/README.md) — Gap
 
 Reason from first principles about LLM serving performance and cost: why decode is memory-bound, how KV cache and batching shape throughput, which optimisations to apply, and how to size and price a deployment.
 
@@ -64,11 +64,11 @@ Reason from first principles about LLM serving performance and cost: why decode 
   - Explain prefill vs decode and why decode is memory-bandwidth bound
   - Estimate KV cache size for a model and context length
   - Estimate memory and latency lower bounds from first principles
-- **[P3M2](curriculum/p3-llm-inference-and-gpu-economics/p3m2-serving-engines-pagedattention-continuous-batching-prefix-caching.md) Serving engines — PagedAttention, continuous batching, prefix caching** (~8 h)
+- **[P3M2](curriculum/p3-llm-inference-and-gpu-economics/p3m2-serving-engines-pagedattention-continuous-batching-prefix-caching.md) Serving engines: PagedAttention, continuous batching, prefix caching** (~8 h)
   - Explain continuous (iteration-level) batching vs static batching
   - Explain how PagedAttention reduces KV cache waste
   - Know when prefix caching and chunked prefill help
-- **[P3M3](curriculum/p3-llm-inference-and-gpu-economics/p3m3-optimisation-quantisation-speculative-decoding-flashattention.md) Optimisation — quantisation, speculative decoding, FlashAttention** (~8 h)
+- **[P3M3](curriculum/p3-llm-inference-and-gpu-economics/p3m3-optimisation-quantisation-speculative-decoding-flashattention.md) Optimisation: quantisation, speculative decoding, FlashAttention** (~8 h)
   - Choose a quantisation scheme and measure its quality cost
   - Explain speculative decoding and when it helps
   - Explain FlashAttention's IO-aware idea
@@ -79,7 +79,7 @@ Reason from first principles about LLM serving performance and cost: why decode 
 
 **Capstone:** Self-hosting vs API cost study
 
-## [P2 · Platform engineering and Kubernetes for AI](curriculum/p2-platform-engineering-and-kubernetes-for-ai/README.md) — 🟡 partial
+## [P2 · Platform engineering and Kubernetes for AI](curriculum/p2-platform-engineering-and-kubernetes-for-ai/README.md) — Partial
 
 Design an internal AI platform as a product: golden paths, team boundaries, multi-tenant Kubernetes with GPU scheduling, and infrastructure delivered through IaC, GitOps and policy-as-code.
 
@@ -102,15 +102,15 @@ Design an internal AI platform as a product: golden paths, team boundaries, mult
 
 **Capstone:** Reference AI platform on Kubernetes
 
-## [P5 · AI governance, risk and security](curriculum/p5-ai-governance-risk-and-security/README.md) — 🟡 partial
+## [P5 · AI governance, risk and security](curriculum/p5-ai-governance-risk-and-security/README.md) — Partial
 
-Turn governance frameworks and regulation into concrete platform controls: risk tiers, documentation, audit trails, human oversight and LLM security — mapped to NIST, ISO/IEC 42001, the EU AI Act and Malaysian/Singapore guidance.
+Turn governance frameworks and regulation into concrete platform controls: risk tiers, documentation, audit trails, human oversight and LLM security - mapped to NIST, ISO/IEC 42001, the EU AI Act and Malaysian/Singapore guidance.
 
-- **[P5M1](curriculum/p5-ai-governance-risk-and-security/p5m1-risk-frameworks-nist-ai-rmf-and-iso-iec-42001.md) Risk frameworks — NIST AI RMF and ISO/IEC 42001** (~6 h)
+- **[P5M1](curriculum/p5-ai-governance-risk-and-security/p5m1-risk-frameworks-nist-ai-rmf-and-iso-iec-42001.md) Risk frameworks: NIST AI RMF and ISO/IEC 42001** (~6 h)
   - Explain the four NIST AI RMF functions and the GenAI Profile
   - Explain what an AI management system (ISO/IEC 42001) is
   - Design a risk-tiering scheme for an organisation
-- **[P5M2](curriculum/p5-ai-governance-risk-and-security/p5m2-regulation-and-guidance-eu-ai-act-malaysia-singapore.md) Regulation and guidance — EU AI Act, Malaysia, Singapore** (~6 h)
+- **[P5M2](curriculum/p5-ai-governance-risk-and-security/p5m2-regulation-and-guidance-eu-ai-act-malaysia-singapore.md) Regulation and guidance: EU AI Act, Malaysia, Singapore** (~6 h)
   - Explain the EU AI Act's risk-based structure and current timeline
   - Summarise Malaysia's AIGE guidelines and Singapore's GenAI framework
   - Know when a Malaysian company is affected by the EU AI Act
@@ -118,18 +118,18 @@ Turn governance frameworks and regulation into concrete platform controls: risk 
   - Explain the OWASP Top 10 for LLM Applications
   - Explain direct and indirect prompt injection and realistic defences
   - Threat-model an agent with tools
-- **[P5M4](curriculum/p5-ai-governance-risk-and-security/p5m4-operational-governance-documentation-lineage-and-human-oversight.md) Operational governance — documentation, lineage and human oversight** (~6 h)
+- **[P5M4](curriculum/p5-ai-governance-risk-and-security/p5m4-operational-governance-documentation-lineage-and-human-oversight.md) Operational governance: documentation, lineage and human oversight** (~6 h)
   - Write model cards, datasheets and agent cards
   - Design audit trails and lineage from data to decision
   - Design meaningful human oversight
 
 **Capstone:** Governance-by-design pack for your agent platform
 
-## [P6 · Public proof and technical leadership](curriculum/p6-public-proof-and-technical-leadership/README.md) — 🔴 gap
+## [P6 · Public proof and technical leadership](curriculum/p6-public-proof-and-technical-leadership/README.md) — Gap
 
-Become known for your expertise: write design docs and public posts that people share, give talks, maintain open source, and operate at staff level — leading without authority.
+Become known for your expertise: write design docs and public posts that people share, give talks, maintain open source, and operate at staff level, leading without authority.
 
-- **[P6M1](curriculum/p6-public-proof-and-technical-leadership/p6m1-technical-writing-design-docs-adrs-and-posts.md) Technical writing — design docs, ADRs and posts** (~6 h)
+- **[P6M1](curriculum/p6-public-proof-and-technical-leadership/p6m1-technical-writing-design-docs-adrs-and-posts.md) Technical writing: design docs, ADRs and posts** (~6 h)
   - Write design docs that get decisions made
   - Write ADRs that future engineers can trust
   - Write public posts that teach one thing with evidence

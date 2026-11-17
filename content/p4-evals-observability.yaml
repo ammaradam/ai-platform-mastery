@@ -4,8 +4,8 @@ title: Evals and observability for LLM and agent systems
 status: gap
 goal: >
   Build evaluation systems that tell you, with evidence, whether an LLM or agent
-  is good enough to ship — from error analysis and calibrated LLM judges to agent
-  trajectory evals, production tracing and eval-gated releases — including for
+  is good enough to ship, from error analysis and calibrated LLM judges to agent
+  trajectory evals, production tracing and eval-gated releases, including for
   Malaysian language mixes.
 why_now: >
   Your biggest gap and the highest-demand skill. It also connects your platform
@@ -16,7 +16,7 @@ capstone:
     Build a complete eval system for the auction assistant (or a public stand-in):
     labelled dataset from error analysis, code-based checks, a calibrated LLM judge,
     agent trajectory checks, OpenTelemetry tracing, and a CI gate that blocks a
-    regression — with a BM/Manglish slice.
+    regression, with a BM/Manglish slice.
   deliverables:
     - Failure taxonomy from error analysis of at least 100 traces
     - Eval dataset (at least 150 cases, including a BM/Manglish slice) with provenance
@@ -46,16 +46,16 @@ modules:
       Prefer code where possible: cheap, fast, deterministic.
 
       ## Three levels (Hamel Husain's framing)
-      1. **Unit tests / assertions** — run on every change; cheap.
-      2. **Human and model evaluation** — on sampled traces; periodic.
-      3. **A/B testing** — real users; for significant changes.
+      1. **Unit tests / assertions**: run on every change; cheap.
+      2. **Human and model evaluation**: on sampled traces; periodic.
+      3. **A/B testing**: real users; for significant changes.
 
       ## Error analysis is the core skill
       Before writing any metric, **look at your data**:
       1. Collect 50–100+ real or realistic traces.
-      2. **Open coding** — read each, write free-text notes on what went wrong.
+      2. **Open coding**: read each, write free-text notes on what went wrong.
          Focus on the first upstream failure in a trace.
-      3. **Axial coding** — group notes into a small set of failure categories
+      3. **Axial coding**: group notes into a small set of failure categories
          (e.g. "wrong auction date", "ignores lot condition", "replies in English to
          a BM question", "hallucinated fee").
       4. Count them. Fix the obvious ones directly (prompt or code); build evals
@@ -66,10 +66,10 @@ modules:
 
       ## Datasets
       - Start from real traces; add **synthetic inputs** by varying dimensions
-        (persona × feature × scenario) — generate inputs, not expected outputs.
+        (persona × feature × scenario), generate inputs, not expected outputs.
       - Keep provenance and version datasets like code.
-      - Separate **capability evals** (can it do hard new things — expected pass
-        rate lower) from **regression evals** (it used to work — expected ~100%).
+      - Separate **capability evals** (can it do hard new things, expected pass
+        rate lower) from **regression evals** (it used to work, expected ~100%).
 
       ## Binary beats scales
       Pass/fail judgments with a written critique are more reliable and actionable
@@ -96,7 +96,7 @@ modules:
         required: true
         minutes: 60
         focus: Tactical section on evaluation and monitoring.
-      - title: AI Engineering (Ch. 3-4 — Evaluation)
+      - title: "AI Engineering (Ch. 3-4: Evaluation)"
         author: Chip Huyen, O'Reilly 2025
         url: https://www.oreilly.com/library/view/ai-engineering/9781098166298/
         type: book
@@ -121,7 +121,7 @@ modules:
         answer: 1
         explain: Generating expected outputs bakes in the model's own errors.
       - q: A regression eval suite should have an expected pass rate of...
-        options: ["~50%", "~100% — these used to work", "~0%", "Doesn't matter"]
+        options: ["~50%", "~100%, these used to work", "~0%", "Doesn't matter"]
         answer: 1
         explain: Regression evals protect existing behaviour; capability evals measure progress on hard tasks.
       - q: Why are binary pass/fail judgments usually preferred over 1-5 scales?
@@ -156,7 +156,7 @@ modules:
       - What surprised you most in the traces compared to your expectations?
 
   - id: p4m2
-    title: LLM-as-judge — building judges you can trust
+    title: "LLM-as-judge: building judges you can trust"
     hours: 8
     figures: [judge-matrix]
     objectives:
@@ -167,11 +167,11 @@ modules:
       ## Why judges need validation
       An LLM judge is itself a model making predictions. Zheng et al. (MT-Bench /
       Chatbot Arena) showed strong judges can agree with humans at levels similar
-      to human-human agreement — but also documented biases:
-      - **Position bias** — favouring the first (or second) answer in pairwise
+      to human-human agreement, but also documented biases:
+      - **Position bias**: favouring the first (or second) answer in pairwise
         comparisons. Mitigate by swapping order and requiring consistency.
-      - **Verbosity bias** — preferring longer answers.
-      - **Self-enhancement bias** — favouring outputs from the same model family.
+      - **Verbosity bias**: preferring longer answers.
+      - **Self-enhancement bias**: favouring outputs from the same model family.
       - Limited ability to grade maths/reasoning it can't do itself.
 
       ## Critique shadowing (Hamel Husain)
@@ -187,9 +187,9 @@ modules:
       ## Measure the judge like a classifier
       Treat expert labels as ground truth. Split into train (few-shot examples),
       dev (iterate), and test (final report). Report:
-      - **TPR** (true positive rate) — of truly passing outputs, how many the judge
+      - **TPR** (true positive rate): of truly passing outputs, how many the judge
         passes.
-      - **TNR** (true negative rate) — of truly failing outputs, how many the judge
+      - **TNR** (true negative rate): of truly failing outputs, how many the judge
         fails.
       Raw accuracy hides problems when classes are imbalanced (e.g. 90% pass).
 
@@ -201,7 +201,7 @@ modules:
 
       ## Criteria drift
       Shankar et al. ("Who Validates the Validators?") found people's evaluation
-      criteria change as they grade outputs — you discover what "good" means by
+      criteria change as they grade outputs, you discover what "good" means by
       looking. So judge building is iterative, and criteria must be re-checked when
       the product changes.
 
@@ -266,7 +266,7 @@ modules:
       - q: Why keep a separate test split of expert labels when tuning the judge prompt?
         options: ["Regulations", "To avoid overfitting the prompt to examples you iterated on", "To save tokens", "For latency"]
         answer: 1
-        explain: "Same logic as ML — report on data you didn't tune against."
+        explain: "Same logic as ML, report on data you didn't tune against."
     exercises:
       - title: Calibrated judge for your top failure
         level: core
@@ -293,12 +293,12 @@ modules:
       - Handle non-determinism with multiple trials (pass@k, pass^k)
     lesson: |
       ## RAG: split the problem
-      - **Retrieval** — did we fetch the right context? Metrics: recall@k,
+      - **Retrieval**: did we fetch the right context? Metrics: recall@k,
         precision@k, MRR/nDCG against labelled relevant documents.
-      - **Generation** — given the context, is the answer **faithful/grounded**
+      - **Generation**: given the context, is the answer **faithful/grounded**
         (claims supported by context) and **relevant/correct**?
       Frameworks like RAGAS compute reference-free metrics (faithfulness, answer
-      relevance, context precision/recall) — useful starting points, but validate
+      relevance, context precision/recall), useful starting points, but validate
       them against your own labels before trusting them.
 
       ## Agents: transcript vs outcome
@@ -309,19 +309,19 @@ modules:
       the right tool with valid arguments?).
 
       ## What to evaluate in agents
-      - **Task success** — outcome-based.
-      - **Tool use** — correct tool selection, valid arguments, handling errors.
-      - **Trajectory** — efficiency (steps, tokens, cost), loops, unnecessary calls.
-      - **Policy adherence** — e.g. τ-bench tests agents interacting with simulated
+      - **Task success**: outcome-based.
+      - **Tool use**: correct tool selection, valid arguments, handling errors.
+      - **Trajectory**: efficiency (steps, tokens, cost), loops, unnecessary calls.
+      - **Policy adherence**: e.g. τ-bench tests agents interacting with simulated
         users under domain policies (retail, airline).
-      - **Safety** — refuses out-of-policy actions; resists prompt injection from
+      - **Safety**: refuses out-of-policy actions; resists prompt injection from
         tool outputs.
 
       ## Non-determinism
       Run each task multiple times (**trials**).
-      - **pass@k** — probability at least one of k attempts succeeds (capability).
-      - **pass^k** — probability *all* k attempts succeed (reliability). τ-bench
-        showed pass^k drops sharply as k grows — agents that "can" do a task often
+      - **pass@k**: probability at least one of k attempts succeeds (capability).
+      - **pass^k**: probability *all* k attempts succeed (reliability). τ-bench
+        showed pass^k drops sharply as k grows, agents that "can" do a task often
         can't do it consistently. For production, reliability is what users feel.
 
       ## Benchmarks vs product evals
@@ -422,12 +422,11 @@ modules:
       ## Tracing
       An LLM app trace is a tree of spans: request → retrieval → LLM call(s) → tool
       calls → response. OpenTelemetry's **GenAI semantic conventions** (still in
-      development status — check the current version) standardise attributes like
+      development status, check the current version) standardise attributes like
       `gen_ai.operation.name`, `gen_ai.request.model`, `gen_ai.provider.name`, token
       usage, and agent/tool spans. Using the standard means any backend (Application
       Insights, Langfuse, Phoenix, Datadog…) can read your traces, and you avoid
-      vendor lock-in. Capture prompts and completions only where privacy rules allow
-      — the conventions say instrumentations must let you turn that off.
+      vendor lock-in. Capture prompts and completions only where privacy rules allow, the conventions say instrumentations must let you turn that off.
 
       ## What to measure in production
       - Ops: latency (TTFT, total), errors, tokens and **cost per request/team**.
@@ -444,7 +443,7 @@ modules:
       Treat prompts, model versions, retrieval configs and tool definitions as
       **versioned artifacts**. Any change triggers:
       1. Fast assertions (seconds) on every commit.
-      2. Full offline suite (minutes) on PRs — compare to **champion**; fail if any
+      2. Full offline suite (minutes) on PRs, compare to **champion**; fail if any
          critical slice regresses beyond a threshold, with confidence intervals for
          small sets.
       3. Shadow or canary in production with online evals before full rollout.
@@ -452,10 +451,10 @@ modules:
 
       ## Guardrails
       Input and output checks around the model (topic filters, PII, injection
-      detectors, schema validation). They're part of the system — so evaluate their
+      detectors, schema validation). They're part of the system, so evaluate their
       false-positive and false-negative rates too.
     readings:
-      - title: OpenTelemetry — Semantic conventions for generative AI systems
+      - title: "OpenTelemetry: Semantic conventions for generative AI systems"
         author: OpenTelemetry
         url: https://opentelemetry.io/docs/specs/semconv/gen-ai/
         type: docs
@@ -469,14 +468,14 @@ modules:
         required: true
         minutes: 40
         focus: Data viewers, error analysis loop, empowering domain experts.
-      - title: Langfuse documentation — Tracing and evaluation
+      - title: "Langfuse documentation: Tracing and evaluation"
         author: Langfuse
         url: https://langfuse.com/docs
         type: docs
         required: false
         minutes: 30
         focus: An open-source example of trace + eval tooling.
-      - title: Azure AI Foundry — Observability and evaluation
+      - title: "Azure AI Foundry: Observability and evaluation"
         author: Microsoft Learn
         url: https://learn.microsoft.com/en-us/azure/ai-foundry/concepts/observability
         type: docs
@@ -497,7 +496,7 @@ modules:
         answer: 1
         explain: Any of these change behaviour and should be versioned and gated.
       - q: Your eval set for a slice has 30 cases and the pass rate dropped 3 points. What's the right reaction?
-        options: ["Block immediately", "Consider confidence intervals — with 30 cases, 3 points may be noise", "Ignore all small slices", "Delete the slice"]
+        options: ["Block immediately", "Consider confidence intervals, with 30 cases, 3 points may be noise", "Ignore all small slices", "Delete the slice"]
         answer: 1
         explain: Small samples need statistical care; set thresholds accordingly or grow the slice.
       - q: What closes the offline-online loop?
@@ -537,16 +536,16 @@ modules:
       Most eval knowledge is English-first. Malaysian users code-switch within a
       sentence ("Boleh check tak bila auction start, I nak bid lori tu"), use
       Manglish particles (lah, kan, meh), and mix scripts. Models can look fine on
-      English benchmarks and fail here — and few people in the world can evaluate it
+      English benchmarks and fail here, and few people in the world can evaluate it
       well. This is your differentiator.
 
       ## Benchmarks to know
-      - **SEA-HELM** (AI Singapore) — holistic SEA evaluation with five pillars: NLP
+      - **SEA-HELM** (AI Singapore): holistic SEA evaluation with five pillars: NLP
         classics, LLM-specifics, SEA linguistics, SEA culture, and safety; public
         leaderboard and open code.
-      - **MalayMMLU** (Universiti Malaya × YTL AI Labs, EMNLP Findings 2024) — 24k+
+      - **MalayMMLU** (Universiti Malaya × YTL AI Labs, EMNLP Findings 2024): 24k+
         multiple-choice questions across Malaysian school-curriculum subjects.
-      - **MyCulture** (Universiti Malaya) — Malaysian culture knowledge with an
+      - **MyCulture** (Universiti Malaya): Malaysian culture knowledge with an
         open-ended format to reduce MCQ shortcuts.
       Limits: MCQ benchmarks test knowledge, not conversational behaviour;
       contamination risk; little coverage of colloquial code-switching.
@@ -559,10 +558,10 @@ modules:
 
       ## Designing code-switching evals
       Define dimensions and sample across them:
-      - **Language mix** — pure BM, pure English, BM-English mix, Manglish, with
+      - **Language mix**: pure BM, pure English, BM-English mix, Manglish, with
         Mandarin/Cantonese/Tamil terms.
-      - **Register** — formal (customer complaint letter) vs casual (WhatsApp).
-      - **Task** — Q&A, instruction following, extraction, refusal.
+      - **Register**: formal (customer complaint letter) vs casual (WhatsApp).
+      - **Task**: Q&A, instruction following, extraction, refusal.
       Failure modes to check: **language fidelity** (replies in the user's language or
       mix?), comprehension of particles/slang, cultural correctness (local
       institutions, holidays, currency RM), and safety that still holds in BM (some
@@ -629,7 +628,7 @@ modules:
       - title: Malaysian code-switching eval set v0
         level: core
         task: Write 60 native-authored test inputs across language mix × register × task, with pass criteria. Run 2 models and report per-slice results.
-        deliverable: Dataset (CSV/JSONL) + results table — the seed for your eval startup.
+        deliverable: Dataset (CSV/JSONL) + results table, the seed for your eval startup.
         acceptance:
           - At least 4 language-mix slices with 10+ items each
           - Cultural items reviewed by someone other than you

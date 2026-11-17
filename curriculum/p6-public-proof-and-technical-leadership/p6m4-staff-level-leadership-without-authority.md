@@ -11,10 +11,10 @@
 ## Lesson
 
 ## Staff archetypes (Will Larson)
-- **Tech Lead** — guides one team's approach and execution.
-- **Architect** — direction and quality across a critical area.
-- **Solver** — parachutes into hard problems.
-- **Right Hand** — extends an executive's leadership across the org.
+- **Tech Lead**: guides one team's approach and execution.
+- **Architect**: direction and quality across a critical area.
+- **Solver**: parachutes into hard problems.
+- **Right Hand**: extends an executive's leadership across the org.
 Your current role (platform direction, governance, coaching DS) mixes Tech
 Lead and Architect.
 
@@ -22,12 +22,12 @@ Lead and Architect.
 Three pillars: **big-picture thinking** (strategy, vision, technical
 direction), **project execution** (leading hard, ambiguous projects to done),
 and **levelling up others** (mentoring, setting standards, reviews). Much of it
-is "glue work" — make it visible and tie it to outcomes.
+is "glue work", make it visible and tie it to outcomes.
 
 ## Influence tools
 - Written strategy and vision docs (connect to p6m1).
 - Getting sponsors: managers and execs who will spend capital on your ideas.
-- Being "in the room" — and earning it by bringing data.
+- Being "in the room": and earning it by bringing data.
 - Making others successful (coaching DS to "drive on the roads").
 
 ## IC vs manager
@@ -89,7 +89,7 @@ Answer without notes first. Answers are in the collapsible section below.
 
 ### Technical vision doc (core)
 
-Write a 2-page, 12-18 month technical vision for AI at Pickles (or a target employer) — platform, evals, governance.
+Write a 2-page, 12-18 month technical vision for AI at Pickles (or a target employer), platform, evals, governance.
 
 **Deliverable:** Vision doc.
 

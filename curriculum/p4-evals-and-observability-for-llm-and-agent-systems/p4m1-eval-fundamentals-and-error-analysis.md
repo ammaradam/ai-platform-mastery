@@ -18,16 +18,16 @@ tests on generated code), **model-based** (LLM-as-judge), and **human**.
 Prefer code where possible: cheap, fast, deterministic.
 
 ## Three levels (Hamel Husain's framing)
-1. **Unit tests / assertions** — run on every change; cheap.
-2. **Human and model evaluation** — on sampled traces; periodic.
-3. **A/B testing** — real users; for significant changes.
+1. **Unit tests / assertions**: run on every change; cheap.
+2. **Human and model evaluation**: on sampled traces; periodic.
+3. **A/B testing**: real users; for significant changes.
 
 ## Error analysis is the core skill
 Before writing any metric, **look at your data**:
 1. Collect 50–100+ real or realistic traces.
-2. **Open coding** — read each, write free-text notes on what went wrong.
+2. **Open coding**: read each, write free-text notes on what went wrong.
    Focus on the first upstream failure in a trace.
-3. **Axial coding** — group notes into a small set of failure categories
+3. **Axial coding**: group notes into a small set of failure categories
    (e.g. "wrong auction date", "ignores lot condition", "replies in English to
    a BM question", "hallucinated fee").
 4. Count them. Fix the obvious ones directly (prompt or code); build evals
@@ -38,10 +38,10 @@ rarely track what actually breaks in *your* product.
 
 ## Datasets
 - Start from real traces; add **synthetic inputs** by varying dimensions
-  (persona × feature × scenario) — generate inputs, not expected outputs.
+  (persona × feature × scenario), generate inputs, not expected outputs.
 - Keep provenance and version datasets like code.
-- Separate **capability evals** (can it do hard new things — expected pass
-  rate lower) from **regression evals** (it used to work — expected ~100%).
+- Separate **capability evals** (can it do hard new things, expected pass
+  rate lower) from **regression evals** (it used to work, expected ~100%).
 
 ## Binary beats scales
 Pass/fail judgments with a written critique are more reliable and actionable
@@ -54,7 +54,7 @@ than 1–5 scales, where nobody agrees what a "3" means.
 | **Required** | [Your AI Product Needs Evals](https://hamel.dev/blog/posts/evals/) — Hamel Husain | blog | 40 min | The three levels of evals and "look at your data". |
 | **Required** | [Demystifying evals for AI agents](https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents) — Anthropic Engineering | blog | 30 min | Tasks, trials, transcripts, outcomes, graders; capability vs regression evals. |
 | **Required** | [What We Learned from a Year of Building with LLMs](https://applied-llms.org/) — Yan, Bischof, Frye, Husain, Liu, Shankar | guide | 60 min | Tactical section on evaluation and monitoring. |
-| Optional | [AI Engineering (Ch. 3-4 — Evaluation)](https://www.oreilly.com/library/view/ai-engineering/9781098166298/) — Chip Huyen, O'Reilly 2025 | book | 120 min | Evaluation methodology and evaluating AI systems. |
+| Optional | [AI Engineering (Ch. 3-4: Evaluation)](https://www.oreilly.com/library/view/ai-engineering/9781098166298/) — Chip Huyen, O'Reilly 2025 | book | 120 min | Evaluation methodology and evaluating AI systems. |
 
 ## Quiz
 
@@ -93,7 +93,7 @@ Answer without notes first. Answers are in the collapsible section below.
 - A) Doesn't matter
 - B) ~0%
 - C) ~50%
-- D) ~100% — these used to work
+- D) ~100%, these used to work
 
 **Q6.** Why are binary pass/fail judgments usually preferred over 1-5 scales?
 

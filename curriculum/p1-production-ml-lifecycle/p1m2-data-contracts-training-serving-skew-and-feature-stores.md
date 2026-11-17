@@ -13,11 +13,11 @@
 ## Training-serving skew
 Skew is any difference between what the model saw in training and what it sees
 in production. Three root causes:
-1. **Code skew** — features computed by different code paths (a Spark job for
+1. **Code skew**: features computed by different code paths (a Spark job for
    training, a Python function at serving).
-2. **Data skew** — the serving data distribution differs from training
+2. **Data skew**: the serving data distribution differs from training
    (often a symptom of a pipeline bug, not real-world drift).
-3. **Time skew / leakage** — training rows used information that would not have
+3. **Time skew / leakage**: training rows used information that would not have
    been available at prediction time.
 
 ## Point-in-time correctness
@@ -32,15 +32,15 @@ serving; an **offline store** (history, for training via point-in-time joins);
 an **online store** (latest values, low latency, for serving); and
 materialisation jobs that keep them consistent. Uber's Michelangelo popularised
 this; Feast is the main open-source option. A feature store is worth it when
-several models share features or need low-latency online lookups — not for a
+several models share features or need low-latency online lookups, not for a
 single batch model.
 
 ## Data contracts
 A data contract is an explicit, versioned agreement between a data producer and
 consumers: schema, types, nullability, allowed ranges, semantics, freshness SLA,
 and an owner. The key design question is **where it is enforced**:
-- at the producer (best — bad data never lands),
-- at ingestion into your pipeline (good — fail fast),
+- at the producer (best, bad data never lands),
+- at ingestion into your pipeline (good, fail fast),
 - at training/serving time (last line of defence).
 Contracts should fail loudly in CI and in pipelines, and changes should go
 through versioning (additive changes are safe; renames and type changes are
@@ -57,7 +57,7 @@ customer request.
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
 | **Required** | [Meet Michelangelo: Uber's Machine Learning Platform](https://www.uber.com/blog/michelangelo-machine-learning-platform/) — Uber Engineering, 2017 | blog | 25 min | The feature store section and why shared features matter. |
-| **Required** | [Feast documentation — Concepts](https://docs.feast.dev/) — Feast | docs | 45 min | Offline vs online store, materialisation, point-in-time joins. |
+| **Required** | [Feast documentation: Concepts](https://docs.feast.dev/) — Feast | docs | 45 min | Offline vs online store, materialisation, point-in-time joins. |
 | Optional | [Designing Machine Learning Systems (Ch. 4-5, 7)](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/) — Chip Huyen, O'Reilly 2022 | book | 120 min | Data leakage section in Ch. 5 is essential. |
 | **Required** | [Rules of Machine Learning (Rules](https://developers.google.com/machine-learning/guides/rules-of-ml) — Martin Zinkevich, Google | guide | 20 min | Training-serving skew rules. |
 
@@ -69,7 +69,7 @@ Answer without notes first. Answers are in the collapsible section below.
 
 - A) Class imbalance
 - B) Underfitting
-- C) Point-in-time leakage — features came from after the label timestamp
+- C) Point-in-time leakage, features came from after the label timestamp
 - D) Concept drift
 
 **Q2.** Which is NOT one of the three main root causes of training-serving skew?
@@ -103,7 +103,7 @@ Answer without notes first. Answers are in the collapsible section below.
 **Q6.** Where is the best place to enforce a data contract?
 
 - A) In the dashboard
-- B) Nowhere — monitor instead
+- B) Nowhere, monitor instead
 - C) Only in the model
 - D) At the producer, before data lands
 

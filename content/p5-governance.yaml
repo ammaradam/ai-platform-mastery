@@ -4,7 +4,7 @@ title: AI governance, risk and security
 status: partial
 goal: >
   Turn governance frameworks and regulation into concrete platform controls:
-  risk tiers, documentation, audit trails, human oversight and LLM security —
+  risk tiers, documentation, audit trails, human oversight and LLM security -
   mapped to NIST, ISO/IEC 42001, the EU AI Act and Malaysian/Singapore guidance.
 why_now: >
   Regulated enterprises (PETRONAS, banks, GLCs) hire people who can translate
@@ -27,7 +27,7 @@ capstone:
     - Threat model covers indirect prompt injection via tools
 modules:
   - id: p5m1
-    title: Risk frameworks — NIST AI RMF and ISO/IEC 42001
+    title: "Risk frameworks: NIST AI RMF and ISO/IEC 42001"
     hours: 6
     figures: [nist-rmf]
     objectives:
@@ -37,10 +37,10 @@ modules:
     lesson: |
       ## NIST AI Risk Management Framework (AI RMF 1.0, 2023)
       Voluntary US framework. Four functions:
-      - **Govern** — culture, policies, roles, accountability (cross-cutting).
-      - **Map** — understand context, intended use, stakeholders, risks.
-      - **Measure** — assess and track risks with metrics (evals live here).
-      - **Manage** — prioritise, respond to, and monitor risks.
+      - **Govern**: culture, policies, roles, accountability (cross-cutting).
+      - **Map**: understand context, intended use, stakeholders, risks.
+      - **Measure**: assess and track risks with metrics (evals live here).
+      - **Manage**: prioritise, respond to, and monitor risks.
       It also describes characteristics of trustworthy AI: valid and reliable; safe;
       secure and resilient; accountable and transparent; explainable and
       interpretable; privacy-enhanced; fair with harmful bias managed.
@@ -49,23 +49,23 @@ modules:
       information security, harmful bias, data privacy and IP.
 
       ## ISO/IEC 42001:2023
-      The first international **management system** standard for AI — like ISO 27001
+      The first international **management system** standard for AI, like ISO 27001
       but for AI. It specifies requirements for establishing, implementing,
       maintaining and continually improving an AI management system (AIMS):
       policy, roles, risk assessment, AI impact assessment, controls (Annex A),
       monitoring, internal audit, management review. It is **certifiable**, which is
       why enterprises and vendors care.
 
-      ## Risk tiering — the practical bridge
+      ## Risk tiering, the practical bridge
       Not every use case needs the same controls. A tiering scheme uses criteria
       like: impact on individuals' rights or finances, autonomy (advice vs action),
       audience (internal vs public), reversibility, data sensitivity, and scale.
       Example:
-      - **Tier 1 (low)** — internal productivity, human reviews all outputs.
+      - **Tier 1 (low)**: internal productivity, human reviews all outputs.
         Controls: basic evals, logging.
-      - **Tier 2 (medium)** — customer-facing information (auction assistant).
+      - **Tier 2 (medium)**: customer-facing information (auction assistant).
         Adds: eval gate, guardrails, monitoring, incident process, agent card.
-      - **Tier 3 (high)** — decisions affecting people's money or rights (credit,
+      - **Tier 3 (high)**: decisions affecting people's money or rights (credit,
         hiring) or autonomous actions. Adds: human oversight, bias testing,
         independent review, sign-off, audit trail.
       The platform's job: make Tier-2 controls the default golden path.
@@ -84,7 +84,7 @@ modules:
         required: true
         minutes: 60
         focus: The list of GenAI risks and suggested actions.
-      - title: ISO/IEC 42001:2023 — AI management systems
+      - title: "ISO/IEC 42001:2023: AI management systems"
         author: ISO
         url: https://www.iso.org/standard/81230.html
         type: standard
@@ -133,7 +133,7 @@ modules:
       - Which controls in your platform exist only on paper?
 
   - id: p5m2
-    title: Regulation and guidance — EU AI Act, Malaysia, Singapore
+    title: "Regulation and guidance: EU AI Act, Malaysia, Singapore"
     hours: 6
     objectives:
       - Explain the EU AI Act's risk-based structure and current timeline
@@ -143,26 +143,26 @@ modules:
       ## EU AI Act (Regulation (EU) 2024/1689)
       Risk-based:
       - **Prohibited practices** (e.g. social scoring, certain manipulative or
-        exploitative systems, untargeted facial-image scraping) — banned since
+        exploitative systems, untargeted facial-image scraping), banned since
         February 2025.
-      - **High-risk systems** — Annex III use cases (e.g. employment, education,
+      - **High-risk systems**: Annex III use cases (e.g. employment, education,
         credit scoring, critical infrastructure, law enforcement) and AI in regulated
         products (Annex I). Obligations: risk management, data governance, technical
         documentation, logging, transparency, human oversight, accuracy/robustness,
         conformity assessment, registration.
-      - **Transparency obligations** (Article 50) — e.g. telling people they're
+      - **Transparency obligations** (Article 50): e.g. telling people they're
         interacting with AI, marking AI-generated content.
-      - **General-purpose AI (GPAI) models** — obligations for model providers since
+      - **General-purpose AI (GPAI) models**: obligations for model providers since
         August 2025, extra duties for systemic-risk models.
       **Timeline update:** the 2026 Digital Omnibus on AI postponed high-risk
-      obligations — to 2 December 2027 for Annex III systems and 2 August 2028 for
+      obligations, to 2 December 2027 for Annex III systems and 2 August 2028 for
       Annex I product-embedded systems. Regulation changes; always check the current
       text before advising.
       **Extraterritorial reach:** it applies to providers placing AI on the EU market
       and to providers/deployers outside the EU when the system's **output is used in
       the EU**.
 
-      ## Malaysia — National Guidelines on AI Governance & Ethics (AIGE)
+      ## Malaysia, National Guidelines on AI Governance & Ethics (AIGE)
       Launched by MOSTI on 20 September 2024. **Voluntary.** Seven principles
       (fairness; reliability, safety and control; privacy and security;
       inclusiveness; transparency; accountability; pursuit of human benefit and
@@ -171,11 +171,11 @@ modules:
       data. Watch the National AI Office and the National AI Action Plan 2026–2030
       for what comes next.
 
-      ## Singapore — Model AI Governance Framework for Generative AI (2024)
+      ## Singapore, Model AI Governance Framework for Generative AI (2024)
       From IMDA and the AI Verify Foundation; voluntary; **nine dimensions**:
       accountability, data, trusted development and deployment, incident reporting,
       testing and assurance, security, content provenance, safety and alignment R&D,
-      and AI for public good. AI Verify offers testing tools — practical reference for
+      and AI for public good. AI Verify offers testing tools, practical reference for
       regional companies.
 
       ## How to use this as an engineer
@@ -183,7 +183,7 @@ modules:
       which obligations attach, and (3) implement them as platform controls with
       evidence. Get legal to confirm classification.
     readings:
-      - title: EU AI Act — official text, Regulation (EU) 2024/1689
+      - title: "EU AI Act: official text, Regulation (EU) 2024/1689"
         author: EUR-Lex
         url: https://eur-lex.europa.eu/eli/reg/2024/1689/oj
         type: law
@@ -197,7 +197,7 @@ modules:
         required: true
         minutes: 45
         focus: High-level summary and the high-risk requirements.
-      - title: The AI Act Implementation Timeline — What Changes Under the AI Omnibus?
+      - title: "The AI Act Implementation Timeline: What Changes Under the AI Omnibus?"
         author: Future of Privacy Forum
         url: https://fpf.org/?p=250371
         type: guide
@@ -228,7 +228,7 @@ modules:
         answer: 1
         explain: Postponed from 2 August 2026 to 2 December 2027; Annex I embedded systems moved to 2 August 2028.
       - q: A Malaysian company's AI system scores job applicants in Germany for a client. Can the EU AI Act apply?
-        options: ["No, it's a Malaysian company", "Yes — it applies when the output is used in the EU", "Only if hosted in the EU", "Only for GPAI"]
+        options: ["No, it's a Malaysian company", "Yes, it applies when the output is used in the EU", "Only if hosted in the EU", "Only for GPAI"]
         answer: 1
         explain: The Act has extraterritorial reach based on where outputs are used.
       - q: Malaysia's AIGE guidelines are...
@@ -275,18 +275,18 @@ modules:
       Weaknesses · LLM09 Misinformation · LLM10 Unbounded Consumption.
 
       ## Prompt injection
-      - **Direct** — the user types instructions to override the system.
-      - **Indirect** — instructions hidden in content the model reads: web pages,
+      - **Direct**: the user types instructions to override the system.
+      - **Indirect**: instructions hidden in content the model reads: web pages,
         emails, documents, tool outputs (Greshake et al., 2023). For agents this is
         the big one: any data source becomes an attack surface.
       There is **no complete fix** today. Defence in depth:
-      1. **Least privilege** — tools with minimal scopes; read-only by default.
+      1. **Least privilege**: tools with minimal scopes; read-only by default.
       2. **Human confirmation** for consequential actions (payments, emails, deletes).
       3. **Separate trusted instructions from untrusted data**; never let untrusted
          content choose which tools to call with high-privilege arguments.
-      4. **Output handling** — treat model output as untrusted input to downstream
+      4. **Output handling**: treat model output as untrusted input to downstream
          systems (escape, validate against schemas, never `eval`).
-      5. Detection classifiers and monitoring — helpful, not sufficient.
+      5. Detection classifiers and monitoring, helpful, not sufficient.
       A useful rule of thumb (Simon Willison's "lethal trifecta"): danger is highest
       when an agent has **access to private data**, **exposure to untrusted
       content**, and **a way to communicate externally**. Remove one leg.
@@ -301,7 +301,7 @@ modules:
 
       ## MITRE ATLAS
       A knowledge base of adversary tactics and techniques against AI systems,
-      modelled on ATT&CK — useful for red-team planning.
+      modelled on ATT&CK, useful for red-team planning.
     readings:
       - title: OWASP Top 10 for LLM Applications 2025
         author: OWASP GenAI Security Project
@@ -349,7 +349,7 @@ modules:
         answer: 0
         explain: Downstream systems must treat model output as untrusted.
       - q: An agent loops calling a paid API 10,000 times. Which risk and fix?
-        options: ["LLM10 Unbounded Consumption — step limits, quotas and budgets", "LLM01 — better prompts", "LLM08 — re-embed", "None"]
+        options: ["LLM10 Unbounded Consumption, step limits, quotas and budgets", "LLM01, better prompts", "LLM08, re-embed", "None"]
         answer: 0
         explain: Bound steps, tokens and spend at the gateway and in the agent loop.
       - q: An agent has a tool with write access to all of SharePoint but only needs to read one library. Which risk?
@@ -374,7 +374,7 @@ modules:
       - Which agent on your platform has the full lethal trifecta today?
 
   - id: p5m4
-    title: Operational governance — documentation, lineage and human oversight
+    title: "Operational governance: documentation, lineage and human oversight"
     hours: 6
     objectives:
       - Write model cards, datasheets and agent cards
@@ -382,12 +382,12 @@ modules:
       - Design meaningful human oversight
     lesson: |
       ## Documentation artefacts
-      - **Model cards** (Mitchell et al., 2019) — intended use, out-of-scope use,
+      - **Model cards** (Mitchell et al., 2019): intended use, out-of-scope use,
         training data summary, evaluation results disaggregated by relevant groups,
         ethical considerations, caveats.
-      - **Datasheets for datasets** (Gebru et al., 2018) — motivation, composition,
+      - **Datasheets for datasets** (Gebru et al., 2018): motivation, composition,
         collection, preprocessing, uses, distribution, maintenance.
-      - **Agent/system cards** — for LLM systems: purpose, model(s) and versions,
+      - **Agent/system cards**: for LLM systems: purpose, model(s) and versions,
         tools and their permissions, data accessed, guardrails, eval results by slice,
         known limitations, owner, risk tier, escalation path.
       Generate as much as possible **from the platform** (registry metadata, eval
@@ -428,7 +428,7 @@ modules:
         type: paper
         required: true
         minutes: 30
-        focus: The question list — reuse it as a template.
+        focus: The question list, reuse it as a template.
       - title: NIST AI RMF Playbook
         author: NIST
         url: https://airc.nist.gov/airmf-resources/playbook
@@ -442,7 +442,7 @@ modules:
         answer: 1
         explain: Aggregate metrics can hide poor performance on specific groups.
       - q: Reviewers approve 99.9% of AI decisions without changes. What's the most likely concern?
-        options: ["The model is perfect", "Automation bias — review may be rubber-stamping", "Too many reviewers", "Latency"]
+        options: ["The model is perfect", "Automation bias, review may be rubber-stamping", "Too many reviewers", "Latency"]
         answer: 1
         explain: Near-zero overturns suggests oversight isn't meaningful; test it.
       - q: Which is essential for an audit trail of an LLM decision?

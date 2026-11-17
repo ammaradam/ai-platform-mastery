@@ -11,12 +11,12 @@
 ## Lesson
 
 ## RAG: split the problem
-- **Retrieval** — did we fetch the right context? Metrics: recall@k,
+- **Retrieval**: did we fetch the right context? Metrics: recall@k,
   precision@k, MRR/nDCG against labelled relevant documents.
-- **Generation** — given the context, is the answer **faithful/grounded**
+- **Generation**: given the context, is the answer **faithful/grounded**
   (claims supported by context) and **relevant/correct**?
 Frameworks like RAGAS compute reference-free metrics (faithfulness, answer
-relevance, context precision/recall) — useful starting points, but validate
+relevance, context precision/recall), useful starting points, but validate
 them against your own labels before trusting them.
 
 ## Agents: transcript vs outcome
@@ -27,19 +27,19 @@ process requirements (did it ask for confirmation before a payment? did it call
 the right tool with valid arguments?).
 
 ## What to evaluate in agents
-- **Task success** — outcome-based.
-- **Tool use** — correct tool selection, valid arguments, handling errors.
-- **Trajectory** — efficiency (steps, tokens, cost), loops, unnecessary calls.
-- **Policy adherence** — e.g. τ-bench tests agents interacting with simulated
+- **Task success**: outcome-based.
+- **Tool use**: correct tool selection, valid arguments, handling errors.
+- **Trajectory**: efficiency (steps, tokens, cost), loops, unnecessary calls.
+- **Policy adherence**: e.g. τ-bench tests agents interacting with simulated
   users under domain policies (retail, airline).
-- **Safety** — refuses out-of-policy actions; resists prompt injection from
+- **Safety**: refuses out-of-policy actions; resists prompt injection from
   tool outputs.
 
 ## Non-determinism
 Run each task multiple times (**trials**).
-- **pass@k** — probability at least one of k attempts succeeds (capability).
-- **pass^k** — probability *all* k attempts succeed (reliability). τ-bench
-  showed pass^k drops sharply as k grows — agents that "can" do a task often
+- **pass@k**: probability at least one of k attempts succeeds (capability).
+- **pass^k**: probability *all* k attempts succeed (reliability). τ-bench
+  showed pass^k drops sharply as k grows, agents that "can" do a task often
   can't do it consistently. For production, reliability is what users feel.
 
 ## Benchmarks vs product evals

@@ -1,4 +1,4 @@
-/* AI Platform Mastery — course app (v3). Vanilla JS, no build step.
+/* AI Platform Mastery course app (v3). Vanilla JS, no build step.
    Routes are plain hashes: #home #learning #course-p1 #learn-p1m1-quiz #cap-p1 #cert-p1 #review #progress #settings */
 {
 const KEY = "apm-v2", OLD_KEY = "apm-progress-v1";
@@ -18,6 +18,8 @@ const SKILLS = {
   p5: ["AI governance", "NIST AI RMF", "EU AI Act", "LLM security", "Threat modelling", "Model cards"],
   p6: ["Technical writing", "Public speaking", "Open source", "Staff-level leadership"],
 };
+const CI = { p1: "pipeline", p2: "server", p3: "chip", p4: "evals", p5: "shield", p6: "megaphone" };
+const bi = (n, size = 48, cls = "bi", off = false) => `<img class="${cls}${off ? " off" : ""}" src="img/badges/${n}.png" width="${size}" height="${size}" alt="" loading="lazy">`;
 let D, S, mem = null;
 
 /* ---------- state ---------- */
@@ -109,23 +111,24 @@ setInterval(() => {
 
 /* ---------- badges ---------- */
 const BADGES = [
-  ["first-quiz", "First quiz passed", () => MODS.some(m => passed(m.id))],
-  ["streak-3", "3-day streak", () => streak() >= 3], ["streak-7", "7-day streak", () => streak() >= 7], ["streak-30", "30-day streak", () => streak() >= 30],
-  ["hours-10", "10 hours learning", () => totalMin() >= 600], ["hours-50", "50 hours learning", () => totalMin() >= 3000],
-  ["mods-5", "5 modules complete", () => MODS.filter(modDone).length >= 5], ["mods-all", "All 25 modules", () => MODS.every(modDone)],
-  ["perfect", "Perfect quiz score", () => Object.values(S.quiz).some(q => q.best >= 1)],
-  ...["p1", "p2", "p3", "p4", "p5", "p6"].map(id => [`course-${id}`, `${id.toUpperCase()} certificate`, () => courseDone(pil(id))]),
+  ["first-lesson", "First lesson", "rocket", () => Object.keys(S.done).some(k => k.endsWith(":lesson"))],
+  ["first-quiz", "First quiz passed", "cap", () => MODS.some(m => passed(m.id))],
+  ["streak-3", "3-day streak", "flame-1", () => streak() >= 3], ["streak-7", "7-day streak", "flame-2", () => streak() >= 7], ["streak-30", "30-day streak", "flame-3", () => streak() >= 30],
+  ["hours-10", "10 hours", "hourglass", () => totalMin() >= 600], ["hours-50", "50 hours", "stopwatch", () => totalMin() >= 3000],
+  ["mods-5", "5 modules", "books", () => MODS.filter(modDone).length >= 5], ["mods-all", "All 25 modules", "trophy", () => MODS.every(modDone)],
+  ["perfect", "100% on a quiz", "target", () => Object.values(S.quiz).some(q => q.best >= 1)],
+  ...["p1", "p2", "p3", "p4", "p5", "p6"].map(id => [`course-${id}`, `Course ${id.slice(1)} complete`, CI[id], () => courseDone(pil(id))]),
 ];
 function checkBadges() {
   const fresh = [];
-  for (const [id, label, test] of BADGES) if (!S.badges[id] && test()) { S.badges[id] = Date.now(); fresh.push(label); }
-  if (fresh.length) { save(); toast("Achievement unlocked: " + fresh.join(", ")); confetti(); }
+  for (const [id, label, , test] of BADGES) if (!S.badges[id] && test()) { S.badges[id] = Date.now(); fresh.push(label); }
+  if (fresh.length) { save(); toast("Badge earned: " + fresh.join(", ")); confetti(); }
 }
 
 /* ---------- UI helpers ---------- */
 function toast(msg) { const t = $("#toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("show"), 2800); }
 function confetti() {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  return;
   const c = document.createElement("div"); c.className = "confetti";
   const cols = ["#0056D2", "#EA4335", "#FBBC04", "#34A853", "#7B5CE0", "#E8710A"];
   c.innerHTML = Array.from({ length: 70 }, () => `<i style="left:${Math.random() * 100}%;background:${cols[Math.random() * 6 | 0]};animation-delay:${Math.random() * .5}s;animation-duration:${1.2 + Math.random()}s"></i>`).join("");
@@ -134,7 +137,7 @@ function confetti() {
 const ring = (p, c, s = 64, label) => `<div class="ring" style="--p:${Math.round(p * 100)};--c:${c};--s:${s}px"><b>${label ?? Math.round(p * 100) + "%"}</b></div>`;
 const bar = (p, c) => `<div class="bar" style="--c:${c}"><i style="width:${Math.round(p * 100)}%"></i></div>`;
 const photo = (pid, size = "sm", eager) => `<div class="ph">${A.cover(pid)}<img src="img/${pid}${size === "sm" ? "-sm" : ""}.jpg" alt="" ${eager ? "" : 'loading="lazy"'} onerror="this.remove()"></div>`;
-const prov = p => `<div class="prov"><i style="background:${col(p)}">${p.id.toUpperCase()}</i>AI Platform Mastery</div>`;
+const prov = p => `<div class="prov">${bi(CI[p.id], 22, "pi")}Course ${p.order}</div>`;
 const greet = () => { const h = new Date().getHours(); return h < 12 ? "Good morning" : h < 18 ? "Good afternoon" : "Good evening"; };
 const stepIc = k => STEPS.find(s => s[0] === k)[2];
 
@@ -142,10 +145,10 @@ const stepIc = k => STEPS.find(s => s[0] === k)[2];
 function vHome() {
   const n = upNext(), wk = weekMin(), pct = overall();
   let h = `<section class="hero"><div class="ph"><img src="img/hero.jpg" alt="" onerror="this.remove()"></div><div class="wrap">
-    <div class="kick">${greet()}, ${esc(S.name)}</div><h1>${pct > 0 ? "Keep building your expertise" : "Become a global-level AI platform engineer"}</h1>
-    <p>6 courses, 25 modules, graded quizzes and hands-on projects, from production ML to LLM inference, evals and AI governance.</p>
+    <div class="kick">${greet()}, ${esc(S.name)}</div><h1>AI Platform Mastery</h1>
+    <p>${D.pillars.length} courses · ${MODS.length} modules · about ${Math.round(MODS.reduce((a, m) => a + m.hours, 0) / 10) * 10} hours. Production ML, platforms, LLM inference, evals and AI governance.</p>
     <div class="hbar"><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px"><span>Overall progress</span><b>${Math.round(pct * 100)}%</b></div>${bar(pct)}</div>
-    <div class="row">${n ? `<a class="btn wh lg" href="#learn-${n.m.id}-${n.step}">${pct > 0 ? "Resume learning" : "Start learning"} ${ic("next")}</a>` : ""}<a class="btn txt" style="color:#fff" href="#learning">View all courses</a></div></div></section>`;
+    <div class="row">${n ? `<a class="btn wh lg" href="#learn-${n.m.id}-${n.step}">${pct > 0 ? "Resume" : "Start course 1"} ${ic("next")}</a>` : ""}<a class="btn txt" style="color:#fff" href="#learning">All courses</a></div></div></section>`;
   h += `<div class="wrap">${installCard()}<div class="dash" style="margin-top:28px"><div>`;
   if (n) {
     const p = n.m.pillar, st = STEPS.find(s => s[0] === n.step);
@@ -156,14 +159,13 @@ function vHome() {
       <a class="btn pri" href="#learn-${n.m.id}-${n.step}">Resume ${ic("next")}</a></div></div>`;
   }
   const inprog = D.pillars.filter(p => courseStarted(p) && !courseDone(p));
-  h += `<div class="sec"><h2>${inprog.length ? "Your courses" : "Recommended for you"}</h2><a href="#learning">See all</a></div><div class="grid">${D.pillars.map(courseCard).join("")}</div>`;
+  h += `<div class="sec"><h2>Courses</h2><a href="#learning">See all</a></div><div class="grid">${D.pillars.map(courseCard).join("")}</div>`;
   const rv = Object.keys(S.review).length;
   h += `</div><aside class="rail">
-    <div class="card"><h3 style="margin-bottom:14px">Weekly goal</h3><div class="goalrow">${ring(Math.min(1, wk / S.goalMin), "var(--blue)", 72)}<div><b style="font-size:20px">${fmtMin(wk)}</b> <span class="mut">of ${fmtMin(S.goalMin)}</span><div class="sm mut">${wk >= S.goalMin ? "Goal reached this week" : `${fmtMin(Math.max(0, S.goalMin - wk))} to go`}</div></div></div>
-      <div class="week">${weekDays().map((d, i) => `<div><span>${"MTWTFSS"[i]}</span><i class="${d.on ? "on" : ""} ${d.today ? "today" : ""}">${d.on ? "✓" : ""}</i></div>`).join("")}</div></div>
-    <div class="card"><div class="stats3"><div>${A.spot.flame(streak() > 0)}<b>${streak()}</b><span>day streak</span></div><div><b style="margin-top:10px">${MODS.filter(m => passed(m.id)).length}</b><span>quizzes passed</span></div><div><b style="margin-top:10px">${Object.keys(S.badges).length}</b><span>achievements</span></div></div></div>
-    ${rv ? `<a class="card" href="#review" style="display:flex;gap:14px;align-items:center;color:inherit;text-decoration:none"><span style="color:var(--blue)">${ic("review")}</span><div><b>${rv} question${rv > 1 ? "s" : ""} to review</b><div class="sm mut">Spaced practice on what you missed</div></div></a>` : ""}
-    <div class="card"><h3 style="margin-bottom:8px">Study tip</h3><p class="sm mut" style="margin:0">Take each quiz cold before the lesson. If you pass, skim the lesson and go straight to the exercises.</p></div>
+    <div class="card"><h3 style="margin-bottom:14px">Weekly goal</h3><div class="goalrow">${ring(Math.min(1, wk / S.goalMin), "var(--blue)", 72)}<div><b style="font-size:20px">${fmtMin(wk)}</b> <span class="mut">of ${fmtMin(S.goalMin)}</span><div class="sm mut">${wk >= S.goalMin ? "Goal met" : `${fmtMin(Math.max(0, S.goalMin - wk))} left this week`}</div></div></div>
+      <div class="week">${weekDays().map((d, i) => `<div><span>${"MTWTFSS"[i]}</span><i class="${d.on ? "on" : ""} ${d.today ? "today" : ""}">${d.on ? ic("check", "ic wk") : ""}</i></div>`).join("")}</div></div>
+    <div class="card"><div class="stats3"><div>${bi("flame-1", 28, "bi", !streak())}<b>${streak()}</b><span>day streak</span></div><div>${bi("cap", 28)}<b>${MODS.filter(m => passed(m.id)).length}</b><span>quizzes passed</span></div><div>${bi("trophy", 28)}<b>${Object.keys(S.badges).length}</b><span>badges</span></div></div></div>
+    ${rv ? `<a class="card" href="#review" style="display:flex;gap:14px;align-items:center;color:inherit;text-decoration:none"><span style="color:var(--blue)">${ic("review")}</span><div><b>${rv} question${rv > 1 ? "s" : ""} to review</b><div class="sm mut">From quizzes you took</div></div></a>` : ""}
   </aside></div>${footer()}</div>`;
   return h;
 }
@@ -172,19 +174,19 @@ function courseCard(p) {
   return `<a class="card ccard" href="#course-${p.id}"><div class="ph" style="aspect-ratio:16/9">${A.cover(p.id)}<img src="img/${p.id}-sm.jpg" alt="" loading="lazy" onerror="this.remove()"><span class="badge-lvl">${p.parallel ? "Runs in parallel" : LEVEL[p.status]}</span>${courseDone(p) ? `<span class="badge-done">Completed</span>` : ""}</div>
     <div class="bd">${prov(p)}<h3>${esc(p.title)}</h3><div class="skills"><b>Skills you'll gain:</b> ${SKILLS[p.id].join(", ")}</div>
     ${pc > 0 ? `<div style="margin-top:8px">${bar(pc, col(p))}<div class="xs mut" style="margin-top:4px">${Math.round(pc * 100)}% complete</div></div>` : ""}
-    <div class="cmeta">Course · ${p.modules.length} modules · ~${hours(p)} hours${open ? "" : " · 🔒 locked"}</div></div></a>`;
+    <div class="cmeta">${p.modules.length} modules · ~${hours(p)} h${open ? "" : ` · <span class="lk">${ic("lock", "ic xs-ic")} Locked</span>`}</div></div></a>`;
 }
 let seg = "progress";
 function vLearning() {
   const groups = { progress: D.pillars.filter(p => courseOpen(p) && !courseDone(p)), next: D.pillars.filter(p => !courseOpen(p)), done: D.pillars.filter(courseDone) };
   const list = groups[seg];
-  return `<div class="wrap" style="padding-top:28px"><h1>My Learning</h1><p class="mut">Recommended order: ${D.pillars.filter(p => !p.parallel).map(p => p.id.toUpperCase()).join(" → ")}. P6 runs alongside all of them.</p>
+  return `<div class="wrap" style="padding-top:28px"><h1>My Learning</h1><p class="mut">Order: ${D.pillars.filter(p => !p.parallel).map(p => "Course " + p.order).join(", ")}. Course 6 runs alongside the others.</p>
     <div class="seg" role="tablist">${[["progress", "In progress"], ["next", "Up next"], ["done", "Completed"]].map(([k, l]) => `<button role="tab" class="${seg === k ? "on" : ""}" data-seg="${k}">${l} (${groups[k].length})</button>`).join("")}</div>
     ${list.length ? list.map(p => { const pc = coursePct(p), m = p.modules.find(x => unlocked(x) && !modDone(x));
       return `<a class="card lrow" href="#course-${p.id}">${photo(p.id)}<div>${prov(p)}<h3 style="margin:4px 0">${esc(p.title)}</h3><div class="sm mut">${m ? `Next: Module ${m.idx + 1} · ${esc(m.title)}` : courseDone(p) ? "Certificate earned" : "Pass the previous course to unlock"}</div>
         <div style="display:flex;gap:10px;align-items:center;margin-top:10px;max-width:420px">${bar(pc, col(p))}<span class="xs mut">${Math.round(pc * 100)}%</span></div></div>
         <div class="act">${courseDone(p) ? `<span class="btn" data-href="#cert-${p.id}">View certificate</span>` : m ? `<span class="btn pri" data-href="#learn-${m.id}-${nextStep(m)}">${pc > 0 ? "Resume" : "Start"}</span>` : `<span class="chip">${ic("lock", "ic")} Locked</span>`}</div></a>`; }).join("")
-      : `<div class="card empty">${A.spot.empty()}<h3>Nothing here yet</h3><p class="mut">${seg === "done" ? "Finish every module and the capstone of a course to complete it." : "All courses are open."}</p></div>`}
+      : `<div class="card empty">${bi("books", 96, "bi big")}<h3>Nothing here yet</h3><p class="mut">${seg === "done" ? "Finish every module and the capstone of a course to complete it." : "All courses are open."}</p></div>`}
     ${footer()}</div>`;
 }
 function vCourse(pid) {
@@ -193,22 +195,22 @@ function vCourse(pid) {
   let h = `<section class="chead"><div class="wrap"><div>
     <div class="crumbs"><a href="#home">Home</a>${ic("next")}<a href="#learning">My Learning</a>${ic("next")}<span>Course ${p.order}</span></div>
     <h1>${esc(p.title)}</h1><p class="lead">${esc(p.goal)}</p>
-    <div class="by"><i style="background:${col(p)}">${p.id.toUpperCase()}</i><span>Curated by <b>AI Platform Mastery</b> · readings from Google, Anthropic, NIST, CNCF and more</span></div>
+    <div class="by">${bi(CI[p.id], 32)}<span>${p.modules.reduce((a, m) => a + m.readings.length, 0)} readings · ${p.modules.reduce((a, m) => a + m.exercises.length, 0)} exercises · 1 capstone</span></div>
     <div class="ctas">${lockedC ? `<span class="btn lg" style="pointer-events:none;opacity:.7">${ic("lock")} Unlocks after the previous course</span>` : n ? `<a class="btn pri lg" href="#learn-${n.id}-${nextStep(n)}">${pc > 0 ? "Resume course" : "Start course"}</a>` : courseDone(p) ? `<a class="btn pri lg" href="#cert-${p.id}">View certificate</a>` : `<a class="btn pri lg" href="#cap-${p.id}">Go to capstone</a>`}
-      ${pc > 0 ? `<div style="min-width:180px"><div class="sm" style="display:flex;justify-content:space-between"><span>Your progress</span><b>${Math.round(pc * 100)}%</b></div>${bar(pc, col(p))}</div>` : `<span class="sm mut">Free · Self-paced · Certificate on completion</span>`}</div>
+      ${pc > 0 ? `<div style="min-width:180px"><div class="sm" style="display:flex;justify-content:space-between"><span>Your progress</span><b>${Math.round(pc * 100)}%</b></div>${bar(pc, col(p))}</div>` : ""}</div>
     </div>${photo(p.id, "lg", true)}</div></section>
     <div class="wrap"><div class="card strip" style="margin-top:-1px;border-top-left-radius:0;border-top-right-radius:0">
       <div><b>${p.modules.length} modules</b><span>${p.modules.reduce((a, m) => a + m.quiz.length, 0)} graded questions</span></div>
       <div><b>${p.parallel ? "Parallel track" : LEVEL[p.status] + " level"}</b><span>Your level: ${p.status}</span></div>
       <div><b>~${hours(p)} hours</b><span>Flexible schedule</span></div>
-      <div><b>Certificate</b><span>Earn on completion</span></div></div></div>
+      <div><b>Certificate</b><span>After the capstone</span></div></div></div>
     <nav class="ctabs"><div class="wrap">${[["about", "About"], ["modules", "Modules"], ["capstone", "Capstone"], ["skills", "Skills"]].map(([k, l], i) => `<a href="#course-${pid}" data-scroll="${k}" class="${i === 0 ? "on" : ""}">${l}</a>`).join("")}</div></nav>
     <div class="wrap"><div class="cbody"><div>
     <section id="s-about"><h2 style="margin-bottom:10px">What you'll learn</h2><ul class="card learn">${p.modules.flatMap(m => m.objectives.slice(0, 2)).map(o => `<li>${ic("check")}<span>${esc(o)}</span></li>`).join("")}</ul>
-      <h3 style="margin:24px 0 8px">Why this course matters for you</h3><p style="color:var(--ink2);font-size:17px">${esc(p.why_now)}</p></section>
+      <h3 style="margin:24px 0 8px">Why it matters for you</h3><p style="color:var(--ink2);font-size:17px">${esc(p.why_now)}</p></section>
     <section id="s-skills" style="margin-top:28px"><h3 style="margin-bottom:12px">Skills you'll gain</h3><div class="chips">${SKILLS[p.id].map(s => `<span class="chip">${esc(s)}</span>`).join("")}</div></section>
-    <section id="s-modules" style="margin-top:36px"><div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:12px"><h2>There are ${p.modules.length} modules in this course</h2></div>
-    <p class="mut">Each module has a lesson, readings, a graded quiz, hands-on exercises and a reflection. Pass a quiz with 80% to unlock the next module.</p><div class="card modlist">`;
+    <section id="s-modules" style="margin-top:36px"><div style="display:flex;justify-content:space-between;align-items:end;margin-bottom:12px"><h2>Modules</h2></div>
+    <p class="mut">Each module: lesson, readings, quiz, exercises, reflection. Score 80% on the quiz to unlock the next module.</p><div class="card modlist">`;
   p.modules.forEach((m, i) => {
     const un = unlocked(m), mp = modPct(m), open = n && n.id === m.id;
     h += `<details class="mod" ${open ? "open" : ""}><summary><div><div class="mnum">Module ${i + 1}${modDone(m) ? ` · <span style="color:var(--ok)">Completed</span>` : ""}</div><h3>${esc(m.title)}</h3>
@@ -241,7 +243,7 @@ function vLearn(mid, step) {
   const p = m.pillar;
   if (!unlocked(m)) {
     const prev = MODS.slice(0, MODS.indexOf(m)).reverse().find(x => !passed(x.id) && !x.pillar.parallel);
-    return `<div class="wrap"><div class="card empty" style="margin-top:28px">${A.spot.empty()}<h2>${esc(m.title)} is locked</h2><p class="mut">Pass the quiz for the module before it (80%) to unlock this one.</p>${prev ? `<a class="btn pri" href="#learn-${prev.id}-quiz">Go to ${esc(prev.title)}</a>` : ""}</div></div>`;
+    return `<div class="wrap"><div class="card empty" style="margin-top:28px">${bi(CI[p.id], 96, "bi big", true)}<h2>${esc(m.title)} is locked</h2><p class="mut">Pass the quiz for the module before it (80%) to unlock this one.</p>${prev ? `<a class="btn pri" href="#learn-${prev.id}-quiz">Go to ${esc(prev.title)}</a>` : ""}</div></div>`;
   }
   S.last = { mid, step }; save();
   const st = STEPS.find(s => s[0] === step) || STEPS[0];
@@ -283,15 +285,15 @@ let quiz = null;
 function quizView(m) {
   const qs = S.quiz[m.id];
   if (!quiz || quiz.id !== m.id) {
-    return `<div class="qfacts"><div><b>${m.quiz.length}</b><span>questions</span></div><div><b>80%</b><span>to pass</span></div><div><b>${qs ? Math.round(qs.best * 100) + "%" : "—"}</b><span>your best</span></div></div>
-      ${passed(m.id) ? `<div class="fb ok"><b>Passed.</b> ${unlockedNextText(m)}</div>` : `<p style="color:var(--ink2)">Already know this? Take it cold to test out. Missed questions go to your Review deck.</p>`}
+    return `<div class="qfacts"><div><b>${m.quiz.length}</b><span>questions</span></div><div><b>80%</b><span>to pass</span></div><div><b>${qs ? Math.round(qs.best * 100) + "%" : "None"}</b><span>your best</span></div></div>
+      ${passed(m.id) ? `<div class="fb ok"><b>Passed.</b> ${unlockedNextText(m)}</div>` : `<p style="color:var(--ink2)">Take it before the lesson to test out. Missed questions go to Review.</p>`}
       ${qs && qs.attempts.length ? `<p class="sm mut">Attempts: ${qs.attempts.slice(-6).map(a => Math.round(a.score * 100) + "%").join(" → ")}</p>` : ""}
       <button class="btn pri lg" data-act="quiz-start">${qs ? "Retake quiz" : "Start quiz"}</button>`;
   }
   if (quiz.i >= m.quiz.length) {
     const sc = quiz.correct / m.quiz.length, ok = sc >= D.pass_mark;
-    return `<div class="result">${ok ? A.spot.trophy() : A.spot.empty()}<div class="score" style="color:${ok ? "var(--ok)" : "var(--bad)"}">${Math.round(sc * 100)}%</div>
-      <h2>${ok ? "You passed!" : "Not quite there yet"}</h2><p style="color:var(--ink2)">${quiz.correct} of ${m.quiz.length} correct. ${ok ? unlockedNextText(m) : "Review the lesson and try again — you need 80%."}</p>
+    return `<div class="result">${bi(ok ? "trophy" : "books", 120, "bi big")}<div class="score" style="color:${ok ? "var(--ok)" : "var(--bad)"}">${Math.round(sc * 100)}%</div>
+      <h2>${ok ? "Passed" : "Below the pass mark"}</h2><p style="color:var(--ink2)">${quiz.correct} of ${m.quiz.length} correct. ${ok ? unlockedNextText(m) : "You need 80%. Review the lesson and retake it."}</p>
       ${quiz.missed.length ? `<p class="sm mut">${quiz.missed.length} missed question${quiz.missed.length > 1 ? "s" : ""} added to Review.</p>` : ""}
       <div style="display:flex;gap:12px;justify-content:center;margin-top:16px"><button class="btn" data-act="quiz-start">Retake</button>${ok ? "" : `<a class="btn pri" href="#learn-${m.id}-lesson">Review lesson</a>`}</div></div>`;
   }
@@ -304,7 +306,7 @@ function quizView(m) {
 }
 function unlockedNextText(m) { const n = MODS[MODS.indexOf(m) + 1]; return n && n.pillar === m.pillar ? `Module ${m.idx + 2} is now unlocked.` : m.idx === m.pillar.modules.length - 1 ? "The capstone project is now unlocked." : ""; }
 function exView(m) {
-  return `<p style="color:var(--ink2)">Core exercises count toward completion; stretch ones add depth. Link your work so it becomes part of your portfolio.</p>
+  return `<p style="color:var(--ink2)">Core exercises count toward completion. Stretch ones are optional.</p>
     ${m.exercises.map((e, i) => `<div class="card ex"><div style="display:flex;justify-content:space-between;gap:10px;align-items:start"><h3>${esc(e.title)}</h3><span class="chip ${e.level === "core" ? "warn" : ""}">${e.level}</span></div>
       <p style="margin-top:10px;color:var(--ink2)">${esc(e.task)}</p><p class="sm"><b>Deliverable:</b> ${esc(e.deliverable)}</p><div class="sm"><b>Done when</b><ul>${e.acceptance.map(a => `<li>${esc(a)}</li>`).join("")}</ul></div>
       <input type="url" placeholder="Link to your work (repo, doc, post)" data-link="${m.id}:${i}" value="${esc(S.links[`${m.id}:${i}`])}">
@@ -318,7 +320,7 @@ function reflView(m) {
 }
 function vCap(pid) {
   const p = pil(pid); if (!p) return notFound();
-  if (!capOpen(p)) return `<div class="wrap"><div class="card empty" style="margin-top:28px">${A.spot.empty()}<h2>Capstone locked</h2><p class="mut">Pass every module quiz in this course first.</p><a class="btn pri" href="#course-${pid}">Back to course</a></div></div>`;
+  if (!capOpen(p)) return `<div class="wrap"><div class="card empty" style="margin-top:28px">${bi(CI[p.id], 96, "bi big", true)}<h2>Capstone locked</h2><p class="mut">Pass every module quiz in this course first.</p><a class="btn pri" href="#course-${pid}">Back to course</a></div></div>`;
   return `<section class="chead"><div class="wrap"><div><div class="crumbs"><a href="#course-${pid}">${esc(p.title)}</a>${ic("next")}<span>Capstone</span></div><h1>${esc(p.capstone.title)}</h1><p class="lead">${esc(p.capstone.brief)}</p>
     <div style="max-width:360px"><div class="sm" style="display:flex;justify-content:space-between"><span>Deliverables</span><b>${Math.round(capPct(p) * 100)}%</b></div>${bar(capPct(p), col(p))}</div></div>${photo(pid, "lg", true)}</div></section>
     <div class="wrap" style="max-width:860px"><h2 style="margin:28px 0 12px">Deliverables</h2><div class="card" style="padding:8px 20px">
@@ -329,19 +331,19 @@ function vCap(pid) {
 }
 function vCert(pid) {
   const p = pil(pid); if (!p) return notFound();
-  if (!courseDone(p)) return `<div class="wrap" style="max-width:760px"><div class="card empty" style="margin-top:28px"><span class="spot" style="display:block;width:110px;height:110px;margin:0 auto">${A.spot.seal(pid)}</span><h2>Certificate not earned yet</h2><p class="mut">${Math.round(coursePct(p) * 100)}% of ${esc(p.title)} complete. Finish every module and the capstone.</p><a class="btn pri" href="#course-${pid}">Go to course</a></div></div>`;
+  if (!courseDone(p)) return `<div class="wrap" style="max-width:760px"><div class="card empty" style="margin-top:28px">${bi(CI[pid], 110, "bi big", true)}<h2>Certificate not earned yet</h2><p class="mut">${Math.round(coursePct(p) * 100)}% of ${esc(p.title)} complete. Finish every module and the capstone.</p><a class="btn pri" href="#course-${pid}">Go to course</a></div></div>`;
   const when = Math.max(...Object.entries(S.caps).filter(([k]) => k.startsWith(pid + ":")).map(([, v]) => +v || 0));
-  return `<div class="wrap" style="max-width:880px;padding-top:28px"><div class="crumbs" style="margin-bottom:14px"><a href="#progress">Accomplishments</a>${ic("next")}<span>Certificate</span></div>
-    <div class="cert" style="--c:${col(p)}"><div class="mut" style="font-weight:700;letter-spacing:.04em;font-size:13px">AI PLATFORM MASTERY · CERTIFICATE OF COMPLETION</div>${A.spot.seal(pid)}
-    <div class="mut">This certifies that</div><div class="name">${esc(S.name)}</div><div class="mut">has successfully completed every module, graded quiz, hands-on exercise and the capstone of</div>
+  return `<div class="wrap" style="max-width:880px;padding-top:28px"><div class="crumbs" style="margin-bottom:14px"><a href="#progress">Progress</a>${ic("next")}<span>Certificate</span></div>
+    <div class="cert" style="--c:${col(p)}"><div class="mut" style="font-weight:700;font-size:14px">Certificate of completion</div>${bi(CI[pid], 110, "bi big")}
+    <div class="mut">This certifies that</div><div class="name">${esc(S.name)}</div><div class="mut">completed every module, quiz, exercise and the capstone of</div>
     <h1 style="margin:12px 0">${esc(p.title)}</h1><div class="mut">${p.modules.length} modules · ~${hours(p)} hours · ${new Date(when || Date.now()).toLocaleDateString(undefined, { day: "numeric", month: "long", year: "numeric" })}</div></div></div>`;
 }
 let rv = null;
 function reviewItems() { return Object.keys(S.review).map(k => { const [mid, qi] = k.split(":"), m = findMod(mid); return m && m.quiz[+qi] ? { k, m, q: m.quiz[+qi] } : null; }).filter(Boolean); }
 function vReview() {
   const items = reviewItems();
-  let h = `<div class="wrap" style="max-width:860px;padding-top:28px"><h1>Review</h1><p class="mut">Questions you missed come back here until you answer them right twice in a row.</p>`;
-  if (!items.length) return h + `<div class="card empty" style="margin-top:16px">${A.spot.empty()}<h2>You're all caught up</h2><p class="mut">Missed quiz questions will appear here for spaced practice.</p></div></div>`;
+  let h = `<div class="wrap" style="max-width:860px;padding-top:28px"><h1>Review</h1><p class="mut">Missed quiz questions. Answer each one right twice to clear it.</p>`;
+  if (!items.length) return h + `<div class="card empty" style="margin-top:16px">${bi("shield", 96, "bi big")}<h2>Nothing to review</h2><p class="mut">Questions you miss in quizzes show up here.</p></div></div>`;
   if (!rv || !S.review[rv.k]) rv = { k: items[0].k, a: null };
   const it = items.find(x => x.k === rv.k), q = it.q, a = rv.a;
   return h + `<div class="card" style="padding:24px;margin-top:16px;border-top:4px solid ${col(it.m.pillar)}"><div class="sm mut">${items.length} left · ${esc(it.m.pillar.title)} · ${esc(it.m.title)}</div><p class="qtext">${esc(q.q)}</p>
@@ -352,15 +354,15 @@ function vProgress() {
   const tm = totalMin(), start = new Date(); start.setDate(start.getDate() - ((start.getDay() + 6) % 7) - 7 * 15);
   const days = Array.from({ length: 112 }, (_, i) => { const x = new Date(start); x.setDate(start.getDate() + i); return x > new Date() ? -1 : (S.activity[dayKey(x)] || 0); });
   const lvl = v => v < 0 ? "x" : v === 0 ? 0 : v < 15 ? 1 : v < 45 ? 2 : v < 90 ? 3 : 4;
-  return `<div class="wrap" style="padding-top:28px"><h1>Accomplishments</h1><p class="mut">Learning since ${new Date(S.started).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
+  return `<div class="wrap" style="padding-top:28px"><h1>Progress</h1><p class="mut">Started ${new Date(S.started).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
     <div class="kpis" style="margin-top:18px"><div class="card kpi">${ring(overall(), "var(--blue)", 58)}<div><b>${MODS.filter(modDone).length}/${MODS.length}</b><span class="mut sm">modules complete</span></div></div>
-      <div class="card kpi">${A.spot.flame(streak() > 0)}<div><b>${streak()}</b><span class="mut sm">day streak</span></div></div>
-      <div class="card kpi"><div><b>${fmtMin(tm)}</b><span class="mut sm">active learning</span></div></div><div class="card kpi"><div><b>${avgQuiz()}%</b><span class="mut sm">average best quiz</span></div></div></div>
+      <div class="card kpi">${bi("flame-1", 40, "bi", !streak())}<div><b>${streak()}</b><span class="mut sm">day streak</span></div></div>
+      <div class="card kpi">${bi("hourglass", 40)}<div><b>${fmtMin(tm)}</b><span class="mut sm">active time</span></div></div><div class="card kpi">${bi("target", 40)}<div><b>${avgQuiz()}%</b><span class="mut sm">avg best quiz</span></div></div></div>
     <div class="sec"><h2>Learning activity</h2><span class="mut sm">last 16 weeks</span></div><div class="card"><div class="heat">${days.map(v => `<i data-l="${lvl(v)}" style="${v < 0 ? "visibility:hidden" : ""}" title="${v > 0 ? fmtMin(v) : ""}"></i>`).join("")}</div></div>
     <div class="sec"><h2>Courses</h2></div><div class="card">${D.pillars.map(p => `<a class="prow" href="#course-${p.id}">${photo(p.id)}<span><b>${esc(p.title)}</b><span style="display:block;margin-top:6px">${bar(coursePct(p), col(p))}</span></span><span class="sm mut">${Math.round(coursePct(p) * 100)}%</span></a>`).join("")}</div>
-    <div class="sec"><h2>Certificates</h2></div><div class="badges">${D.pillars.map(p => `<a class="card badge ${courseDone(p) ? "" : "off"}" href="#cert-${p.id}">${A.spot.seal(p.id)}<b class="sm">${esc(p.title)}</b></a>`).join("")}</div>
-    <div class="sec"><h2>Achievements</h2><span class="mut sm">${Object.keys(S.badges).length}/${BADGES.length}</span></div><div class="badges">${BADGES.map(([id, label]) => `<div class="card badge ${S.badges[id] ? "" : "off"}"><span style="display:block;width:44px;height:44px;margin:0 auto 6px;color:${S.badges[id] ? "#F29900" : "var(--mut)"}">${ic("award", "")}</span><b class="sm">${label}</b></div>`).join("")}</div>
-    <p style="margin-top:24px"><a href="#settings">Settings and backup →</a></p>${footer()}</div>`;
+    <div class="sec"><h2>Certificates</h2></div><div class="badges">${D.pillars.map(p => `<a class="card badge ${courseDone(p) ? "" : "off"}" href="#cert-${p.id}">${bi(CI[p.id], 64)}<b class="sm">${esc(p.title)}</b></a>`).join("")}</div>
+    <div class="sec"><h2>Badges</h2><span class="mut sm">${Object.keys(S.badges).length}/${BADGES.length}</span></div><div class="badges">${BADGES.map(([id, label, icon]) => `<div class="card badge ${S.badges[id] ? "" : "off"}">${bi(icon, 64)}<b class="sm">${label}</b>${S.badges[id] ? `<div class="xs mut">${new Date(S.badges[id]).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</div>` : ""}</div>`).join("")}</div>
+    <p style="margin-top:24px"><a href="#settings">Settings and backup</a></p>${footer()}</div>`;
 }
 const avgQuiz = () => { const v = Object.values(S.quiz); return v.length ? Math.round(v.reduce((a, q) => a + q.best, 0) / v.length * 100) : 0; };
 function vSettings() {
@@ -374,16 +376,16 @@ function vSettings() {
     <p style="margin-top:10px"><button class="btn" data-act="import-text">Restore pasted backup</button></p><p class="sm mut" id="msg" role="status"></p></div>
     <h2 style="margin:28px 0 12px">Danger zone</h2><div class="card" style="padding:20px"><button class="btn" data-act="reset" style="color:var(--bad);border-color:var(--bad)">Reset all progress</button></div>${footer()}</div>`;
 }
-const notFound = () => `<div class="wrap"><div class="card empty" style="margin-top:28px">${A.spot.empty()}<h2>Page not found</h2><a class="btn pri" href="#home">Go home</a></div></div>`;
-const footer = () => `<footer class="foot">AI Platform Mastery · a personal curriculum for production ML, LLM inference, evals and AI governance · <a href="#settings">Settings</a></footer>`;
+const notFound = () => `<div class="wrap"><div class="card empty" style="margin-top:28px">${bi("target", 96, "bi big")}<h2>Page not found</h2><a class="btn pri" href="#home">Go home</a></div></div>`;
+const footer = () => `<footer class="foot">AI Platform Mastery · <a href="#settings">Settings</a> · <a href="https://github.com/ammaradam/ai-platform-mastery" target="_blank" rel="noopener">Source</a></footer>`;
 
 /* ---------- install ---------- */
 let deferredInstall = null;
 addEventListener("beforeinstallprompt", e => { e.preventDefault(); deferredInstall = e; if (parse().view === "home") render(); });
 function installCard() {
   if (matchMedia("(display-mode: standalone)").matches || navigator.standalone || S.hideInstall) return "";
-  if (deferredInstall) return `<div class="card install">${ic("home")}<p><b>Install the app</b> for offline learning and a home-screen icon.</p><button class="btn pri" data-act="install">Install</button><button class="iconbtn" data-act="hide-install" aria-label="Dismiss">✕</button></div>`;
-  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && "serviceWorker" in navigator) return `<div class="card install">${ic("home")}<p><b>Install on iPhone:</b> tap Share, then "Add to Home Screen".</p><button class="iconbtn" data-act="hide-install" aria-label="Dismiss">✕</button></div>`;
+  if (deferredInstall) return `<div class="card install">${ic("home")}<p><b>Install the app</b> for offline learning and a home-screen icon.</p><button class="btn pri" data-act="install">Install</button><button class="iconbtn" data-act="hide-install" aria-label="Dismiss">${ic("x")}</button></div>`;
+  if (/iphone|ipad|ipod/i.test(navigator.userAgent) && "serviceWorker" in navigator) return `<div class="card install">${ic("home")}<p><b>Install on iPhone:</b> tap Share, then "Add to Home Screen".</p><button class="iconbtn" data-act="hide-install" aria-label="Dismiss">${ic("x")}</button></div>`;
   return "";
 }
 
@@ -400,7 +402,7 @@ function buildIndex() {
 }
 function runSearch(q) {
   const box = $("#sres"); q = q.trim().toLowerCase();
-  if (q.length < 2) { box.innerHTML = `<p class="mut" style="padding:16px 4px">Try "KV cache", "drift", "LLM judge", "EU AI Act"…</p>`; return; }
+  if (q.length < 2) { box.innerHTML = `<p class="mut" style="padding:16px 4px">Search lessons, readings and exercises. For example: KV cache, drift, judge, EU AI Act.</p>`; return; }
   const terms = q.split(/\s+/), hits = INDEX.map(x => { const hay = (x.t + " " + x.body).toLowerCase(); const sc = terms.every(t => hay.includes(t)) ? terms.reduce((a, t) => a + (x.t.toLowerCase().includes(t) ? 5 : 1), 0) : 0; return [sc, x]; }).filter(([s]) => s).sort((a, b) => b[0] - a[0]).slice(0, 30);
   const hl = s => { let o = esc(s); terms.forEach(t => o = o.replace(new RegExp(`(${t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`, "gi"), "<mark>$1</mark>")); return o; };
   const snip = b => { const i = b.toLowerCase().indexOf(terms[0]); return i < 0 ? b.slice(0, 140) : (i > 60 ? "…" : "") + b.slice(Math.max(0, i - 60), i + 100) + "…"; };
@@ -421,7 +423,7 @@ function render() {
   document.querySelectorAll("[data-tab]").forEach(a => a.classList.toggle("on", a.dataset.tab === tab));
   if (r.view !== "learn" || (quiz && quiz.id !== r.mid)) quiz = null;
   app.innerHTML = ({ home: vHome, learning: vLearning, course: () => vCourse(r.pid), learn: () => vLearn(r.mid, r.step), cap: () => vCap(r.pid), cert: () => vCert(r.pid), review: vReview, progress: vProgress, settings: vSettings })[r.view]();
-  $("#streak-n").textContent = streak(); $("#streak-f").innerHTML = A.spot.flame(streak() > 0);
+  $("#streak-n").textContent = streak(); $("#streak-f").innerHTML = bi("flame-1", 22, "bi", !streak());
   $("#avatar").textContent = (S.name || "A").trim()[0]?.toUpperCase() || "A";
   $(".syl a.on")?.scrollIntoView({ block: "center" });
   document.title = r.view === "learn" ? `${findMod(r.mid)?.title || ""} | AI Platform Mastery` : r.view === "course" ? `${pil(r.pid)?.title} | AI Platform Mastery` : "AI Platform Mastery";
@@ -451,12 +453,12 @@ document.addEventListener("click", async e => {
     if (quiz.i >= m.quiz.length) {
       const sc2 = quiz.correct / m.quiz.length, rec = S.quiz[m.id] || (S.quiz[m.id] = { best: 0, attempts: [] }), was = passed(m.id);
       rec.attempts.push({ score: sc2, at: Date.now() }); rec.best = Math.max(rec.best, sc2); save();
-      if (sc2 >= D.pass_mark && !was) { confetti(); toast("Quiz passed — next module unlocked"); }
+      if (sc2 >= D.pass_mark && !was) { confetti(); toast("Quiz passed. Next module unlocked."); }
       checkBadges();
     }
     render(); scrollTo(0, 0);
   }
-  else if (act === "rv-next") { if (S.review[rv.k]?.n >= 2) { delete S.review[rv.k]; toast("Mastered — removed from Review"); } const items = reviewItems(), i = items.findIndex(x => x.k === rv.k); rv = items.length ? { k: items[(i + 1) % items.length].k, a: null } : null; save(); render(); }
+  else if (act === "rv-next") { if (S.review[rv.k]?.n >= 2) { delete S.review[rv.k]; toast("Answered twice. Removed from Review."); } const items = reviewItems(), i = items.findIndex(x => x.k === rv.k); rv = items.length ? { k: items[(i + 1) % items.length].k, a: null } : null; save(); render(); }
   else if (act === "drawer") { $("#drawer-panel").innerHTML = syllabus(m); $("#drawer").classList.add("open"); $("#drawer-panel .on")?.scrollIntoView({ block: "center" }); }
   else if (act === "drawer-close") $("#drawer").classList.remove("open");
   else if (act === "search") { $("#sov").classList.add("open"); const i = $("#sq"); i.value = ""; runSearch(""); setTimeout(() => i.focus(), 30); }

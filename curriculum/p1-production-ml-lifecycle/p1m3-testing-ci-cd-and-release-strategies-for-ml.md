@@ -11,8 +11,8 @@
 ## Lesson
 
 ## The ML Test Score
-Breck et al. (Google) proposed 28 tests in four groups — **data**, **model
-development**, **infrastructure**, and **monitoring** — with a final score taken
+Breck et al. (Google) proposed 28 tests in four groups, **data**, **model
+development**, **infrastructure**, and **monitoring**: with a final score taken
 as the *minimum* of the four group scores. Using the minimum is deliberate: a
 system is only as ready as its weakest area. Examples: feature expectations are
 captured in a schema; model staleness impact is known; the full pipeline is
@@ -20,30 +20,30 @@ integration-tested; models can be rolled back; training and serving features are
 checked for skew.
 
 ## MLOps maturity (Google's levels)
-- **Level 0** — manual, notebook-driven, rare releases, no monitoring.
-- **Level 1** — automated *training pipeline* with continuous training (CT),
+- **Level 0**: manual, notebook-driven, rare releases, no monitoring.
+- **Level 1**: automated *training pipeline* with continuous training (CT),
   data and model validation inside the pipeline, a model registry.
-- **Level 2** — CI/CD *of the pipeline itself*: pipeline code is tested, built
+- **Level 2**: CI/CD *of the pipeline itself*: pipeline code is tested, built
   and deployed automatically.
 Key distinction: in ML you deploy a **pipeline that produces models**, not just a
 model.
 
 ## Release strategies
-- **Shadow** — new model receives a copy of live traffic; predictions are logged
+- **Shadow**: new model receives a copy of live traffic; predictions are logged
   but not used. Zero user risk; validates latency, errors and prediction
   distribution. Cannot measure business impact.
-- **Canary** — a small percentage of real traffic uses the new model; expand if
+- **Canary**: a small percentage of real traffic uses the new model; expand if
   healthy. Real impact on a few users; fast rollback.
-- **A/B test** — randomised split to measure causal business impact with
+- **A/B test**: randomised split to measure causal business impact with
   statistical power. Slow; needs enough traffic.
-- **Blue-green** — two full environments; switch all traffic at once; instant
+- **Blue-green**: two full environments; switch all traffic at once; instant
   rollback but no gradual exposure.
-- **Interleaving / bandits** — common for ranking; out of scope here.
+- **Interleaving / bandits**: common for ranking; out of scope here.
 
 ## Release gates
 A gate is an automated check that blocks promotion: schema checks, offline
 metric thresholds vs the champion, slice-level checks (no segment regresses by
-more than X), latency and size budgets, and — for LLM systems — eval scores
+more than X), latency and size budgets, and, for LLM systems, eval scores
 (Pillar 4). Gates must compare against the **current champion**, not a fixed
 number, or the bar slowly drifts down.
 

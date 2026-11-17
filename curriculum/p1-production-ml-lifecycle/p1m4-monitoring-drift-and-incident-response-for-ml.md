@@ -11,17 +11,17 @@
 ## Lesson
 
 ## Kinds of change
-- **Data (covariate) drift** — P(X) changes: input distribution shifts (more
+- **Data (covariate) drift**: P(X) changes: input distribution shifts (more
   flood-damaged cars after a storm).
-- **Prediction drift** — the distribution of model outputs shifts. Often the
+- **Prediction drift**: the distribution of model outputs shifts. Often the
   earliest signal you can see.
-- **Concept drift** — P(Y|X) changes: the relationship itself changes (same car,
+- **Concept drift**: P(Y|X) changes: the relationship itself changes (same car,
   different price because the market moved). Only detectable with labels or
   proxies.
-- **Label shift** — P(Y) changes.
+- **Label shift**: P(Y) changes.
 
 ## Metrics
-- **PSI** (Population Stability Index) — common in finance; rough guide: <0.1 no
+- **PSI** (Population Stability Index): common in finance; rough guide: <0.1 no
   significant change, 0.1–0.25 moderate, >0.25 significant.
 - **KS test**, **Wasserstein distance**, **Jensen-Shannon divergence** for
   numeric features; **chi-squared** for categoricals.
@@ -29,13 +29,13 @@
   "significant". Prefer effect-size metrics with thresholds tuned on history.
 
 ## What to monitor (in priority order)
-1. **Service health** — latency, errors, throughput (standard SRE).
-2. **Data quality** — nulls, schema, ranges, freshness (cheapest, catches most
+1. **Service health**: latency, errors, throughput (standard SRE).
+2. **Data quality**: nulls, schema, ranges, freshness (cheapest, catches most
    incidents).
-3. **Prediction distribution** — drift in outputs.
-4. **Model quality** — once labels arrive (for auctions: when the hammer price
+3. **Prediction distribution**: drift in outputs.
+4. **Model quality**: once labels arrive (for auctions: when the hammer price
    is known), compute real error by segment.
-5. **Business KPIs** — sell-through, margin.
+5. **Business KPIs**: sell-through, margin.
 
 ## SLOs and incidents
 An SLO is a target on a user-visible indicator (e.g. 99.5% of pricing requests
@@ -49,9 +49,9 @@ actions.
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| **Required** | [Data drift — ML in production guide](https://www.evidentlyai.com/ml-in-production/data-drift) — Evidently AI | guide | 30 min | Drift types and why statistical tests over-alert at scale. |
-| **Required** | [Site Reliability Engineering — Ch. 4: Service Level Objectives](https://sre.google/sre-book/service-level-objectives/) — Google SRE book | book | 40 min | SLIs, SLOs, error budgets. |
-| Optional | [SRE book — Ch. 15: Postmortem Culture](https://sre.google/sre-book/postmortem-culture/) — Google SRE book | book | 25 min | Blameless postmortems. |
+| **Required** | [Data drift: ML in production guide](https://www.evidentlyai.com/ml-in-production/data-drift) — Evidently AI | guide | 30 min | Drift types and why statistical tests over-alert at scale. |
+| **Required** | [Site Reliability Engineering: Ch. 4: Service Level Objectives](https://sre.google/sre-book/service-level-objectives/) — Google SRE book | book | 40 min | SLIs, SLOs, error budgets. |
+| Optional | [SRE book: Ch. 15: Postmortem Culture](https://sre.google/sre-book/postmortem-culture/) — Google SRE book | book | 25 min | Blameless postmortems. |
 | Optional | [Designing Machine Learning Systems (Ch. 8)](https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/) — Chip Huyen, O'Reilly 2022 | book | 60 min | Distribution shifts and monitoring. |
 
 ## Quiz
@@ -105,7 +105,7 @@ Answer without notes first. Answers are in the collapsible section below.
 - **Q1: B** — Input distribution P(X) changed; the relationship P(Y|X) did not.
 - **Q2: C** — The relationship between features and target changed.
 - **Q3: D** — Significance grows with sample size; use effect-size metrics and tuned thresholds.
-- **Q4: A** — Common rule of thumb — above 0.25 is a significant shift.
+- **Q4: A** — Common rule of thumb, above 0.25 is a significant shift.
 - **Q5: B** — Most incidents are broken pipelines, not subtle drift.
 - **Q6: A** — 1 minus the SLO target; spending it fast triggers reliability work.
 

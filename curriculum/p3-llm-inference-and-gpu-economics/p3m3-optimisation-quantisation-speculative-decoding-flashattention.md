@@ -1,4 +1,4 @@
-# P3M3 · Optimisation — quantisation, speculative decoding, FlashAttention
+# P3M3 · Optimisation: quantisation, speculative decoding, FlashAttention
 
 **Pillar:** [LLM inference and GPU economics](README.md) · **Time:** ~8 h · **Pass mark:** 80% on the quiz
 
@@ -12,21 +12,21 @@
 
 ## Quantisation
 Store weights (and sometimes activations or KV cache) in fewer bits.
-- **Weight-only INT8/INT4** — shrinks memory and speeds memory-bound decode.
+- **Weight-only INT8/INT4**: shrinks memory and speeds memory-bound decode.
   Methods: **GPTQ** (approximate second-order, layer-wise), **AWQ**
   (activation-aware: protect the small fraction of salient weights).
-- **FP8** — on newer GPUs (e.g. H100), FP8 weights/activations with hardware
+- **FP8**: on newer GPUs (e.g. H100), FP8 weights/activations with hardware
   support; good quality/speed trade-off.
-- **KV cache quantisation** — more concurrent sequences.
+- **KV cache quantisation**: more concurrent sequences.
 Rule: quantisation is a **quality** change, so it must pass your evals
-(Pillar 4), not just perplexity. Quality loss is often uneven — check your
+(Pillar 4), not just perplexity. Quality loss is often uneven, check your
 languages (e.g. BM/Manglish) and tasks separately.
 
 ## Speculative decoding
 A small **draft** model proposes k tokens; the large **target** model verifies
 them in one forward pass. Accepted tokens are kept; on the first mismatch the
 target's token is used. The sampling scheme guarantees the output distribution
-equals the target model's — **no quality loss**, just speed. Helps most when
+equals the target model's, **no quality loss**, just speed. Helps most when
 the draft's acceptance rate is high and you're latency-bound at low batch
 sizes; gains shrink at high batch where you're compute-bound. Variants: n-gram
 / prompt lookup, Medusa heads, EAGLE.
@@ -34,7 +34,7 @@ sizes; gains shrink at high batch where you're compute-bound. Variants: n-gram
 ## FlashAttention
 Standard attention materialises the full N×N attention matrix in slow GPU HBM.
 **FlashAttention** tiles the computation so blocks stay in fast on-chip SRAM,
-using an online softmax — exact attention with far fewer memory reads/writes.
+using an online softmax, exact attention with far fewer memory reads/writes.
 The lesson generalises: on GPUs, **moving data is often the cost, not maths**.
 
 ## Other levers

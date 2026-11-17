@@ -1,10 +1,10 @@
 # P6 · Public proof and technical leadership
 
-**Your current level:** 🔴 gap
+**Your current level:** Gap
 
 ## Goal
 
-Become known for your expertise: write design docs and public posts that people share, give talks, maintain open source, and operate at staff level — leading without authority.
+Become known for your expertise: write design docs and public posts that people share, give talks, maintain open source, and operate at staff level, leading without authority.
 
 ## Why this matters for you
 
@@ -16,7 +16,7 @@ Total: ~24 hours
 
 | Module | Hours | Quiz | Exercises |
 |---|---|---|---|
-| [P6M1 · Technical writing — design docs, ADRs and posts](p6m1-technical-writing-design-docs-adrs-and-posts.md) | 6 | 4 Qs | 2 |
+| [P6M1 · Technical writing: design docs, ADRs and posts](p6m1-technical-writing-design-docs-adrs-and-posts.md) | 6 | 4 Qs | 2 |
 | [P6M2 · Talks and conferences](p6m2-talks-and-conferences.md) | 6 | 4 Qs | 2 |
 | [P6M3 · Open source as proof of skill](p6m3-open-source-as-proof-of-skill.md) | 6 | 4 Qs | 2 |
 | [P6M4 · Staff-level leadership without authority](p6m4-staff-level-leadership-without-authority.md) | 6 | 4 Qs | 2 |

@@ -1,4 +1,4 @@
-# P4M2 · LLM-as-judge — building judges you can trust
+# P4M2 · LLM-as-judge: building judges you can trust
 
 **Pillar:** [Evals and observability for LLM and agent systems](README.md) · **Time:** ~8 h · **Pass mark:** 80% on the quiz
 
@@ -13,11 +13,11 @@
 ## Why judges need validation
 An LLM judge is itself a model making predictions. Zheng et al. (MT-Bench /
 Chatbot Arena) showed strong judges can agree with humans at levels similar
-to human-human agreement — but also documented biases:
-- **Position bias** — favouring the first (or second) answer in pairwise
+to human-human agreement, but also documented biases:
+- **Position bias**: favouring the first (or second) answer in pairwise
   comparisons. Mitigate by swapping order and requiring consistency.
-- **Verbosity bias** — preferring longer answers.
-- **Self-enhancement bias** — favouring outputs from the same model family.
+- **Verbosity bias**: preferring longer answers.
+- **Self-enhancement bias**: favouring outputs from the same model family.
 - Limited ability to grade maths/reasoning it can't do itself.
 
 ## Critique shadowing (Hamel Husain)
@@ -33,9 +33,9 @@ to human-human agreement — but also documented biases:
 ## Measure the judge like a classifier
 Treat expert labels as ground truth. Split into train (few-shot examples),
 dev (iterate), and test (final report). Report:
-- **TPR** (true positive rate) — of truly passing outputs, how many the judge
+- **TPR** (true positive rate): of truly passing outputs, how many the judge
   passes.
-- **TNR** (true negative rate) — of truly failing outputs, how many the judge
+- **TNR** (true negative rate): of truly failing outputs, how many the judge
   fails.
 Raw accuracy hides problems when classes are imbalanced (e.g. 90% pass).
 
@@ -47,7 +47,7 @@ Example: TPR 0.9, TNR 0.8, observed 0.75 → (0.75 + 0.8 − 1)/(0.9 + 0.8 − 1
 
 ## Criteria drift
 Shankar et al. ("Who Validates the Validators?") found people's evaluation
-criteria change as they grade outputs — you discover what "good" means by
+criteria change as they grade outputs, you discover what "good" means by
 looking. So judge building is iterative, and criteria must be re-checked when
 the product changes.
 
@@ -126,7 +126,7 @@ Answer without notes first. Answers are in the collapsible section below.
 - **Q4: B** — Shankar et al. found graders refine what they consider good while grading.
 - **Q5: D** — Critiques become few-shot examples for the judge.
 - **Q6: C** — Narrow binary judges are easier to validate and debug.
-- **Q7: A** — Same logic as ML — report on data you didn't tune against.
+- **Q7: A** — Same logic as ML, report on data you didn't tune against.
 
 </details>
 

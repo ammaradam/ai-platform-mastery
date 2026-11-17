@@ -34,9 +34,9 @@ modules:
       - Estimate memory and latency lower bounds from first principles
     lesson: |
       ## Two phases
-      - **Prefill** — process the whole prompt in parallel. Large matrix-matrix
+      - **Prefill**: process the whole prompt in parallel. Large matrix-matrix
         multiplies → **compute-bound**. Dominates **time to first token (TTFT)**.
-      - **Decode** — generate one token at a time per sequence. Each step must read
+      - **Decode**: generate one token at a time per sequence. Each step must read
         all model weights from GPU memory to produce just one token per sequence →
         **memory-bandwidth-bound** at small batch sizes. Dominates **time per output
         token (TPOT)**, a.k.a. inter-token latency.
@@ -61,7 +61,7 @@ modules:
 
       Example (Llama-2-7B-like: 32 layers, 32 KV heads, head_dim 128, FP16 = 2 bytes):
       2 × 32 × 32 × 128 × 2 = 524,288 bytes ≈ **0.5 MB per token**. A 4,096-token
-      sequence ≈ 2 GB. KV cache — not weights — usually limits how many concurrent
+      sequence ≈ 2 GB. KV cache, not weights, usually limits how many concurrent
       requests you can serve. **Grouped-query attention (GQA)** cuts KV heads (e.g.
       8 instead of 32), shrinking the cache 4×.
 
@@ -96,7 +96,7 @@ modules:
         required: false
         minutes: 60
         focus: Survey of optimisation methods; good map for p3m3.
-      - title: AI Engineering (Ch. 9 — Inference Optimization)
+      - title: "AI Engineering (Ch. 9: Inference Optimization)"
         author: Chip Huyen, O'Reilly 2025
         url: https://www.oreilly.com/library/view/ai-engineering/9781098166298/
         type: book
@@ -107,7 +107,7 @@ modules:
       - q: Why is decode memory-bandwidth bound at small batch sizes?
         options: ["Attention is quadratic", "Every step reads all weights to produce one token per sequence, so little compute per byte moved", "Tokenisation is slow", "The KV cache is on CPU"]
         answer: 1
-        explain: Low arithmetic intensity — the weight read dominates.
+        explain: Low arithmetic intensity, the weight read dominates.
       - q: Which phase dominates time to first token?
         options: ["Decode", "Prefill", "Detokenisation", "Sampling"]
         answer: 1
@@ -149,7 +149,7 @@ modules:
       - Which latency metric matters most for the auction assistant, and why?
 
   - id: p3m2
-    title: Serving engines — PagedAttention, continuous batching, prefix caching
+    title: "Serving engines: PagedAttention, continuous batching, prefix caching"
     hours: 8
     figures: [batching]
     objectives:
@@ -178,7 +178,7 @@ modules:
       document). Caching the KV for that prefix skips its prefill. SGLang's
       **RadixAttention** keeps prefixes in a radix tree for automatic reuse; vLLM
       supports automatic prefix caching. Big win for agents with long, stable system
-      prompts and tool definitions — order your prompt so stable parts come first.
+      prompts and tool definitions, order your prompt so stable parts come first.
 
       ## Chunked prefill and disaggregation
       A long prefill can stall everyone's decode steps (latency spikes). **Chunked
@@ -275,7 +275,7 @@ modules:
       - How would you restructure the auction assistant's prompt to maximise cache hits?
 
   - id: p3m3
-    title: Optimisation — quantisation, speculative decoding, FlashAttention
+    title: "Optimisation: quantisation, speculative decoding, FlashAttention"
     hours: 8
     objectives:
       - Choose a quantisation scheme and measure its quality cost
@@ -284,21 +284,21 @@ modules:
     lesson: |
       ## Quantisation
       Store weights (and sometimes activations or KV cache) in fewer bits.
-      - **Weight-only INT8/INT4** — shrinks memory and speeds memory-bound decode.
+      - **Weight-only INT8/INT4**: shrinks memory and speeds memory-bound decode.
         Methods: **GPTQ** (approximate second-order, layer-wise), **AWQ**
         (activation-aware: protect the small fraction of salient weights).
-      - **FP8** — on newer GPUs (e.g. H100), FP8 weights/activations with hardware
+      - **FP8**: on newer GPUs (e.g. H100), FP8 weights/activations with hardware
         support; good quality/speed trade-off.
-      - **KV cache quantisation** — more concurrent sequences.
+      - **KV cache quantisation**: more concurrent sequences.
       Rule: quantisation is a **quality** change, so it must pass your evals
-      (Pillar 4), not just perplexity. Quality loss is often uneven — check your
+      (Pillar 4), not just perplexity. Quality loss is often uneven, check your
       languages (e.g. BM/Manglish) and tasks separately.
 
       ## Speculative decoding
       A small **draft** model proposes k tokens; the large **target** model verifies
       them in one forward pass. Accepted tokens are kept; on the first mismatch the
       target's token is used. The sampling scheme guarantees the output distribution
-      equals the target model's — **no quality loss**, just speed. Helps most when
+      equals the target model's, **no quality loss**, just speed. Helps most when
       the draft's acceptance rate is high and you're latency-bound at low batch
       sizes; gains shrink at high batch where you're compute-bound. Variants: n-gram
       / prompt lookup, Medusa heads, EAGLE.
@@ -306,7 +306,7 @@ modules:
       ## FlashAttention
       Standard attention materialises the full N×N attention matrix in slow GPU HBM.
       **FlashAttention** tiles the computation so blocks stay in fast on-chip SRAM,
-      using an online softmax — exact attention with far fewer memory reads/writes.
+      using an online softmax, exact attention with far fewer memory reads/writes.
       The lesson generalises: on GPUs, **moving data is often the cost, not maths**.
 
       ## Other levers
@@ -405,7 +405,7 @@ modules:
       `cost per 1M tokens = (GPU hourly cost) / (tokens per second × 3600) × 1,000,000`
 
       Example: a GPU at $4/hour sustaining 2,000 output tokens/s at your SLO:
-      4 / (2,000 × 3,600) × 1,000,000 ≈ **$0.56 per 1M output tokens** — at 100%
+      4 / (2,000 × 3,600) × 1,000,000 ≈ **$0.56 per 1M output tokens**: at 100%
       utilisation. At 25% average utilisation, effective cost is 4× higher
       (~$2.22). **Utilisation is the whole game.** APIs charge per token so you pay
       nothing when idle; self-hosting charges per hour.
@@ -419,15 +419,15 @@ modules:
       ## Capacity planning
       Required replicas ≈ peak tokens/s ÷ per-replica goodput, plus headroom (N+1
       for failure, ~30% for spikes). Scale on queue depth / in-flight requests.
-      Consider autoscaling lag: model loading can take minutes — keep a warm minimum
+      Consider autoscaling lag: model loading can take minutes, keep a warm minimum
       or use faster loading (cached weights on local NVMe).
 
       ## Gateway layer
       An AI gateway (APIM in your Foundry platform; LiteLLM or Envoy-based gateways
       elsewhere) centralises auth, quotas, token metering per team, routing,
-      fallback between providers and caching — essential for chargeback.
+      fallback between providers and caching, essential for chargeback.
     readings:
-      - title: vLLM documentation — Benchmarking
+      - title: "vLLM documentation: Benchmarking"
         author: vLLM
         url: https://docs.vllm.ai/
         type: docs
@@ -448,7 +448,7 @@ modules:
         required: true
         minutes: 15
         focus: Latency vs throughput trade-off and hardware comparisons.
-      - title: Azure API Management — AI gateway capabilities
+      - title: "Azure API Management: AI gateway capabilities"
         author: Microsoft Learn
         url: https://learn.microsoft.com/en-us/azure/api-management/genai-gateway-capabilities
         type: docs

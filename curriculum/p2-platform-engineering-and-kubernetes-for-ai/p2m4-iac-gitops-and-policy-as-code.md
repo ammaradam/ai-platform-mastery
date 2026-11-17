@@ -22,7 +22,7 @@
 ## GitOps
 GitOps (OpenGitOps principles): desired state is **declarative**, **versioned
 and immutable** in git, **pulled automatically** by agents, and **continuously
-reconciled**. Argo CD runs in the cluster, watches git, and syncs manifests —
+reconciled**. Argo CD runs in the cluster, watches git, and syncs manifests -
 the same control-loop idea as Kubernetes itself. Benefits: audit trail,
 rollback via git revert, no CI system holding cluster-admin credentials.
 Typical split: Terraform for cloud resources (clusters, networks, identities),
@@ -30,9 +30,9 @@ GitOps for in-cluster resources.
 
 ## Policy as code
 Admission controllers enforce rules at the API server:
-- **Kyverno** — policies written as Kubernetes YAML; validate, mutate,
+- **Kyverno**: policies written as Kubernetes YAML; validate, mutate,
   generate, verify images.
-- **OPA Gatekeeper** — policies in Rego via ConstraintTemplates.
+- **OPA Gatekeeper**: policies in Rego via ConstraintTemplates.
 Example AI-platform guardrails: no containers without resource limits; GPU
 pods only in approved namespaces; images only from your registry and signed;
 no public LoadBalancers; required labels for cost allocation (team, model).
@@ -41,16 +41,16 @@ before deploying.
 
 ## Secrets and identity
 Prefer workload identity (Azure Workload Identity, IRSA on AWS) over static
-secrets. You already used workload identity federation for Foundry agents —
+secrets. You already used workload identity federation for Foundry agents -
 that's the pattern.
 
 ## Readings
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| **Required** | [Terraform docs — Modules](https://developer.hashicorp.com/terraform/language/modules) — HashiCorp | docs | 30 min | Module composition and versioning. |
+| **Required** | [Terraform docs: Modules](https://developer.hashicorp.com/terraform/language/modules) — HashiCorp | docs | 30 min | Module composition and versioning. |
 | **Required** | [OpenGitOps principles](https://opengitops.dev/) — CNCF OpenGitOps | docs | 10 min | The four principles. |
-| **Required** | [Argo CD documentation — Core concepts](https://argo-cd.readthedocs.io/en/stable/core_concepts/) — Argo Project | docs | 30 min | Applications, sync, health and the app-of-apps pattern. |
+| **Required** | [Argo CD documentation: Core concepts](https://argo-cd.readthedocs.io/en/stable/core_concepts/) — Argo Project | docs | 30 min | Applications, sync, health and the app-of-apps pattern. |
 | **Required** | [Kyverno documentation](https://kyverno.io/docs/) — Kyverno | docs | 45 min | Validate and mutate policies; testing policies with the CLI. |
 | Optional | [OPA Gatekeeper documentation](https://open-policy-agent.github.io/gatekeeper/website/docs/) — Open Policy Agent | docs | 30 min | ConstraintTemplates and Rego basics. |
 

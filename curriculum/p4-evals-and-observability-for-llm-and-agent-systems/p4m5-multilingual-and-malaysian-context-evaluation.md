@@ -14,16 +14,16 @@
 Most eval knowledge is English-first. Malaysian users code-switch within a
 sentence ("Boleh check tak bila auction start, I nak bid lori tu"), use
 Manglish particles (lah, kan, meh), and mix scripts. Models can look fine on
-English benchmarks and fail here — and few people in the world can evaluate it
+English benchmarks and fail here, and few people in the world can evaluate it
 well. This is your differentiator.
 
 ## Benchmarks to know
-- **SEA-HELM** (AI Singapore) — holistic SEA evaluation with five pillars: NLP
+- **SEA-HELM** (AI Singapore): holistic SEA evaluation with five pillars: NLP
   classics, LLM-specifics, SEA linguistics, SEA culture, and safety; public
   leaderboard and open code.
-- **MalayMMLU** (Universiti Malaya × YTL AI Labs, EMNLP Findings 2024) — 24k+
+- **MalayMMLU** (Universiti Malaya × YTL AI Labs, EMNLP Findings 2024): 24k+
   multiple-choice questions across Malaysian school-curriculum subjects.
-- **MyCulture** (Universiti Malaya) — Malaysian culture knowledge with an
+- **MyCulture** (Universiti Malaya): Malaysian culture knowledge with an
   open-ended format to reduce MCQ shortcuts.
 Limits: MCQ benchmarks test knowledge, not conversational behaviour;
 contamination risk; little coverage of colloquial code-switching.
@@ -36,10 +36,10 @@ and localise.
 
 ## Designing code-switching evals
 Define dimensions and sample across them:
-- **Language mix** — pure BM, pure English, BM-English mix, Manglish, with
+- **Language mix**: pure BM, pure English, BM-English mix, Manglish, with
   Mandarin/Cantonese/Tamil terms.
-- **Register** — formal (customer complaint letter) vs casual (WhatsApp).
-- **Task** — Q&A, instruction following, extraction, refusal.
+- **Register**: formal (customer complaint letter) vs casual (WhatsApp).
+- **Task**: Q&A, instruction following, extraction, refusal.
 Failure modes to check: **language fidelity** (replies in the user's language or
 mix?), comprehension of particles/slang, cultural correctness (local
 institutions, holidays, currency RM), and safety that still holds in BM (some
@@ -121,7 +121,7 @@ Answer without notes first. Answers are in the collapsible section below.
 
 Write 60 native-authored test inputs across language mix × register × task, with pass criteria. Run 2 models and report per-slice results.
 
-**Deliverable:** Dataset (CSV/JSONL) + results table — the seed for your eval startup.
+**Deliverable:** Dataset (CSV/JSONL) + results table, the seed for your eval startup.
 
 **Done when:**
 - [ ] At least 4 language-mix slices with 10+ items each

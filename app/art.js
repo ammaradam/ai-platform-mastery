@@ -1,5 +1,5 @@
 /* Flat-vector illustration library. Every function returns an SVG string.
-   Style: Google-visuals flat vector — bold flat fields, a soft shadow plane,
+   Style: Google-visuals flat vector: bold flat fields, a soft shadow plane,
    a light edge, few shapes. Colours come from each course's palette. */
 (function () {
   const PAL = {
@@ -170,6 +170,7 @@
     link: '<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
     award: '<circle cx="12" cy="9" r="6"/><path d="M8.5 13.5L7 22l5-3 5 3-1.5-8.5"/>',
     menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
+    x: '<path d="M6 6l12 12M18 6L6 18"/>',
   };
   const icon = (n, cls = "ic") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n] || ""}</svg>`;
 
@@ -186,7 +187,7 @@
          ["Data checks", 20, 192, 130], ["Monitoring", 162, 192, 130], ["Process mgmt", 304, 192, 140], ["Analysis", 456, 192, 124]].map(([l, x, y, w]) => box(x, y, w, 46, "#D2E3FC", l, null, "#0B4FB3")).join("")}
       ${box(250, 106, 100, 48, "#1A73E8", "ML code")}`, "ML code is a small box in a big system (after Sculley et al., 2015)"),
     "drift-types": () => fig(`
-      ${T(150, 34, "Data drift — P(X) changes")}${T(450, 34, "Concept drift — P(Y|X) changes")}
+      ${T(150, 34, "Data drift: P(X) changes")}${T(450, 34, "Concept drift: P(Y|X) changes")}
       <path d="M40 210h220M40 210V60M340 210h220M340 210V60" stroke="#BDC1C6" stroke-width="2"/>
       <path d="M50 200 Q100 60 150 200" fill="#1A73E8" opacity=".35"/><path d="M110 200 Q170 60 230 200" fill="#E8710A" opacity=".45"/>
       ${T(100, 236, "before", { size: 15, w: 500 })}${T(190, 236, "after", { size: 15, w: 500 })}
@@ -201,7 +202,7 @@
       <path d="M490 162 Q490 220 300 220 Q300 220 300 166" fill="none" stroke="#5F6368" stroke-width="3" marker-end="url(#ah)"/>
       ${T(395, 240, "observe", { size: 15, w: 500 })}${T(300, 70, "reconcile forever", { size: 15, w: 500 })}`, "Every Kubernetes controller runs this loop"),
     "prefill-decode": () => fig(`
-      ${T(150, 36, "Prefill — compute-bound")}${T(450, 36, "Decode — memory-bound")}
+      ${T(150, 36, "Prefill: compute-bound")}${T(450, 36, "Decode: memory-bound")}
       ${Array.from({ length: 8 }, (_, i) => `<rect x="${50 + i * 26}" y="70" width="20" height="20" rx="4" fill="#E8710A"/>`).join("")}
       ${arrow(150, 98, 150, 136)}${box(70, 140, 160, 50, "#A84F05", "All prompt tokens", "in one pass")}
       ${T(150, 222, "sets time to first token", { size: 15, w: 500 })}

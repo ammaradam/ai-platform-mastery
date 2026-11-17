@@ -1,6 +1,6 @@
 # P3 · LLM inference and GPU economics
 
-**Your current level:** 🔴 gap
+**Your current level:** Gap
 
 ## Goal
 
@@ -17,8 +17,8 @@ Total: ~32 hours
 | Module | Hours | Quiz | Exercises |
 |---|---|---|---|
 | [P3M1 · Transformer inference arithmetic](p3m1-transformer-inference-arithmetic.md) | 8 | 7 Qs | 2 |
-| [P3M2 · Serving engines — PagedAttention, continuous batching, prefix caching](p3m2-serving-engines-pagedattention-continuous-batching-prefix-caching.md) | 8 | 6 Qs | 2 |
-| [P3M3 · Optimisation — quantisation, speculative decoding, FlashAttention](p3m3-optimisation-quantisation-speculative-decoding-flashattention.md) | 8 | 6 Qs | 2 |
+| [P3M2 · Serving engines: PagedAttention, continuous batching, prefix caching](p3m2-serving-engines-pagedattention-continuous-batching-prefix-caching.md) | 8 | 6 Qs | 2 |
+| [P3M3 · Optimisation: quantisation, speculative decoding, FlashAttention](p3m3-optimisation-quantisation-speculative-decoding-flashattention.md) | 8 | 6 Qs | 2 |
 | [P3M4 · Benchmarking, capacity planning and cost per token](p3m4-benchmarking-capacity-planning-and-cost-per-token.md) | 8 | 6 Qs | 2 |
 
 ## Capstone: Self-hosting vs API cost study

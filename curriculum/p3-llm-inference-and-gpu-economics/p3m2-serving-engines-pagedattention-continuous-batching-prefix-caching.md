@@ -1,4 +1,4 @@
-# P3M2 · Serving engines — PagedAttention, continuous batching, prefix caching
+# P3M2 · Serving engines: PagedAttention, continuous batching, prefix caching
 
 **Pillar:** [LLM inference and GPU economics](README.md) · **Time:** ~8 h · **Pass mark:** 80% on the quiz
 
@@ -31,7 +31,7 @@ Many requests share a prefix (system prompt, few-shot examples, a long
 document). Caching the KV for that prefix skips its prefill. SGLang's
 **RadixAttention** keeps prefixes in a radix tree for automatic reuse; vLLM
 supports automatic prefix caching. Big win for agents with long, stable system
-prompts and tool definitions — order your prompt so stable parts come first.
+prompts and tool definitions, order your prompt so stable parts come first.
 
 ## Chunked prefill and disaggregation
 A long prefill can stall everyone's decode steps (latency spikes). **Chunked

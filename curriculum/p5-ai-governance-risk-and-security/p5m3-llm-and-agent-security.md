@@ -17,18 +17,18 @@ Excessive Agency · LLM07 System Prompt Leakage · LLM08 Vector and Embedding
 Weaknesses · LLM09 Misinformation · LLM10 Unbounded Consumption.
 
 ## Prompt injection
-- **Direct** — the user types instructions to override the system.
-- **Indirect** — instructions hidden in content the model reads: web pages,
+- **Direct**: the user types instructions to override the system.
+- **Indirect**: instructions hidden in content the model reads: web pages,
   emails, documents, tool outputs (Greshake et al., 2023). For agents this is
   the big one: any data source becomes an attack surface.
 There is **no complete fix** today. Defence in depth:
-1. **Least privilege** — tools with minimal scopes; read-only by default.
+1. **Least privilege**: tools with minimal scopes; read-only by default.
 2. **Human confirmation** for consequential actions (payments, emails, deletes).
 3. **Separate trusted instructions from untrusted data**; never let untrusted
    content choose which tools to call with high-privilege arguments.
-4. **Output handling** — treat model output as untrusted input to downstream
+4. **Output handling**: treat model output as untrusted input to downstream
    systems (escape, validate against schemas, never `eval`).
-5. Detection classifiers and monitoring — helpful, not sufficient.
+5. Detection classifiers and monitoring, helpful, not sufficient.
 A useful rule of thumb (Simon Willison's "lethal trifecta"): danger is highest
 when an agent has **access to private data**, **exposure to untrusted
 content**, and **a way to communicate externally**. Remove one leg.
@@ -43,7 +43,7 @@ max tokens and budget alerts per team.
 
 ## MITRE ATLAS
 A knowledge base of adversary tactics and techniques against AI systems,
-modelled on ATT&CK — useful for red-team planning.
+modelled on ATT&CK, useful for red-team planning.
 
 ## Readings
 
@@ -88,10 +88,10 @@ Answer without notes first. Answers are in the collapsible section below.
 
 **Q5.** An agent loops calling a paid API 10,000 times. Which risk and fix?
 
-- A) LLM08 — re-embed
+- A) LLM08, re-embed
 - B) None
-- C) LLM10 Unbounded Consumption — step limits, quotas and budgets
-- D) LLM01 — better prompts
+- C) LLM10 Unbounded Consumption, step limits, quotas and budgets
+- D) LLM01, better prompts
 
 **Q6.** An agent has a tool with write access to all of SharePoint but only needs to read one library. Which risk?
 

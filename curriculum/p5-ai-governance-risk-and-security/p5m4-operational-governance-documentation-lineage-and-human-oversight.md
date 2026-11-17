@@ -1,4 +1,4 @@
-# P5M4 · Operational governance — documentation, lineage and human oversight
+# P5M4 · Operational governance: documentation, lineage and human oversight
 
 **Pillar:** [AI governance, risk and security](README.md) · **Time:** ~6 h · **Pass mark:** 80% on the quiz
 
@@ -11,12 +11,12 @@
 ## Lesson
 
 ## Documentation artefacts
-- **Model cards** (Mitchell et al., 2019) — intended use, out-of-scope use,
+- **Model cards** (Mitchell et al., 2019): intended use, out-of-scope use,
   training data summary, evaluation results disaggregated by relevant groups,
   ethical considerations, caveats.
-- **Datasheets for datasets** (Gebru et al., 2018) — motivation, composition,
+- **Datasheets for datasets** (Gebru et al., 2018): motivation, composition,
   collection, preprocessing, uses, distribution, maintenance.
-- **Agent/system cards** — for LLM systems: purpose, model(s) and versions,
+- **Agent/system cards**: for LLM systems: purpose, model(s) and versions,
   tools and their permissions, data accessed, guardrails, eval results by slice,
   known limitations, owner, risk tier, escalation path.
 Generate as much as possible **from the platform** (registry metadata, eval
@@ -49,7 +49,7 @@ switch / feature flag), and how incidents feed back into evals.
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
 | **Required** | [Model Cards for Model Reporting](https://arxiv.org/abs/1810.03993) — Mitchell et al., 2019 | paper | 30 min | Card sections and disaggregated evaluation. |
-| **Required** | [Datasheets for Datasets](https://arxiv.org/abs/1803.09010) — Gebru et al., 2018 | paper | 30 min | The question list — reuse it as a template. |
+| **Required** | [Datasheets for Datasets](https://arxiv.org/abs/1803.09010) — Gebru et al., 2018 | paper | 30 min | The question list, reuse it as a template. |
 | Optional | [NIST AI RMF Playbook](https://airc.nist.gov/airmf-resources/playbook) — NIST | guide | 45 min | Suggested actions for Govern and Manage. |
 
 ## Quiz
@@ -66,7 +66,7 @@ Answer without notes first. Answers are in the collapsible section below.
 **Q2.** Reviewers approve 99.9% of AI decisions without changes. What's the most likely concern?
 
 - A) Latency
-- B) Automation bias — review may be rubber-stamping
+- B) Automation bias, review may be rubber-stamping
 - C) Too many reviewers
 - D) The model is perfect
 

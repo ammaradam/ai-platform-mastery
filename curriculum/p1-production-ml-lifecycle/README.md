@@ -1,6 +1,6 @@
 # P1 · Production ML lifecycle
 
-**Your current level:** 🟢 strong
+**Your current level:** Strong
 
 ## Goal
 

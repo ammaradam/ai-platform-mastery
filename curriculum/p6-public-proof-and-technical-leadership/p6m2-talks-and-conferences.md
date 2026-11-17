@@ -14,16 +14,16 @@
 Local meetups (PyData KL, Kubernetes/CNCF KL, GDG, AWS/Azure user groups) →
 PyCon MY / regional conferences (PyCon APAC, KubeCon + CloudNativeCon events,
 MLOps-focused conferences) → global conferences. You've spoken at PyCon
-Malaysia — you're already on the ladder.
+Malaysia, you're already on the ladder.
 
 ## Writing a CFP that works
 Reviewers read hundreds. Make theirs easy:
-- **Title** — specific, promises a takeaway ("What 100 agent traces taught us
+- **Title**: specific, promises a takeaway ("What 100 agent traces taught us
   about evals in Manglish").
-- **Abstract** — problem, why it matters, what you'll show, what attendees
+- **Abstract**: problem, why it matters, what you'll show, what attendees
   leave with. Concrete beats clever.
 - **Audience and level** stated clearly.
-- **Evidence you can deliver** — real system, real numbers, links to prior
+- **Evidence you can deliver**: real system, real numbers, links to prior
   talks or posts.
 - Original material: talks about your own production experience beat survey
   talks.
@@ -43,7 +43,7 @@ One body of work → blog post → meetup talk → conference talk → video →
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| Optional | [Open Source Guides — Building Community (for speaking and community)](https://opensource.guide/building-community/) — GitHub | guide | 20 min | Community and visibility habits that transfer to speaking. |
+| Optional | [Open Source Guides: Building Community (for speaking and community)](https://opensource.guide/building-community/) — GitHub | guide | 20 min | Community and visibility habits that transfer to speaking. |
 | **Required** | [Tips for Your First KubeCon Presentation (Part 1)](https://kubernetes.io/blog/2018/10/18/tips-for-your-first-kubecon-presentation-part-1/) — Kubernetes blog, 2018 | blog | 15 min | Submitting a good talk and preparing; applies to any conference. |
 
 ## Quiz

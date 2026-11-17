@@ -13,19 +13,19 @@
 ## What a platform is
 The CNCF Platforms white paper defines a platform as a collection of
 capabilities, documentation and tools that support developing, deploying and
-operating products — offered as **self-service** and run **as a product** for
+operating products, offered as **self-service** and run **as a product** for
 internal users. The test of a platform is not the tech; it is whether teams
 choose to use it.
 
 ## Team Topologies in one page
 Four team types:
-- **Stream-aligned** — owns a slice of business value end to end (e.g. the
+- **Stream-aligned**: owns a slice of business value end to end (e.g. the
   pricing data science team).
-- **Platform** — provides internal services that reduce stream-aligned teams'
+- **Platform**: provides internal services that reduce stream-aligned teams'
   cognitive load (your role).
-- **Enabling** — temporarily helps teams adopt new capabilities (coaching DS on
+- **Enabling**: temporarily helps teams adopt new capabilities (coaching DS on
   MLOps practices).
-- **Complicated-subsystem** — owns a part needing deep specialist knowledge
+- **Complicated-subsystem**: owns a part needing deep specialist knowledge
   (e.g. a CV damage-detection model or an inference engine).
 Three interaction modes: **collaboration**, **X-as-a-service**,
 **facilitating**. A healthy platform moves from collaboration to
@@ -44,7 +44,7 @@ monitoring and eval hooks on day one.
 - DORA metrics: deployment frequency, lead time for changes, change failure
   rate, time to restore service.
 - Developer satisfaction surveys; support ticket volume.
-Your "two weeks to two days" release story is a lead-time improvement — say it
+Your "two weeks to two days" release story is a lead-time improvement, say it
 in DORA language.
 
 ## Readings
@@ -126,7 +126,7 @@ Draw your AI/ML org, Architecture team and Infra team as Team Topologies types w
 
 ### Golden path spec for a model service (core)
 
-Write the golden path for "ship a new pricing model" — steps, template contents, what is automated, what is optional.
+Write the golden path for "ship a new pricing model", steps, template contents, what is automated, what is optional.
 
 **Deliverable:** Golden path doc (max 2 pages).
 

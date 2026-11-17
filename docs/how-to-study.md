@@ -16,7 +16,7 @@
 | 22–32 | **P2 Platform + Kubernetes** | Reference platform repo + blog post |
 | 33–40 | **P5 Governance + security** | Governance pack + threat model |
 | 41–52 | **Consolidate.** Talk submissions, MLOps-Toolbox release, review missed quiz questions | Talk delivered, public body of work |
-| Throughout | **P6** — one post a month, one ADR per real decision | |
+| Throughout | **P6**: one post a month, one ADR per real decision | |
 
 ## The method for each module
 

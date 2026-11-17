@@ -1,6 +1,6 @@
 # P2 · Platform engineering and Kubernetes for AI
 
-**Your current level:** 🟡 partial
+**Your current level:** Partial
 
 ## Goal
 

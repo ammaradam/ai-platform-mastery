@@ -25,7 +25,7 @@ signal.
 
 ## Small finished things beat big unfinished ones
 A published eval dataset, a tiny CLI, a Kubernetes manifest example, a
-benchmark notebook — each is shareable proof. Your side-project list is long;
+benchmark notebook, each is shareable proof. Your side-project list is long;
 choose open-source work that **reinforces your expertise story** (platform +
 evals + Malaysia) and pause the rest.
 
@@ -33,8 +33,8 @@ evals + Malaysia) and pause the rest.
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| **Required** | [Open Source Guides — How to Contribute to Open Source](https://opensource.guide/how-to-contribute/) — GitHub | guide | 20 min | Finding a project and making a first contribution. |
-| **Required** | [Open Source Guides — Starting an Open Source Project](https://opensource.guide/starting-a-project/) — GitHub | guide | 20 min | README, contributing guide, code of conduct. |
+| **Required** | [Open Source Guides: How to Contribute to Open Source](https://opensource.guide/how-to-contribute/) — GitHub | guide | 20 min | Finding a project and making a first contribution. |
+| **Required** | [Open Source Guides: Starting an Open Source Project](https://opensource.guide/starting-a-project/) — GitHub | guide | 20 min | README, contributing guide, code of conduct. |
 
 ## Quiz
 

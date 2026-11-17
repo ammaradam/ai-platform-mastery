@@ -12,21 +12,21 @@
 
 ## How GPUs reach a Pod
 GPUs are **extended resources** advertised by a **device plugin** (e.g.
-`nvidia.com/gpu`). Pods request them in `limits`; GPUs are not overcommitted —
+`nvidia.com/gpu`). Pods request them in `limits`; GPUs are not overcommitted -
 a requested GPU is exclusively assigned by default. The **NVIDIA GPU Operator**
 installs and manages the drivers, container toolkit, device plugin, DCGM
 monitoring and MIG manager as Kubernetes-managed components.
 
 ## Sharing a GPU
-- **MIG (Multi-Instance GPU)** — on supported data-centre GPUs (e.g. A100,
+- **MIG (Multi-Instance GPU)**: on supported data-centre GPUs (e.g. A100,
   H100), hardware-partitions one GPU into isolated instances with dedicated
   memory and compute. Strong isolation; fixed profiles.
-- **Time-slicing** — multiple Pods share a GPU by taking turns. No memory
+- **Time-slicing**: multiple Pods share a GPU by taking turns. No memory
   isolation; one tenant can OOM others. Fine for dev, notebooks, light
   inference.
-- **MPS** — concurrent processes share a GPU with better utilisation than
+- **MPS**: concurrent processes share a GPU with better utilisation than
   time-slicing; limited isolation.
-- **Dedicated** — whole GPUs for training or large LLM serving.
+- **Dedicated**: whole GPUs for training or large LLM serving.
 
 ## Multi-tenancy
 Soft multi-tenancy (trusted internal teams) usually means one namespace per
@@ -50,10 +50,10 @@ nodes for fault-tolerant training.
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| **Required** | [Kubernetes docs — Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/) — Kubernetes | docs | 15 min | Device plugins and how GPUs are requested. |
+| **Required** | [Kubernetes docs: Schedule GPUs](https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/) — Kubernetes | docs | 15 min | Device plugins and how GPUs are requested. |
 | **Required** | [NVIDIA GPU Operator documentation](https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/index.html) — NVIDIA | docs | 45 min | Components it manages; MIG and time-slicing configuration pages. |
-| **Required** | [Kueue documentation — Overview](https://kueue.sigs.k8s.io/docs/overview/) — Kubernetes SIG Scheduling | docs | 30 min | ClusterQueues, LocalQueues, cohorts and borrowing. |
-| **Required** | [Kubernetes docs — Multi-tenancy](https://kubernetes.io/docs/concepts/security/multi-tenancy/) — Kubernetes | docs | 30 min | Soft vs hard multi-tenancy and isolation controls. |
+| **Required** | [Kueue documentation: Overview](https://kueue.sigs.k8s.io/docs/overview/) — Kubernetes SIG Scheduling | docs | 30 min | ClusterQueues, LocalQueues, cohorts and borrowing. |
+| **Required** | [Kubernetes docs: Multi-tenancy](https://kubernetes.io/docs/concepts/security/multi-tenancy/) — Kubernetes | docs | 30 min | Soft vs hard multi-tenancy and isolation controls. |
 
 ## Quiz
 
@@ -97,7 +97,7 @@ Answer without notes first. Answers are in the collapsible section below.
 **Q6.** For untrusted external tenants, what's usually required?
 
 - A) Just quotas
-- B) Hard multi-tenancy — separate clusters or strong sandboxing
+- B) Hard multi-tenancy, separate clusters or strong sandboxing
 - C) Just RBAC
 - D) Namespaces are enough
 

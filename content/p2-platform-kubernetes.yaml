@@ -39,19 +39,19 @@ modules:
       ## What a platform is
       The CNCF Platforms white paper defines a platform as a collection of
       capabilities, documentation and tools that support developing, deploying and
-      operating products — offered as **self-service** and run **as a product** for
+      operating products, offered as **self-service** and run **as a product** for
       internal users. The test of a platform is not the tech; it is whether teams
       choose to use it.
 
       ## Team Topologies in one page
       Four team types:
-      - **Stream-aligned** — owns a slice of business value end to end (e.g. the
+      - **Stream-aligned**: owns a slice of business value end to end (e.g. the
         pricing data science team).
-      - **Platform** — provides internal services that reduce stream-aligned teams'
+      - **Platform**: provides internal services that reduce stream-aligned teams'
         cognitive load (your role).
-      - **Enabling** — temporarily helps teams adopt new capabilities (coaching DS on
+      - **Enabling**: temporarily helps teams adopt new capabilities (coaching DS on
         MLOps practices).
-      - **Complicated-subsystem** — owns a part needing deep specialist knowledge
+      - **Complicated-subsystem**: owns a part needing deep specialist knowledge
         (e.g. a CV damage-detection model or an inference engine).
       Three interaction modes: **collaboration**, **X-as-a-service**,
       **facilitating**. A healthy platform moves from collaboration to
@@ -70,7 +70,7 @@ modules:
       - DORA metrics: deployment frequency, lead time for changes, change failure
         rate, time to restore service.
       - Developer satisfaction surveys; support ticket volume.
-      Your "two weeks to two days" release story is a lead-time improvement — say it
+      Your "two weeks to two days" release story is a lead-time improvement, say it
       in DORA language.
     readings:
       - title: CNCF Platforms White Paper
@@ -135,7 +135,7 @@ modules:
           - Each team labelled with type and interaction mode
       - title: Golden path spec for a model service
         level: core
-        task: Write the golden path for "ship a new pricing model" — steps, template contents, what is automated, what is optional.
+        task: Write the golden path for "ship a new pricing model", steps, template contents, what is automated, what is optional.
         deliverable: Golden path doc (max 2 pages).
         acceptance:
           - Includes a time-to-first-deploy target and how you'd measure it
@@ -185,24 +185,24 @@ modules:
       - **VPA** adjusts requests.
       - **Cluster Autoscaler / Karpenter** add or remove nodes when pods can't schedule.
       - **KEDA** scales on event sources and can scale to zero.
-      For LLM serving, CPU is a poor scaling signal — use queue length, in-flight
+      For LLM serving, CPU is a poor scaling signal, use queue length, in-flight
       requests or KV-cache utilisation (Pillar 3).
     readings:
-      - title: Kubernetes docs — Controllers
+      - title: "Kubernetes docs: Controllers"
         author: Kubernetes
         url: https://kubernetes.io/docs/concepts/architecture/controller/
         type: docs
         required: true
         minutes: 15
         focus: Control loops and desired vs actual state.
-      - title: Kubernetes docs — Operator pattern
+      - title: "Kubernetes docs: Operator pattern"
         author: Kubernetes
         url: https://kubernetes.io/docs/concepts/extend-kubernetes/operator/
         type: docs
         required: true
         minutes: 15
         focus: CRDs and custom controllers.
-      - title: Kubernetes docs — Resource management for Pods and Containers
+      - title: "Kubernetes docs: Resource management for Pods and Containers"
         author: Kubernetes
         url: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
         type: docs
@@ -280,21 +280,21 @@ modules:
     lesson: |
       ## How GPUs reach a Pod
       GPUs are **extended resources** advertised by a **device plugin** (e.g.
-      `nvidia.com/gpu`). Pods request them in `limits`; GPUs are not overcommitted —
+      `nvidia.com/gpu`). Pods request them in `limits`; GPUs are not overcommitted -
       a requested GPU is exclusively assigned by default. The **NVIDIA GPU Operator**
       installs and manages the drivers, container toolkit, device plugin, DCGM
       monitoring and MIG manager as Kubernetes-managed components.
 
       ## Sharing a GPU
-      - **MIG (Multi-Instance GPU)** — on supported data-centre GPUs (e.g. A100,
+      - **MIG (Multi-Instance GPU)**: on supported data-centre GPUs (e.g. A100,
         H100), hardware-partitions one GPU into isolated instances with dedicated
         memory and compute. Strong isolation; fixed profiles.
-      - **Time-slicing** — multiple Pods share a GPU by taking turns. No memory
+      - **Time-slicing**: multiple Pods share a GPU by taking turns. No memory
         isolation; one tenant can OOM others. Fine for dev, notebooks, light
         inference.
-      - **MPS** — concurrent processes share a GPU with better utilisation than
+      - **MPS**: concurrent processes share a GPU with better utilisation than
         time-slicing; limited isolation.
-      - **Dedicated** — whole GPUs for training or large LLM serving.
+      - **Dedicated**: whole GPUs for training or large LLM serving.
 
       ## Multi-tenancy
       Soft multi-tenancy (trusted internal teams) usually means one namespace per
@@ -314,7 +314,7 @@ modules:
       reserved GPUs are the biggest waste. Scale-to-zero for spiky inference, spot
       nodes for fault-tolerant training.
     readings:
-      - title: Kubernetes docs — Schedule GPUs
+      - title: "Kubernetes docs: Schedule GPUs"
         author: Kubernetes
         url: https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/
         type: docs
@@ -328,14 +328,14 @@ modules:
         required: true
         minutes: 45
         focus: Components it manages; MIG and time-slicing configuration pages.
-      - title: Kueue documentation — Overview
+      - title: "Kueue documentation: Overview"
         author: Kubernetes SIG Scheduling
         url: https://kueue.sigs.k8s.io/docs/overview/
         type: docs
         required: true
         minutes: 30
         focus: ClusterQueues, LocalQueues, cohorts and borrowing.
-      - title: Kubernetes docs — Multi-tenancy
+      - title: "Kubernetes docs: Multi-tenancy"
         author: Kubernetes
         url: https://kubernetes.io/docs/concepts/security/multi-tenancy/
         type: docs
@@ -364,7 +364,7 @@ modules:
         answer: 0
         explain: Taints repel Pods without matching tolerations.
       - q: For untrusted external tenants, what's usually required?
-        options: ["Namespaces are enough", "Hard multi-tenancy — separate clusters or strong sandboxing", "Just RBAC", "Just quotas"]
+        options: ["Namespaces are enough", "Hard multi-tenancy, separate clusters or strong sandboxing", "Just RBAC", "Just quotas"]
         answer: 1
         explain: Namespaces provide soft isolation suitable for trusted internal teams.
     exercises:
@@ -409,7 +409,7 @@ modules:
       ## GitOps
       GitOps (OpenGitOps principles): desired state is **declarative**, **versioned
       and immutable** in git, **pulled automatically** by agents, and **continuously
-      reconciled**. Argo CD runs in the cluster, watches git, and syncs manifests —
+      reconciled**. Argo CD runs in the cluster, watches git, and syncs manifests -
       the same control-loop idea as Kubernetes itself. Benefits: audit trail,
       rollback via git revert, no CI system holding cluster-admin credentials.
       Typical split: Terraform for cloud resources (clusters, networks, identities),
@@ -417,9 +417,9 @@ modules:
 
       ## Policy as code
       Admission controllers enforce rules at the API server:
-      - **Kyverno** — policies written as Kubernetes YAML; validate, mutate,
+      - **Kyverno**: policies written as Kubernetes YAML; validate, mutate,
         generate, verify images.
-      - **OPA Gatekeeper** — policies in Rego via ConstraintTemplates.
+      - **OPA Gatekeeper**: policies in Rego via ConstraintTemplates.
       Example AI-platform guardrails: no containers without resource limits; GPU
       pods only in approved namespaces; images only from your registry and signed;
       no public LoadBalancers; required labels for cost allocation (team, model).
@@ -428,10 +428,10 @@ modules:
 
       ## Secrets and identity
       Prefer workload identity (Azure Workload Identity, IRSA on AWS) over static
-      secrets. You already used workload identity federation for Foundry agents —
+      secrets. You already used workload identity federation for Foundry agents -
       that's the pattern.
     readings:
-      - title: Terraform docs — Modules
+      - title: "Terraform docs: Modules"
         author: HashiCorp
         url: https://developer.hashicorp.com/terraform/language/modules
         type: docs
@@ -445,7 +445,7 @@ modules:
         required: true
         minutes: 10
         focus: The four principles.
-      - title: Argo CD documentation — Core concepts
+      - title: "Argo CD documentation: Core concepts"
         author: Argo Project
         url: https://argo-cd.readthedocs.io/en/stable/core_concepts/
         type: docs

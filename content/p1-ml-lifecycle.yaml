@@ -35,30 +35,30 @@ modules:
     lesson: |
       ## The core idea
       In 2015 Google's *Hidden Technical Debt in Machine Learning Systems* made one
-      picture famous: a tiny box labelled "ML code" surrounded by much bigger boxes —
+      picture famous: a tiny box labelled "ML code" surrounded by much bigger boxes -
       configuration, data collection, feature extraction, data verification, serving
       infrastructure, monitoring, process management. The point: **most of the cost
       and risk of an ML system lives outside the model.**
 
       ## Debt patterns you must be able to name
-      - **Entanglement (CACE)** — *Changing Anything Changes Everything*. Features
+      - **Entanglement (CACE)**: *Changing Anything Changes Everything*. Features
         interact, so adding, removing or rescaling one input can shift the whole
         model's behaviour. You cannot make isolated improvements.
-      - **Correction cascades** — model B is trained on model A's output to "fix"
+      - **Correction cascades**: model B is trained on model A's output to "fix"
         a new case. Now improving A can break B.
-      - **Undeclared consumers** — other systems silently read your predictions or
+      - **Undeclared consumers**: other systems silently read your predictions or
         log files. You change the model; their behaviour changes; nobody knows why.
-      - **Unstable data dependencies** — an input signal owned by another team
+      - **Unstable data dependencies**: an input signal owned by another team
         changes meaning or distribution without notice.
-      - **Underutilised data dependencies** — features that add almost nothing but
+      - **Underutilised data dependencies**: features that add almost nothing but
         still add breakage risk (legacy, bundled, epsilon features).
-      - **Feedback loops** — direct (the model picks the data it learns from, like a
+      - **Feedback loops**: direct (the model picks the data it learns from, like a
         recommender) and hidden (two systems influence each other through the world).
         Pricing models are especially prone: your predicted price shifts seller
         behaviour, which shifts future prices.
-      - **Glue code and pipeline jungles** — large amounts of code exist only to
+      - **Glue code and pipeline jungles**: large amounts of code exist only to
         move data in and out of generic packages; pipelines grow by accretion.
-      - **Dead experimental codepaths** and **configuration debt** — configuration
+      - **Dead experimental codepaths** and **configuration debt**: configuration
         often outgrows code and is rarely tested.
 
       ## Rules of ML worth memorising
@@ -109,7 +109,7 @@ modules:
         answer: 1
         explain: Changing one input shifts learned interactions across the whole model, so improvements are not isolated.
       - q: Model B is trained on Model A's output to handle a new region. What risk does this create?
-        options: ["Correction cascade — improving A can degrade B", "Training-serving skew", "Config debt", "Label leakage"]
+        options: ["Correction cascade, improving A can degrade B", "Training-serving skew", "Config debt", "Label leakage"]
         answer: 0
         explain: Stacking a corrective model on another creates a dependency where upstream improvements break downstream behaviour.
       - q: Your pricing predictions are being read directly from a log table by the finance team's dashboard without your knowledge. This is an example of...
@@ -119,7 +119,7 @@ modules:
       - q: According to Rules of ML, what is the best way to ensure you train like you serve?
         options: ["Retrain daily", "Log the features used at serving time and use them for training", "Use the same model architecture", "Freeze the feature list"]
         answer: 1
-        explain: Rule #29 — logging serving-time features removes a whole class of skew bugs.
+        explain: Rule #29, logging serving-time features removes a whole class of skew bugs.
       - q: Why are pricing models particularly exposed to hidden feedback loops?
         options: ["They use tabular data", "Predicted prices influence seller and buyer behaviour, which becomes future training data", "They retrain too often", "They use LightGBM"]
         answer: 1
@@ -156,11 +156,11 @@ modules:
       ## Training-serving skew
       Skew is any difference between what the model saw in training and what it sees
       in production. Three root causes:
-      1. **Code skew** — features computed by different code paths (a Spark job for
+      1. **Code skew**: features computed by different code paths (a Spark job for
          training, a Python function at serving).
-      2. **Data skew** — the serving data distribution differs from training
+      2. **Data skew**: the serving data distribution differs from training
          (often a symptom of a pipeline bug, not real-world drift).
-      3. **Time skew / leakage** — training rows used information that would not have
+      3. **Time skew / leakage**: training rows used information that would not have
          been available at prediction time.
 
       ## Point-in-time correctness
@@ -175,15 +175,15 @@ modules:
       an **online store** (latest values, low latency, for serving); and
       materialisation jobs that keep them consistent. Uber's Michelangelo popularised
       this; Feast is the main open-source option. A feature store is worth it when
-      several models share features or need low-latency online lookups — not for a
+      several models share features or need low-latency online lookups, not for a
       single batch model.
 
       ## Data contracts
       A data contract is an explicit, versioned agreement between a data producer and
       consumers: schema, types, nullability, allowed ranges, semantics, freshness SLA,
       and an owner. The key design question is **where it is enforced**:
-      - at the producer (best — bad data never lands),
-      - at ingestion into your pipeline (good — fail fast),
+      - at the producer (best, bad data never lands),
+      - at ingestion into your pipeline (good, fail fast),
       - at training/serving time (last line of defence).
       Contracts should fail loudly in CI and in pipelines, and changes should go
       through versioning (additive changes are safe; renames and type changes are
@@ -202,7 +202,7 @@ modules:
         required: true
         minutes: 25
         focus: The feature store section and why shared features matter.
-      - title: Feast documentation — Concepts
+      - title: "Feast documentation: Concepts"
         author: Feast
         url: https://docs.feast.dev/
         type: docs
@@ -225,7 +225,7 @@ modules:
         focus: Training-serving skew rules.
     quiz:
       - q: Offline AUC is 0.95 but production performance is much worse. Training data was built by joining each auction to the latest available vehicle condition score. What is the most likely cause?
-        options: ["Concept drift", "Point-in-time leakage — features came from after the label timestamp", "Underfitting", "Class imbalance"]
+        options: ["Concept drift", "Point-in-time leakage, features came from after the label timestamp", "Underfitting", "Class imbalance"]
         answer: 1
         explain: Joining to the latest value leaks future information; an as-of join on the label timestamp is required.
       - q: Which is NOT one of the three main root causes of training-serving skew?
@@ -245,7 +245,7 @@ modules:
         answer: 2
         explain: Additive, optional changes don't break existing consumers.
       - q: Where is the best place to enforce a data contract?
-        options: ["At the producer, before data lands", "Only in the model", "In the dashboard", "Nowhere — monitor instead"]
+        options: ["At the producer, before data lands", "Only in the model", "In the dashboard", "Nowhere, monitor instead"]
         answer: 0
         explain: Producer-side enforcement stops bad data entering the system; downstream checks are fallbacks.
     exercises:
@@ -281,8 +281,8 @@ modules:
       - Choose between shadow, canary, A/B and blue-green releases for a model
     lesson: |
       ## The ML Test Score
-      Breck et al. (Google) proposed 28 tests in four groups — **data**, **model
-      development**, **infrastructure**, and **monitoring** — with a final score taken
+      Breck et al. (Google) proposed 28 tests in four groups, **data**, **model
+      development**, **infrastructure**, and **monitoring**: with a final score taken
       as the *minimum* of the four group scores. Using the minimum is deliberate: a
       system is only as ready as its weakest area. Examples: feature expectations are
       captured in a schema; model staleness impact is known; the full pipeline is
@@ -290,30 +290,30 @@ modules:
       checked for skew.
 
       ## MLOps maturity (Google's levels)
-      - **Level 0** — manual, notebook-driven, rare releases, no monitoring.
-      - **Level 1** — automated *training pipeline* with continuous training (CT),
+      - **Level 0**: manual, notebook-driven, rare releases, no monitoring.
+      - **Level 1**: automated *training pipeline* with continuous training (CT),
         data and model validation inside the pipeline, a model registry.
-      - **Level 2** — CI/CD *of the pipeline itself*: pipeline code is tested, built
+      - **Level 2**: CI/CD *of the pipeline itself*: pipeline code is tested, built
         and deployed automatically.
       Key distinction: in ML you deploy a **pipeline that produces models**, not just a
       model.
 
       ## Release strategies
-      - **Shadow** — new model receives a copy of live traffic; predictions are logged
+      - **Shadow**: new model receives a copy of live traffic; predictions are logged
         but not used. Zero user risk; validates latency, errors and prediction
         distribution. Cannot measure business impact.
-      - **Canary** — a small percentage of real traffic uses the new model; expand if
+      - **Canary**: a small percentage of real traffic uses the new model; expand if
         healthy. Real impact on a few users; fast rollback.
-      - **A/B test** — randomised split to measure causal business impact with
+      - **A/B test**: randomised split to measure causal business impact with
         statistical power. Slow; needs enough traffic.
-      - **Blue-green** — two full environments; switch all traffic at once; instant
+      - **Blue-green**: two full environments; switch all traffic at once; instant
         rollback but no gradual exposure.
-      - **Interleaving / bandits** — common for ranking; out of scope here.
+      - **Interleaving / bandits**: common for ranking; out of scope here.
 
       ## Release gates
       A gate is an automated check that blocks promotion: schema checks, offline
       metric thresholds vs the champion, slice-level checks (no segment regresses by
-      more than X), latency and size budgets, and — for LLM systems — eval scores
+      more than X), latency and size budgets, and, for LLM systems, eval scores
       (Pillar 4). Gates must compare against the **current champion**, not a fixed
       number, or the bar slowly drifts down.
     readings:
@@ -390,17 +390,17 @@ modules:
       - Write SLOs and a runbook for an ML service
     lesson: |
       ## Kinds of change
-      - **Data (covariate) drift** — P(X) changes: input distribution shifts (more
+      - **Data (covariate) drift**: P(X) changes: input distribution shifts (more
         flood-damaged cars after a storm).
-      - **Prediction drift** — the distribution of model outputs shifts. Often the
+      - **Prediction drift**: the distribution of model outputs shifts. Often the
         earliest signal you can see.
-      - **Concept drift** — P(Y|X) changes: the relationship itself changes (same car,
+      - **Concept drift**: P(Y|X) changes: the relationship itself changes (same car,
         different price because the market moved). Only detectable with labels or
         proxies.
-      - **Label shift** — P(Y) changes.
+      - **Label shift**: P(Y) changes.
 
       ## Metrics
-      - **PSI** (Population Stability Index) — common in finance; rough guide: <0.1 no
+      - **PSI** (Population Stability Index): common in finance; rough guide: <0.1 no
         significant change, 0.1–0.25 moderate, >0.25 significant.
       - **KS test**, **Wasserstein distance**, **Jensen-Shannon divergence** for
         numeric features; **chi-squared** for categoricals.
@@ -408,13 +408,13 @@ modules:
         "significant". Prefer effect-size metrics with thresholds tuned on history.
 
       ## What to monitor (in priority order)
-      1. **Service health** — latency, errors, throughput (standard SRE).
-      2. **Data quality** — nulls, schema, ranges, freshness (cheapest, catches most
+      1. **Service health**: latency, errors, throughput (standard SRE).
+      2. **Data quality**: nulls, schema, ranges, freshness (cheapest, catches most
          incidents).
-      3. **Prediction distribution** — drift in outputs.
-      4. **Model quality** — once labels arrive (for auctions: when the hammer price
+      3. **Prediction distribution**: drift in outputs.
+      4. **Model quality**: once labels arrive (for auctions: when the hammer price
          is known), compute real error by segment.
-      5. **Business KPIs** — sell-through, margin.
+      5. **Business KPIs**: sell-through, margin.
 
       ## SLOs and incidents
       An SLO is a target on a user-visible indicator (e.g. 99.5% of pricing requests
@@ -424,21 +424,21 @@ modules:
       postmortem material. Postmortems are **blameless** and end with owned, dated
       actions.
     readings:
-      - title: Data drift — ML in production guide
+      - title: "Data drift: ML in production guide"
         author: Evidently AI
         url: https://www.evidentlyai.com/ml-in-production/data-drift
         type: guide
         required: true
         minutes: 30
         focus: Drift types and why statistical tests over-alert at scale.
-      - title: "Site Reliability Engineering — Ch. 4: Service Level Objectives"
+      - title: "Site Reliability Engineering: Ch. 4: Service Level Objectives"
         author: Google SRE book
         url: https://sre.google/sre-book/service-level-objectives/
         type: book
         required: true
         minutes: 40
         focus: SLIs, SLOs, error budgets.
-      - title: "SRE book — Ch. 15: Postmortem Culture"
+      - title: "SRE book: Ch. 15: Postmortem Culture"
         author: Google SRE book
         url: https://sre.google/sre-book/postmortem-culture/
         type: book
@@ -468,7 +468,7 @@ modules:
       - q: A PSI of 0.3 on a key feature usually indicates...
         options: ["No change", "Moderate change", "Significant shift worth investigating", "A bug in PSI"]
         answer: 2
-        explain: Common rule of thumb — above 0.25 is a significant shift.
+        explain: Common rule of thumb, above 0.25 is a significant shift.
       - q: Which monitoring layer typically catches the most ML incidents most cheaply?
         options: ["Business KPIs", "Data quality checks (nulls, schema, freshness)", "Concept drift detection", "Quarterly model reviews"]
         answer: 1

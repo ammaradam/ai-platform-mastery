@@ -24,7 +24,7 @@
 `cost per 1M tokens = (GPU hourly cost) / (tokens per second × 3600) × 1,000,000`
 
 Example: a GPU at $4/hour sustaining 2,000 output tokens/s at your SLO:
-4 / (2,000 × 3,600) × 1,000,000 ≈ **$0.56 per 1M output tokens** — at 100%
+4 / (2,000 × 3,600) × 1,000,000 ≈ **$0.56 per 1M output tokens**: at 100%
 utilisation. At 25% average utilisation, effective cost is 4× higher
 (~$2.22). **Utilisation is the whole game.** APIs charge per token so you pay
 nothing when idle; self-hosting charges per hour.
@@ -38,22 +38,22 @@ upgrades, security patching). Include engineer time in the model.
 ## Capacity planning
 Required replicas ≈ peak tokens/s ÷ per-replica goodput, plus headroom (N+1
 for failure, ~30% for spikes). Scale on queue depth / in-flight requests.
-Consider autoscaling lag: model loading can take minutes — keep a warm minimum
+Consider autoscaling lag: model loading can take minutes, keep a warm minimum
 or use faster loading (cached weights on local NVMe).
 
 ## Gateway layer
 An AI gateway (APIM in your Foundry platform; LiteLLM or Envoy-based gateways
 elsewhere) centralises auth, quotas, token metering per team, routing,
-fallback between providers and caching — essential for chargeback.
+fallback between providers and caching, essential for chargeback.
 
 ## Readings
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| **Required** | [vLLM documentation — Benchmarking](https://docs.vllm.ai/) — vLLM | docs | 30 min | Benchmark serving script and its metrics. |
+| **Required** | [vLLM documentation: Benchmarking](https://docs.vllm.ai/) — vLLM | docs | 30 min | Benchmark serving script and its metrics. |
 | Optional | [LLMPerf](https://github.com/ray-project/llmperf) — Ray Project | tool | 20 min | Load-testing method and metrics definitions. |
 | **Required** | [LLM Inference Performance Engineering: Best Practices (revisit)](https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices) — Databricks / MosaicML | blog | 15 min | Latency vs throughput trade-off and hardware comparisons. |
-| **Required** | [Azure API Management — AI gateway capabilities](https://learn.microsoft.com/en-us/azure/api-management/genai-gateway-capabilities) — Microsoft Learn | docs | 25 min | Token limits, token metrics, semantic caching, load balancing. |
+| **Required** | [Azure API Management: AI gateway capabilities](https://learn.microsoft.com/en-us/azure/api-management/genai-gateway-capabilities) — Microsoft Learn | docs | 25 min | Token limits, token metrics, semantic caching, load balancing. |
 
 ## Quiz
 

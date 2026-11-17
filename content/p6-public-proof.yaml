@@ -5,7 +5,7 @@ status: gap
 parallel: true
 goal: >
   Become known for your expertise: write design docs and public posts that people
-  share, give talks, maintain open source, and operate at staff level — leading
+  share, give talks, maintain open source, and operate at staff level, leading
   without authority.
 why_now: >
   "Global level" means people outside your company know your work. This pillar
@@ -27,7 +27,7 @@ capstone:
     - Open-source work has a README a stranger can follow in 15 minutes
 modules:
   - id: p6m1
-    title: Technical writing — design docs, ADRs and posts
+    title: "Technical writing: design docs, ADRs and posts"
     hours: 6
     objectives:
       - Write design docs that get decisions made
@@ -44,14 +44,14 @@ modules:
       ## ADRs
       Michael Nygard's Architecture Decision Record: **Title, Status, Context,
       Decision, Consequences**. One decision per record, immutable once accepted
-      (supersede, don't edit). You already use ADRs — make "Consequences" honest,
+      (supersede, don't edit). You already use ADRs, make "Consequences" honest,
       including the downsides you accept.
 
       ## Public posts
       What works for practitioner writing:
       - **One idea per post**, with evidence from real work (numbers, diagrams,
         code).
-      - **Write what you just learned** — "TIL"-style posts are valuable and quick.
+      - **Write what you just learned**: "TIL"-style posts are valuable and quick.
       - Show the failure, not only the success.
       - Title says the takeaway.
       - Never invent results; anonymise company data.
@@ -129,16 +129,16 @@ modules:
       Local meetups (PyData KL, Kubernetes/CNCF KL, GDG, AWS/Azure user groups) →
       PyCon MY / regional conferences (PyCon APAC, KubeCon + CloudNativeCon events,
       MLOps-focused conferences) → global conferences. You've spoken at PyCon
-      Malaysia — you're already on the ladder.
+      Malaysia, you're already on the ladder.
 
       ## Writing a CFP that works
       Reviewers read hundreds. Make theirs easy:
-      - **Title** — specific, promises a takeaway ("What 100 agent traces taught us
+      - **Title**: specific, promises a takeaway ("What 100 agent traces taught us
         about evals in Manglish").
-      - **Abstract** — problem, why it matters, what you'll show, what attendees
+      - **Abstract**: problem, why it matters, what you'll show, what attendees
         leave with. Concrete beats clever.
       - **Audience and level** stated clearly.
-      - **Evidence you can deliver** — real system, real numbers, links to prior
+      - **Evidence you can deliver**: real system, real numbers, links to prior
         talks or posts.
       - Original material: talks about your own production experience beat survey
         talks.
@@ -154,7 +154,7 @@ modules:
       ## Reuse
       One body of work → blog post → meetup talk → conference talk → video → posts.
     readings:
-      - title: Open Source Guides — Building Community (for speaking and community)
+      - title: "Open Source Guides: Building Community (for speaking and community)"
         author: GitHub
         url: https://opensource.guide/building-community/
         type: guide
@@ -224,18 +224,18 @@ modules:
 
       ## Small finished things beat big unfinished ones
       A published eval dataset, a tiny CLI, a Kubernetes manifest example, a
-      benchmark notebook — each is shareable proof. Your side-project list is long;
+      benchmark notebook, each is shareable proof. Your side-project list is long;
       choose open-source work that **reinforces your expertise story** (platform +
       evals + Malaysia) and pause the rest.
     readings:
-      - title: Open Source Guides — How to Contribute to Open Source
+      - title: "Open Source Guides: How to Contribute to Open Source"
         author: GitHub
         url: https://opensource.guide/how-to-contribute/
         type: guide
         required: true
         minutes: 20
         focus: Finding a project and making a first contribution.
-      - title: Open Source Guides — Starting an Open Source Project
+      - title: "Open Source Guides: Starting an Open Source Project"
         author: GitHub
         url: https://opensource.guide/starting-a-project/
         type: guide
@@ -284,10 +284,10 @@ modules:
       - Decide between the staff IC and manager tracks with evidence
     lesson: |
       ## Staff archetypes (Will Larson)
-      - **Tech Lead** — guides one team's approach and execution.
-      - **Architect** — direction and quality across a critical area.
-      - **Solver** — parachutes into hard problems.
-      - **Right Hand** — extends an executive's leadership across the org.
+      - **Tech Lead**: guides one team's approach and execution.
+      - **Architect**: direction and quality across a critical area.
+      - **Solver**: parachutes into hard problems.
+      - **Right Hand**: extends an executive's leadership across the org.
       Your current role (platform direction, governance, coaching DS) mixes Tech
       Lead and Architect.
 
@@ -295,12 +295,12 @@ modules:
       Three pillars: **big-picture thinking** (strategy, vision, technical
       direction), **project execution** (leading hard, ambiguous projects to done),
       and **levelling up others** (mentoring, setting standards, reviews). Much of it
-      is "glue work" — make it visible and tie it to outcomes.
+      is "glue work", make it visible and tie it to outcomes.
 
       ## Influence tools
       - Written strategy and vision docs (connect to p6m1).
       - Getting sponsors: managers and execs who will spend capital on your ideas.
-      - Being "in the room" — and earning it by bringing data.
+      - Being "in the room": and earning it by bringing data.
       - Making others successful (coaching DS to "drive on the roads").
 
       ## IC vs manager
@@ -344,7 +344,7 @@ modules:
     exercises:
       - title: Technical vision doc
         level: core
-        task: Write a 2-page, 12-18 month technical vision for AI at Pickles (or a target employer) — platform, evals, governance.
+        task: Write a 2-page, 12-18 month technical vision for AI at Pickles (or a target employer), platform, evals, governance.
         deliverable: Vision doc.
         acceptance:
           - States current state, target state, and 3 bets with how you'll measure them

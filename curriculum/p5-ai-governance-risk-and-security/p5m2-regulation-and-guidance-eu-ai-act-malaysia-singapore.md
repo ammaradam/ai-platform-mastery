@@ -1,4 +1,4 @@
-# P5M2 · Regulation and guidance — EU AI Act, Malaysia, Singapore
+# P5M2 · Regulation and guidance: EU AI Act, Malaysia, Singapore
 
 **Pillar:** [AI governance, risk and security](README.md) · **Time:** ~6 h · **Pass mark:** 80% on the quiz
 
@@ -13,26 +13,26 @@
 ## EU AI Act (Regulation (EU) 2024/1689)
 Risk-based:
 - **Prohibited practices** (e.g. social scoring, certain manipulative or
-  exploitative systems, untargeted facial-image scraping) — banned since
+  exploitative systems, untargeted facial-image scraping), banned since
   February 2025.
-- **High-risk systems** — Annex III use cases (e.g. employment, education,
+- **High-risk systems**: Annex III use cases (e.g. employment, education,
   credit scoring, critical infrastructure, law enforcement) and AI in regulated
   products (Annex I). Obligations: risk management, data governance, technical
   documentation, logging, transparency, human oversight, accuracy/robustness,
   conformity assessment, registration.
-- **Transparency obligations** (Article 50) — e.g. telling people they're
+- **Transparency obligations** (Article 50): e.g. telling people they're
   interacting with AI, marking AI-generated content.
-- **General-purpose AI (GPAI) models** — obligations for model providers since
+- **General-purpose AI (GPAI) models**: obligations for model providers since
   August 2025, extra duties for systemic-risk models.
 **Timeline update:** the 2026 Digital Omnibus on AI postponed high-risk
-obligations — to 2 December 2027 for Annex III systems and 2 August 2028 for
+obligations, to 2 December 2027 for Annex III systems and 2 August 2028 for
 Annex I product-embedded systems. Regulation changes; always check the current
 text before advising.
 **Extraterritorial reach:** it applies to providers placing AI on the EU market
 and to providers/deployers outside the EU when the system's **output is used in
 the EU**.
 
-## Malaysia — National Guidelines on AI Governance & Ethics (AIGE)
+## Malaysia, National Guidelines on AI Governance & Ethics (AIGE)
 Launched by MOSTI on 20 September 2024. **Voluntary.** Seven principles
 (fairness; reliability, safety and control; privacy and security;
 inclusiveness; transparency; accountability; pursuit of human benefit and
@@ -41,11 +41,11 @@ and developers/technology providers. Malaysia's PDPA still applies to personal
 data. Watch the National AI Office and the National AI Action Plan 2026–2030
 for what comes next.
 
-## Singapore — Model AI Governance Framework for Generative AI (2024)
+## Singapore, Model AI Governance Framework for Generative AI (2024)
 From IMDA and the AI Verify Foundation; voluntary; **nine dimensions**:
 accountability, data, trusted development and deployment, incident reporting,
 testing and assurance, security, content provenance, safety and alignment R&D,
-and AI for public good. AI Verify offers testing tools — practical reference for
+and AI for public good. AI Verify offers testing tools, practical reference for
 regional companies.
 
 ## How to use this as an engineer
@@ -57,9 +57,9 @@ evidence. Get legal to confirm classification.
 
 | | Reading | Type | Time | Focus on |
 |---|---|---|---|---|
-| Optional | [EU AI Act — official text, Regulation (EU) 2024/1689](https://eur-lex.europa.eu/eli/reg/2024/1689/oj) — EUR-Lex | law | 60 min | Articles 5, 6, 9-15 and 50. Use the explorer below to navigate. |
+| Optional | [EU AI Act: official text, Regulation (EU) 2024/1689](https://eur-lex.europa.eu/eli/reg/2024/1689/oj) — EUR-Lex | law | 60 min | Articles 5, 6, 9-15 and 50. Use the explorer below to navigate. |
 | **Required** | [EU AI Act Explorer](https://artificialintelligenceact.eu/) — Future of Life Institute | guide | 45 min | High-level summary and the high-risk requirements. |
-| **Required** | [The AI Act Implementation Timeline — What Changes Under the AI Omnibus?](https://fpf.org/?p=250371) — Future of Privacy Forum | guide | 15 min | Current dates after the Omnibus. |
+| **Required** | [The AI Act Implementation Timeline: What Changes Under the AI Omnibus?](https://fpf.org/?p=250371) — Future of Privacy Forum | guide | 15 min | Current dates after the Omnibus. |
 | **Required** | [National Guidelines on AI Governance and Ethics (AIGE)](https://mastic.mosti.gov.my/publication/the-national-guidelines-on-ai-governance-ethics/) — MOSTI Malaysia, 2024 | guideline | 60 min | The seven principles and Part C (developers and technology providers). |
 | **Required** | [Model AI Governance Framework for Generative AI](https://aiverifyfoundation.sg/) — IMDA & AI Verify Foundation, 2024 | framework | 45 min | The nine dimensions; testing and assurance section. |
 
@@ -83,7 +83,7 @@ Answer without notes first. Answers are in the collapsible section below.
 
 **Q3.** A Malaysian company's AI system scores job applicants in Germany for a client. Can the EU AI Act apply?
 
-- A) Yes — it applies when the output is used in the EU
+- A) Yes, it applies when the output is used in the EU
 - B) Only for GPAI
 - C) No, it's a Malaysian company
 - D) Only if hosted in the EU

@@ -1,4 +1,4 @@
-# P6M1 · Technical writing — design docs, ADRs and posts
+# P6M1 · Technical writing: design docs, ADRs and posts
 
 **Pillar:** [Public proof and technical leadership](README.md) · **Time:** ~6 h · **Pass mark:** 80% on the quiz
 
@@ -20,14 +20,14 @@ allows; a doc nobody reads didn't help.
 ## ADRs
 Michael Nygard's Architecture Decision Record: **Title, Status, Context,
 Decision, Consequences**. One decision per record, immutable once accepted
-(supersede, don't edit). You already use ADRs — make "Consequences" honest,
+(supersede, don't edit). You already use ADRs, make "Consequences" honest,
 including the downsides you accept.
 
 ## Public posts
 What works for practitioner writing:
 - **One idea per post**, with evidence from real work (numbers, diagrams,
   code).
-- **Write what you just learned** — "TIL"-style posts are valuable and quick.
+- **Write what you just learned**: "TIL"-style posts are valuable and quick.
 - Show the failure, not only the success.
 - Title says the takeaway.
 - Never invent results; anonymise company data.

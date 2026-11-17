@@ -1,16 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="color-scheme:light dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AI Platform Mastery</title>
 <style>
 :root{--bg:#f7f7f5;--card:#fff;--ink:#1d1d1b;--mut:#6b6a65;--line:#e4e2dc;--acc:#0f6e56;--acc-bg:#e1f5ee;--warn:#854f0b;--warn-bg:#faeeda;--bad:#a32d2d;--bad-bg:#fcebeb;--ok:#3b6d11;--ok-bg:#eaf3de;--r:12px}
-@media (prefers-color-scheme:dark){:root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe6;--mut:#a3a19a;--line:#33322f;--acc:#5dcaa5;--acc-bg:#0d3a2f;--warn:#fac775;--warn-bg:#3d2a0b;--bad:#f09595;--bad-bg:#3d1616;--ok:#97c459;--ok-bg:#22330f}}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#161615;--card:#1f1f1d;--ink:#ecebe6;--mut:#a3a19a;--line:#33322f;--acc:#5dcaa5;--acc-bg:#0d3a2f;--warn:#fac775;--warn-bg:#3d2a0b;--bad:#f09595;--bad-bg:#3d1616;--ok:#97c459;--ok-bg:#22330f}}
+:root[data-theme=dark]{--bg:#161615;--card:#1f1f1d;--ink:#ecebe6;--mut:#a3a19a;--line:#33322f;--acc:#5dcaa5;--acc-bg:#0d3a2f;--warn:#fac775;--warn-bg:#3d2a0b;--bad:#f09595;--bad-bg:#3d1616;--ok:#97c459;--ok-bg:#22330f}:root[data-theme=light]{--bg:#f7f7f5;--card:#fff;--ink:#1d1d1b;--mut:#6b6a65;--line:#e4e2dc;--acc:#0f6e56;--acc-bg:#e1f5ee;--warn:#854f0b;--warn-bg:#faeeda;--bad:#a32d2d;--bad-bg:#fcebeb;--ok:#3b6d11;--ok-bg:#eaf3de}
 *{box-sizing:border-box}
 body{margin:0;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:calc(72px + env(safe-area-inset-bottom))}
 a{color:var(--acc)}
-header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:calc(12px + env(safe-area-inset-top)) 16px 12px}
 header h1{font-size:17px;font-weight:600;margin:0}
 .bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
 .bar>i{display:block;height:100%;background:var(--acc);border-radius:99px;transition:width .3s}
@@ -65,10 +66,10 @@ nav a.on{color:var(--acc)}
 </header>
 <main id="app" aria-live="polite"></main>
 <nav aria-label="Main">
-  <a href="#/" data-r="path">Path</a>
-  <a href="#/review" data-r="review">Review</a>
-  <a href="#/stats" data-r="stats">Progress</a>
-  <a href="#/settings" data-r="settings">Settings</a>
+  <a href="#path" data-r="path">Path</a>
+  <a href="#review" data-r="review">Review</a>
+  <a href="#stats" data-r="stats">Progress</a>
+  <a href="#settings" data-r="settings">Settings</a>
 </nav>
 <script id="curriculum-data" type="application/json">__CURRICULUM_JSON__</script>
 <script>
@@ -123,17 +124,17 @@ function nextUp(){ return allMods().find(m => isUnlocked(m) && !passed(m.id) && 
 function viewPath(){
   const n = nextUp();
   let h = "";
-  if (n) h += `<div class="card"><div class="mut">Up next</div><h2>${esc(n.title)}</h2><div class="mut">${esc(n.pillar.title)} · ~${n.hours} h</div><p><a class="btn btn-p" href="#/m/${n.id}">Continue</a></p></div>`;
+  if (n) h += `<div class="card"><div class="mut">Up next</div><h2>${esc(n.title)}</h2><div class="mut">${esc(n.pillar.title)} · ~${n.hours} h</div><p><a class="btn btn-p" href="#m-${n.id}">Continue</a></p></div>`;
   D.pillars.forEach(p => {
     const done = p.modules.filter(m => passed(m.id)).length, pct = Math.round(done/p.modules.length*100);
     h += `<div class="card"><div class="row sp"><strong>${p.id.toUpperCase()} · ${esc(p.title)}</strong><span class="pill ${STATUS[p.status]}">${p.status}</span></div>`;
     h += `<div class="mut">${p.parallel ? "Runs in parallel · " : ""}${done}/${p.modules.length} passed</div><div class="bar"><i style="width:${pct}%"></i></div>`;
     p.modules.forEach((m,i) => { const st = state(m), lock = st === "locked";
       const icon = st === "done" ? "✓" : st === "pass" ? "✓" : lock ? "🔒" : i+1;
-      h += `<${lock ? "div" : "a href=\"#/m/" + m.id + "\""} class="mod ${lock ? "locked" : ""}"><span class="dot ${st}">${icon}</span><span><span>${esc(m.title)}</span><br><span class="mut">~${m.hours} h · ${st === "done" ? "complete" : st === "pass" ? "quiz passed — finish readings and exercises" : lock ? "locked" : "open"}</span></span></${lock ? "div" : "a"}>`;
+      h += `<${lock ? "div" : "a href=\"#m-" + m.id + "\""} class="mod ${lock ? "locked" : ""}"><span class="dot ${st}">${icon}</span><span><span>${esc(m.title)}</span><br><span class="mut">~${m.hours} h · ${st === "done" ? "complete" : st === "pass" ? "quiz passed — finish readings and exercises" : lock ? "locked" : "open"}</span></span></${lock ? "div" : "a"}>`;
     });
     const capOpen = p.modules.every(m => passed(m.id));
-    h += `<${capOpen ? "a href=\"#/c/" + p.id + "\"" : "div"} class="mod ${capOpen ? "" : "locked"}"><span class="dot ${capOpen ? "open" : ""}">★</span><span>Capstone: ${esc(p.capstone.title)}<br><span class="mut">${capOpen ? capPct(p) + "% of deliverables" : "unlocks when all quizzes are passed"}</span></span></${capOpen ? "a" : "div"}>`;
+    h += `<${capOpen ? "a href=\"#c-" + p.id + "\"" : "div"} class="mod ${capOpen ? "" : "locked"}"><span class="dot ${capOpen ? "open" : ""}">★</span><span>Capstone: ${esc(p.capstone.title)}<br><span class="mut">${capOpen ? capPct(p) + "% of deliverables" : "unlocks when all quizzes are passed"}</span></span></${capOpen ? "a" : "div"}>`;
     h += `</div>`;
   });
   return h;
@@ -144,10 +145,10 @@ let tab = "learn", quiz = null;
 function viewModule(id){
   const m = findMod(id); if (!m) return `<p>Not found.</p>`;
   if (!isUnlocked(m)) { const ms_ = allMods(), prev = ms_.slice(0, ms_.findIndex(x => x.id === m.id)).reverse().find(x => !passed(x.id) && !x.pillar.parallel);
-    return `<a class="back" href="#/">← Path</a><div class="card"><div class="mut">Locked</div><h2>${esc(m.title)}</h2><p>Pass the quiz for the module before it (80%) to unlock this one.</p>${prev ? `<a class="btn btn-p" href="#/m/${prev.id}">Go to ${esc(prev.title)}</a>` : ""}</div>`; }
+    return `<a class="back" href="#path">← Path</a><div class="card"><div class="mut">Locked</div><h2>${esc(m.title)}</h2><p>Pass the quiz for the module before it (80%) to unlock this one.</p>${prev ? `<a class="btn btn-p" href="#m-${prev.id}">Go to ${esc(prev.title)}</a>` : ""}</div>`; }
   const s = ms(m.id);
   const tabs = [["learn","Lesson"],["read","Read"],["quiz","Quiz"],["build","Build"],["reflect","Reflect"]];
-  let h = `<a class="back" href="#/">← Path</a><div class="mut">${m.pillar.id.toUpperCase()} · ${esc(m.pillar.title)}</div><h2>${esc(m.title)}</h2><div class="mut" style="margin-bottom:12px">~${m.hours} h · best quiz ${Math.round(s.best*100)}% · ${state(m) === "done" ? "complete ✓" : passed(m.id) ? "quiz passed" : "pass mark 80%"}</div>`;
+  let h = `<a class="back" href="#path">← Path</a><div class="mut">${m.pillar.id.toUpperCase()} · ${esc(m.pillar.title)}</div><h2>${esc(m.title)}</h2><div class="mut" style="margin-bottom:12px">~${m.hours} h · best quiz ${Math.round(s.best*100)}% · ${state(m) === "done" ? "complete ✓" : passed(m.id) ? "quiz passed" : "pass mark 80%"}</div>`;
   h += `<div class="tabs" role="tablist">` + tabs.map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" class="${tab===k?"on":""}" data-tab="${k}">${l}</button>`).join("") + `</div>`;
   if (tab === "learn") {
     h += `<div class="card"><h3 style="margin-top:0">You will be able to</h3><ul>${m.objectives.map(o=>`<li>${esc(o)}</li>`).join("")}</ul></div><div class="card lesson">${m.lesson_html}</div><p><button class="btn-p" data-tab="read">Next: readings →</button></p>`;
@@ -168,7 +169,7 @@ function viewQuiz(m){
   if (!quiz || quiz.id !== m.id) return `<div class="card"><h3 style="margin-top:0">${m.quiz.length} questions · pass mark 80%</h3><p class="mut">${s.attempts ? `Attempts: ${s.attempts} · best ${Math.round(s.best*100)}%` : "Already know this? Take it cold to test out."}</p><button class="btn-p" data-act="start-quiz">Start quiz</button></div>`;
   if (quiz.i >= m.quiz.length) {
     const sc = quiz.correct / m.quiz.length, ok = sc >= D.pass_mark;
-    return `<div class="card"><h2>${Math.round(sc*100)}%</h2><p>${quiz.correct} of ${m.quiz.length} correct. ${ok ? "<strong>Passed.</strong> " + (nextInPath(m) ? "Next module unlocked." : "") : "Not yet — re-read the lesson sections you missed and try again."}</p><p class="mut">Missed questions were added to your Review deck.</p><div class="row"><button data-act="start-quiz">Retake</button>${ok && nextInPath(m) ? `<a class="btn btn-p" href="#/m/${nextInPath(m).id}">Next module →</a>` : ""}</div></div>`;
+    return `<div class="card"><h2>${Math.round(sc*100)}%</h2><p>${quiz.correct} of ${m.quiz.length} correct. ${ok ? "<strong>Passed.</strong> " + (nextInPath(m) ? "Next module unlocked." : "") : "Not yet — re-read the lesson sections you missed and try again."}</p><p class="mut">Missed questions were added to your Review deck.</p><div class="row"><button data-act="start-quiz">Retake</button>${ok && nextInPath(m) ? `<a class="btn btn-p" href="#m-${nextInPath(m).id}">Next module →</a>` : ""}</div></div>`;
   }
   const q = m.quiz[quiz.i], a = quiz.answered;
   let h = `<div class="card"><div class="mut">Question ${quiz.i+1} of ${m.quiz.length}</div><p><strong>${esc(q.q)}</strong></p>`;
@@ -181,7 +182,7 @@ function nextInPath(m){ const mods = allMods(), i = mods.findIndex(x => x.id ===
 
 function viewCap(pid){
   const p = D.pillars.find(x => x.id === pid), c = S.capstones[pid] || (S.capstones[pid] = {});
-  return `<a class="back" href="#/">← Path</a><div class="mut">${p.id.toUpperCase()} capstone</div><h2>${esc(p.capstone.title)}</h2><div class="card"><p>${esc(p.capstone.brief)}</p><h3>Deliverables</h3>${p.capstone.deliverables.map((d,i)=>`<label class="chk"><input type="checkbox" data-cap="${i}" ${c[i]?"checked":""}><span>${esc(d)}</span></label>`).join("")}<h3>Graded on</h3><ul>${p.capstone.rubric.map(r=>`<li>${esc(r)}</li>`).join("")}</ul><input type="url" placeholder="Link to the write-up" data-caplink value="${esc(c.link||"")}"></div>`;
+  return `<a class="back" href="#path">← Path</a><div class="mut">${p.id.toUpperCase()} capstone</div><h2>${esc(p.capstone.title)}</h2><div class="card"><p>${esc(p.capstone.brief)}</p><h3>Deliverables</h3>${p.capstone.deliverables.map((d,i)=>`<label class="chk"><input type="checkbox" data-cap="${i}" ${c[i]?"checked":""}><span>${esc(d)}</span></label>`).join("")}<h3>Graded on</h3><ul>${p.capstone.rubric.map(r=>`<li>${esc(r)}</li>`).join("")}</ul><input type="url" placeholder="Link to the write-up" data-caplink value="${esc(c.link||"")}"></div>`;
 }
 
 let rv = null;
@@ -208,11 +209,12 @@ function viewStats(){
   return h;
 }
 function viewSettings(){
-  return `<div class="card"><h2>Settings</h2><p>Progress is saved in this browser. Export it to back it up or move it to another device.</p><div class="row" style="flex-wrap:wrap"><button data-act="export">Export progress</button><label class="btn" for="imp">Import progress</label><input id="imp" type="file" accept="application/json" class="sr"></div><p class="mut" id="msg"></p><hr style="border:0;border-top:1px solid var(--line)"><button data-act="reset" style="color:var(--bad)">Reset all progress</button></div>`;
+  return `<div class="card"><h2>Settings</h2><p>Progress is saved in this browser only. Copy it to back it up or move it to another device.</p><div class="row" style="flex-wrap:wrap"><button data-act="export">Copy progress</button><label class="btn" for="imp">Import from file</label><input id="imp" type="file" accept="application/json,.json,.txt" class="sr"></div><p class="mut" id="msg"></p><textarea id="exp" hidden readonly></textarea><h3>Import by pasting</h3><textarea id="imptxt" placeholder="Paste copied progress here"></textarea><p><button data-act="import-text">Import pasted progress</button></p><hr style="border:0;border-top:1px solid var(--line)"><button data-act="reset" style="color:var(--bad)">Reset all progress</button></div>`;
 }
 
+function curId(){ const mm = location.hash.match(/^#(?:m|c)-(.+)$/); return mm ? mm[1] : null; }
 function route(){
-  const h = location.hash.replace(/^#\/?/, ""), [r, id] = h.split("/");
+  const h = location.hash.replace(/^#/, ""), mm = h.match(/^(m|c)-(.+)$/), r = mm ? mm[1] : h, id = mm ? mm[2] : null;
   document.querySelectorAll("nav a").forEach(a => a.classList.toggle("on", a.dataset.r === (r === "m" || r === "c" || !r ? "path" : r)));
   const app = $("#app");
   if (r === "m") { if (quiz && quiz.id !== id) { quiz = null; } app.innerHTML = viewModule(id); }
@@ -228,7 +230,7 @@ window.addEventListener("hashchange", () => { if (location.hash !== lastRoute) {
 
 document.addEventListener("click", e => {
   const t = e.target.closest("[data-tab],[data-act],[data-ans],[data-rans]"); if (!t) return;
-  const id = location.hash.split("/")[2], m = id && findMod(id);
+  const id = curId(), m = id && findMod(id);
   if (t.dataset.tab) { tab = t.dataset.tab; route(); window.scrollTo(0,0); return; }
   if (t.dataset.ans != null && m) { quiz.answered = +t.dataset.ans; const q = m.quiz[quiz.i], k = m.id + ":" + quiz.i;
     if (quiz.answered === q.answer) quiz.correct++; else S.review[k] = {n:0};
@@ -243,11 +245,13 @@ document.addEventListener("click", e => {
     route(); window.scrollTo(0,0); }
   else if (act === "next-r") { const done = S.review[rv.k] && S.review[rv.k].n >= 2; if (done) delete S.review[rv.k];
     const items = reviewItems(); const i = items.findIndex(x => x.k === rv.k); rv = items.length ? {k: items[(i+1) % items.length].k, a:null} : null; save(); route(); }
-  else if (act === "export") { const b = new Blob([JSON.stringify(S,null,1)], {type:"application/json"}); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "ai-platform-mastery-progress.json"; a.click(); }
+  else if (act === "export") { const txt = JSON.stringify(S); const box = $("#exp"); box.value = txt; box.hidden = false; box.select();
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(() => $("#msg").textContent = "Copied. Paste it somewhere safe (notes, email to yourself).", () => $("#msg").textContent = "Select the text below and copy it."); }
+  else if (act === "import-text") { try { const v = JSON.parse($("#imptxt").value); if (!v.modules) throw 0; S = v; save(); $("#msg").textContent = "Imported."; header(); } catch(err){ $("#msg").textContent = "That text isn't a valid progress export."; } }
   else if (act === "reset") { if (t.dataset.confirm) { S = blank(); save(); route(); } else { t.dataset.confirm = 1; t.textContent = "Tap again to erase everything"; } }
 });
 document.addEventListener("change", e => {
-  const t = e.target, id = location.hash.split("/")[2];
+  const t = e.target, id = curId();
   if (t.id === "imp" && t.files[0]) { t.files[0].text().then(x => { try { const v = JSON.parse(x); if (!v.modules) throw 0; S = v; save(); $("#msg").textContent = "Imported."; header(); } catch(err){ $("#msg").textContent = "That file isn't a valid progress export."; } }); return; }
   if (t.dataset.read != null) { ms(id).readings[t.dataset.read] = t.checked; }
   else if (t.dataset.ex != null) { ms(id).ex[t.dataset.ex] = t.checked; }
@@ -256,7 +260,7 @@ document.addEventListener("change", e => {
   logDay(); save(); header();
 });
 document.addEventListener("input", e => {
-  const t = e.target, id = location.hash.split("/")[2];
+  const t = e.target, id = curId();
   if (t.dataset.field) ms(id)[t.dataset.field] = t.value;
   else if (t.dataset.link != null) ms(id).links[t.dataset.link] = t.value;
   else if (t.hasAttribute("data-caplink")) (S.capstones[id] = S.capstones[id] || {}).link = t.value;

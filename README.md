@@ -55,7 +55,8 @@ Quiz options are shuffled at build time, so write the correct answer wherever yo
 
 - **Locally:** `cd app && python -m http.server 8000`, then open http://localhost:8000
 - **On your phone:** use the published artifact link, or GitHub Pages (Pages on a private repo needs a paid GitHub plan).
-- Progress is saved in your browser. Use **Export** and **Import** in the app to move it between devices.
+- Progress is saved in your browser. Use **Copy progress** and **Import** in Settings to move it between devices.
+- `app/standalone.html` is the same app with the data built in, so it opens from a single file (no server needed).
 
 ## Start here
 

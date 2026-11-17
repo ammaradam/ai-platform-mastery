@@ -345,6 +345,63 @@ label.row{display:flex;gap:12px;align-items:center;padding:10px 0;cursor:pointer
 .week i .wk{width:14px;height:14px;stroke-width:3;color:#fff}
 .lk{display:inline-flex;align-items:center;gap:3px}.xs-ic{width:13px;height:13px}
 .streak .bi{width:20px;height:20px}
+
+/* ---- UX pass ---- */
+.hero.compact .wrap{padding-top:clamp(24px,4vw,40px);padding-bottom:clamp(24px,4vw,40px)}
+.hero.compact h1{font-size:clamp(26px,3.6vw,34px)}
+.hero.compact p{font-size:16px;margin:8px 0 16px}
+.hero.compact .hbar{margin-bottom:16px}
+.nag{display:flex;gap:14px;align-items:center;color:inherit;border-color:#F3C16B;background:var(--warn-soft)}
+.nag:hover{text-decoration:none}.nag>span{color:var(--warn)}
+.lrow{grid-template-columns:96px minmax(0,1fr)}
+.lrow .lprog{grid-column:1/-1;display:flex;gap:10px;align-items:center}.lrow .lprog .bar{flex:1}
+.lrow .act .btn,.lrow .act .chip{width:100%}
+.ptop .t{line-height:1.25}
+.ptop .t .xs{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stepper{display:flex;gap:4px;padding:10px max(4vw,16px);border-bottom:1px solid var(--line);background:var(--bg);overflow-x:auto;scrollbar-width:none;position:sticky;top:calc(var(--hdr) + env(safe-area-inset-top) + 57px);z-index:14}
+.stepper a{flex:1;min-width:56px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px 2px;color:var(--mut);font-size:12px;font-weight:600;position:relative}
+.stepper a:hover{text-decoration:none;color:var(--ink)}
+.stepper a:not(:last-child)::after{content:"";position:absolute;top:16px;left:calc(50% + 18px);right:calc(-50% + 18px);height:2px;background:var(--line)}
+.stepper a.done:not(:last-child)::after{background:var(--ok)}
+.stepper .dot{width:28px;height:28px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;background:var(--bg);font-size:13px;color:var(--mut)}
+.stepper .dot .ic{width:14px;height:14px;stroke-width:3}
+.stepper a.done .dot{background:var(--ok);border-color:var(--ok);color:#fff}
+.stepper a.on{color:var(--blue)}.stepper a.on .dot{border-color:var(--blue);color:var(--blue);box-shadow:0 0 0 3px var(--blue-soft)}
+.stepper a.on.done .dot{color:#fff}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.kbd-hint{display:none;margin-top:12px}
+@media (hover:hover) and (pointer:fine){.kbd-hint{display:block}}
+.kpi b{white-space:nowrap}
+.kpi>div{min-width:0}
+@media (max-width:999px){
+  body.focus{padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+  body.focus .tabs{display:none}
+  body.focus .pbar{bottom:0;padding-bottom:env(safe-area-inset-bottom)}
+  body.focus .hdr{display:none}
+  body.focus .ptop{top:0;padding-top:calc(8px + env(safe-area-inset-top))}
+  body.focus .stepper{top:calc(57px + env(safe-area-inset-top))}
+}
+@media (max-width:719px){
+  .kpis{gap:10px}.kpi{padding:14px;gap:10px}.kpi b{font-size:22px}
+  .chead h1{font-size:28px}.chead .lead{font-size:16px}
+  .ctas .btn.lg{width:100%}
+  .btnrow .btn{flex:1}
+}
+@media (min-width:720px){
+  .lrow{grid-template-columns:160px minmax(0,1fr) 200px}
+  .lrow .lprog{grid-column:2/3}
+  .lrow .act{grid-row:1/3;grid-column:3}
+}
+@media (min-width:1000px){
+  .stepper{display:none}
+}
+
+.pbar .in>*{flex:none}
+.pbar .in .sm,.pbar .in .done{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.pbar .in .sp{display:none}
+@media (max-width:719px){.btnrow{flex-direction:column;align-items:stretch}.btnrow .btn{width:100%}}
+
+.empty .btn{white-space:normal;max-width:100%;text-align:center;line-height:1.3;padding-top:10px;padding-bottom:10px}
 </style>
 </head>
 <body>
@@ -354,7 +411,7 @@ label.row{display:flex;gap:12px;align-items:center;padding:10px 0;cursor:pointer
   <nav class="hnav" aria-label="Main"><a href="#home" data-tab="home">Home</a><a href="#learning" data-tab="learning">My Learning</a><a href="#review" data-tab="review">Review</a><a href="#progress" data-tab="progress">Progress</a></nav>
   <span class="sp"></span>
   <button class="iconbtn msearch" data-act="search" aria-label="Search"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button>
-  <span class="streak" title="Day streak"><span id="streak-f"></span><span id="streak-n">0</span></span>
+  <a class="streak" href="#progress" id="streak" title="Day streak"><span id="streak-f"></span><span id="streak-n">0</span></a>
   <a class="avatar" id="avatar" href="#settings" aria-label="Profile and settings">A</a>
 </div></header>
 <main id="app" aria-live="polite"><p style="padding:60px;text-align:center;color:#5B6780">Loading your courses…</p></main>
@@ -541,6 +598,7 @@ label.row{display:flex;gap:12px;align-items:center;padding:10px 0;cursor:pointer
     award: '<circle cx="12" cy="9" r="6"/><path d="M8.5 13.5L7 22l5-3 5 3-1.5-8.5"/>',
     menu: '<path d="M4 6h16M4 12h16M4 18h16"/>',
     x: '<path d="M6 6l12 12M18 6L6 18"/>',
+    download: '<path d="M12 3v12M7 10l5 5 5-5M5 21h14"/>',
   };
   const icon = (n, cls = "ic") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[n] || ""}</svg>`;
 
@@ -763,9 +821,10 @@ const stepIc = k => STEPS.find(s => s[0] === k)[2];
 /* ---------- views ---------- */
 function vHome() {
   const n = upNext(), wk = weekMin(), pct = overall();
-  let h = `<section class="hero"><div class="ph"><img src="img/hero.jpg" alt="" onerror="this.remove()"></div><div class="wrap">
-    <div class="kick">${greet()}, ${esc(S.name)}</div><h1>AI Platform Mastery</h1>
-    <p>${D.pillars.length} courses · ${MODS.length} modules · about ${Math.round(MODS.reduce((a, m) => a + m.hours, 0) / 10) * 10} hours. Production ML, platforms, LLM inference, evals and AI governance.</p>
+  const back = pct > 0;
+  let h = `<section class="hero ${back ? "compact" : ""}"><div class="ph"><img src="img/hero.jpg" alt="" onerror="this.remove()"></div><div class="wrap">
+    <div class="kick">${greet()}, ${esc(S.name)}</div><h1>${back ? "Welcome back" : "AI Platform Mastery"}</h1>
+    <p>${back ? `${streak() ? `${streak()}-day streak · ` : ""}${fmtMin(weekMin())} this week · ${MODS.filter(m => passed(m.id)).length} of ${MODS.length} quizzes passed` : `${D.pillars.length} courses · ${MODS.length} modules · about ${Math.round(MODS.reduce((a, m) => a + m.hours, 0) / 10) * 10} hours. Production ML, platforms, LLM inference, evals and AI governance.`}</p>
     <div class="hbar"><div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px"><span>Overall progress</span><b>${Math.round(pct * 100)}%</b></div>${bar(pct)}</div>
     <div class="row">${n ? `<a class="btn wh lg" href="#learn-${n.m.id}-${n.step}">${pct > 0 ? "Resume" : "Start course 1"} ${ic("next")}</a>` : ""}<a class="btn txt" style="color:#fff" href="#learning">All courses</a></div></div></section>`;
   h += `<div class="wrap">${installCard()}<div class="dash" style="margin-top:28px"><div>`;
@@ -784,9 +843,16 @@ function vHome() {
     <div class="card"><h3 style="margin-bottom:14px">Weekly goal</h3><div class="goalrow">${ring(Math.min(1, wk / S.goalMin), "var(--blue)", 72)}<div><b style="font-size:20px">${fmtMin(wk)}</b> <span class="mut">of ${fmtMin(S.goalMin)}</span><div class="sm mut">${wk >= S.goalMin ? "Goal met" : `${fmtMin(Math.max(0, S.goalMin - wk))} left this week`}</div></div></div>
       <div class="week">${weekDays().map((d, i) => `<div><span>${"MTWTFSS"[i]}</span><i class="${d.on ? "on" : ""} ${d.today ? "today" : ""}">${d.on ? ic("check", "ic wk") : ""}</i></div>`).join("")}</div></div>
     <div class="card"><div class="stats3"><div>${bi("calendar-check", 28, "bi", !streak())}<b>${streak()}</b><span>day streak</span></div><div>${bi("cap", 28)}<b>${MODS.filter(m => passed(m.id)).length}</b><span>quizzes passed</span></div><div>${bi("trophy", 28)}<b>${Object.keys(S.badges).length}</b><span>badges</span></div></div></div>
+    ${backupNag()}
     ${rv ? `<a class="card" href="#review" style="display:flex;gap:14px;align-items:center;color:inherit;text-decoration:none"><span style="color:var(--blue)">${ic("review")}</span><div><b>${rv} question${rv > 1 ? "s" : ""} to review</b><div class="sm mut">From quizzes you took</div></div></a>` : ""}
   </aside></div>${footer()}</div>`;
   return h;
+}
+function backupNag() {
+  if (Object.keys(S.done).length + Object.keys(S.quiz).length < 3) return "";
+  const days = S.lastBackup ? Math.floor((Date.now() - S.lastBackup) / 864e5) : null;
+  if (days !== null && days < 14) return "";
+  return `<a class="card nag" href="#settings"><span>${ic("download")}</span><div><b>${days === null ? "No backup yet" : `Last backup ${days} days ago`}</b><div class="sm mut">Progress lives only on this device. Back it up in Settings.</div></div></a>`;
 }
 function courseCard(p) {
   const pc = coursePct(p), open = courseOpen(p);
@@ -802,8 +868,8 @@ function vLearning() {
   return `<div class="wrap" style="padding-top:28px"><h1>My Learning</h1><p class="mut">Order: ${D.pillars.filter(p => !p.parallel).map(p => "Course " + p.order).join(", ")}. Course 6 runs alongside the others.</p>
     <div class="seg" role="tablist">${[["progress", "In progress"], ["next", "Up next"], ["done", "Completed"]].map(([k, l]) => `<button role="tab" class="${seg === k ? "on" : ""}" data-seg="${k}">${l} (${groups[k].length})</button>`).join("")}</div>
     ${list.length ? list.map(p => { const pc = coursePct(p), m = p.modules.find(x => unlocked(x) && !modDone(x));
-      return `<a class="card lrow" href="#course-${p.id}">${photo(p.id)}<div>${prov(p)}<h3 style="margin:4px 0">${esc(p.title)}</h3><div class="sm mut">${m ? `Next: Module ${m.idx + 1} · ${esc(m.title)}` : courseDone(p) ? "Certificate earned" : "Pass the previous course to unlock"}</div>
-        <div style="display:flex;gap:10px;align-items:center;margin-top:10px;max-width:420px">${bar(pc, col(p))}<span class="xs mut">${Math.round(pc * 100)}%</span></div></div>
+      return `<a class="card lrow" href="#course-${p.id}">${photo(p.id)}<div>${prov(p)}<h3 style="margin:4px 0">${esc(p.title)}</h3><div class="sm mut">${m ? `Next: Module ${m.idx + 1} · ${esc(m.title)}` : courseDone(p) ? "Certificate earned" : "Pass the previous course to unlock"}</div></div>
+        <div class="lprog">${bar(pc, col(p))}<span class="xs mut">${Math.round(pc * 100)}% complete</span></div>
         <div class="act">${courseDone(p) ? `<span class="btn" data-href="#cert-${p.id}">View certificate</span>` : m ? `<span class="btn pri" data-href="#learn-${m.id}-${nextStep(m)}">${pc > 0 ? "Resume" : "Start"}</span>` : `<span class="chip">${ic("lock", "ic")} Locked</span>`}</div></a>`; }).join("")
       : `<div class="card empty">${bi("books", 96, "bi big")}<h3>Nothing here yet</h3><p class="mut">${seg === "done" ? "Finish every module and the capstone of a course to complete it." : "All courses are open."}</p></div>`}
     ${footer()}</div>`;
@@ -836,7 +902,7 @@ function vCourse(pid) {
       ${un ? `<div style="display:flex;gap:10px;align-items:center;max-width:360px">${bar(mp, col(p))}<span class="xs mut">${Math.round(mp * 100)}%</span></div>` : `<div class="lockrow">${ic("lock")} Pass Module ${i}'s quiz to unlock</div>`}</div><span class="chev">${ic("next")}</span></summary>
       <div class="mbody"><div class="mstats"><span>${ic("clock")}~${m.hours} hours</span><span>${ic("read")}${m.readings.length} readings</span><span>${ic("quiz")}${m.quiz.length}-question quiz</span><span>${ic("ex")}${m.exercises.length} exercises</span></div>
       <ul style="margin:0 0 12px;padding-left:20px;color:var(--ink2);font-size:15px">${m.objectives.map(o => `<li>${esc(o)}</li>`).join("")}</ul>
-      ${STEPS.map(([k, l, icn, kind]) => { const sd = stepDone(m, k); return `<a class="item ${un ? "" : "locked"}" href="#learn-${m.id}-${k}"><span class="st ${sd ? "on" : ""}">${sd ? ic("check") : ""}</span><span class="ty">${ic(icn)}</span><span class="t"><b style="font-weight:600">${l}</b><br><span class="xs mut">${kind}</span></span><span class="d">${stepMeta(m, k)}</span></a>`; }).join("")}</div></details>`;
+      ${STEPS.map(([k, l, icn, kind]) => { const sd = stepDone(m, k); return `<a class="item ${un ? "" : "locked"}" href="#learn-${m.id}-${k}" ${un ? "" : `data-locked="Pass Module ${i}'s quiz to unlock Module ${i + 1}"`}><span class="st ${sd ? "on" : ""}">${sd ? ic("check") : ""}</span><span class="ty">${ic(icn)}</span><span class="t"><b style="font-weight:600">${l}</b><br><span class="xs mut">${kind}</span></span><span class="d">${stepMeta(m, k)}</span></a>`; }).join("")}</div></details>`;
   });
   const co = capOpen(p);
   h += `</div></section>
@@ -868,7 +934,8 @@ function vLearn(mid, step) {
   const st = STEPS.find(s => s[0] === step) || STEPS[0];
   const body = { lesson: lessonView, read: readView, quiz: quizView, ex: exView, reflect: reflView }[st[0]](m);
   return `<div class="pl"><aside class="pside">${syllabus(m)}</aside><div>
-    <div class="ptop"><button class="iconbtn menu" data-act="drawer" aria-label="Open syllabus">${ic("menu")}</button><span class="t">${esc(p.title)} · Module ${m.idx + 1}</span><span class="pct">${Math.round(modPct(m) * 100)}% of module</span></div>
+    <div class="ptop"><a class="iconbtn" href="#course-${p.id}" aria-label="Close and go to course">${ic("x")}</a><div class="t"><div class="xs mut">${esc(p.title)}</div>Module ${m.idx + 1} · ${Math.round(modPct(m) * 100)}% complete</div><button class="iconbtn menu" data-act="drawer" aria-label="Open syllabus">${ic("menu")}</button></div>
+    <nav class="stepper" aria-label="Module steps">${STEPS.map(([k, l, icn], j) => `<a href="#learn-${m.id}-${k}" class="${k === st[0] ? "on" : ""} ${stepDone(m, k) ? "done" : ""}" aria-current="${k === st[0] ? "step" : "false"}"><span class="dot">${stepDone(m, k) ? ic("check") : j + 1}</span><span class="lbl">${l.replace("Graded quiz", "Quiz")}</span></a>`).join("")}</nav>
     <div class="pmain"><div class="ptype">${ic(st[2])}${st[3]} · ${stepMeta(m, st[0])}</div><h1>${st[0] === "lesson" ? esc(m.title) : `${st[1]}: ${esc(m.title)}`}</h1>
     <div class="pmeta">Module ${m.idx + 1} of ${p.modules.length} · ${esc(p.title)}${S.modTime[mid] ? ` · ${fmtMin(S.modTime[mid])} spent` : ""}</div>${body}</div>${actionBar(m, st[0])}</div></div>`;
 }
@@ -881,11 +948,11 @@ function nextHref(m, step) {
 function actionBar(m, step) {
   if (step === "quiz" && quiz && quiz.id === m.id && quiz.i < m.quiz.length) return "";
   const i = STEPS.findIndex(s => s[0] === step), prev = STEPS[i - 1], done = stepDone(m, step), nx = STEPS[i + 1];
-  const left = done ? `<span class="done">${ic("check")} Completed</span>` : step === "lesson" ? `<button class="btn" data-act="lesson-done">Mark as completed</button>`
+  const left = done ? `<span class="done">${ic("check")} Done</span>` : step === "lesson" ? `<span class="sm mut">${lessonMin(m)} min read</span>`
     : step === "read" ? `<span class="sm mut">${req(m).filter(([, i]) => S.done[`${m.id}:read:${i}`]).length}/${req(m).length} required read</span>`
-    : step === "quiz" ? `<span class="sm mut">Pass with 80% to continue</span>` : step === "ex" ? `<span class="sm mut">${core(m).filter(([, i]) => S.done[`${m.id}:ex:${i}`]).length}/${core(m).length} core done</span>` : `<span class="sm mut">40+ characters completes this</span>`;
+    : step === "quiz" ? `<span class="sm mut">Pass with 80% to continue</span>` : step === "ex" ? `<span class="sm mut">${core(m).filter(([, i]) => S.done[`${m.id}:ex:${i}`]).length}/${core(m).length} core done</span>` : `<span class="sm mut"></span>`;
   return `<div class="pbar"><div class="in">${prev ? `<a class="btn txt" href="#learn-${m.id}-${prev[0]}" aria-label="Previous">${ic("back")}</a>` : ""}${left}<span class="sp"></span>
-    <a class="btn pri" href="${nextHref(m, step)}" data-act="${step === "lesson" && !done ? "lesson-next" : ""}">${nx ? `Next: ${nx[1]}` : "Next module"} ${ic("next")}</a></div></div>`;
+    <a class="btn pri" href="${nextHref(m, step)}" data-act="${step === "lesson" && !done ? "lesson-next" : ""}">${step === "lesson" && !done ? "Complete and continue" : nx ? `Next: ${nx[1].replace("Graded quiz", "Quiz")}` : modDone(m) ? "Start next module" : "Next module"} ${ic("next")}</a></div></div>`;
 }
 function lessonView(m) {
   const figs = (m.figures || []).map(f => A.FIG[f] ? A.FIG[f]() : "").join("");
@@ -907,14 +974,15 @@ function quizView(m) {
     return `<div class="qfacts"><div><b>${m.quiz.length}</b><span>questions</span></div><div><b>80%</b><span>to pass</span></div><div><b>${qs ? Math.round(qs.best * 100) + "%" : "None"}</b><span>your best</span></div></div>
       ${passed(m.id) ? `<div class="fb ok"><b>Passed.</b> ${unlockedNextText(m)}</div>` : `<p style="color:var(--ink2)">Take it before the lesson to test out. Missed questions go to Review.</p>`}
       ${qs && qs.attempts.length ? `<p class="sm mut">Attempts: ${qs.attempts.slice(-6).map(a => Math.round(a.score * 100) + "%").join(" → ")}</p>` : ""}
-      <button class="btn pri lg" data-act="quiz-start">${qs ? "Retake quiz" : "Start quiz"}</button>`;
+      <div class="btnrow">${passed(m.id) ? `<a class="btn pri lg" href="#learn-${m.id}-ex">Continue to exercises ${ic("next")}</a><button class="btn lg" data-act="quiz-start">Retake</button>` : `<button class="btn pri lg" data-act="quiz-start">${qs ? "Retake quiz" : "Start quiz"}</button>`}</div>
+      <p class="xs mut kbd-hint">Keyboard: 1 to 4 to answer, Enter for next.</p>`;
   }
   if (quiz.i >= m.quiz.length) {
     const sc = quiz.correct / m.quiz.length, ok = sc >= D.pass_mark;
     return `<div class="result">${bi(ok ? "trophy" : "books", 120, "bi big")}<div class="score" style="color:${ok ? "var(--ok)" : "var(--bad)"}">${Math.round(sc * 100)}%</div>
       <h2>${ok ? "Passed" : "Below the pass mark"}</h2><p style="color:var(--ink2)">${quiz.correct} of ${m.quiz.length} correct. ${ok ? unlockedNextText(m) : "You need 80%. Review the lesson and retake it."}</p>
       ${quiz.missed.length ? `<p class="sm mut">${quiz.missed.length} missed question${quiz.missed.length > 1 ? "s" : ""} added to Review.</p>` : ""}
-      <div style="display:flex;gap:12px;justify-content:center;margin-top:16px"><button class="btn" data-act="quiz-start">Retake</button>${ok ? "" : `<a class="btn pri" href="#learn-${m.id}-lesson">Review lesson</a>`}</div></div>`;
+      <div class="btnrow" style="justify-content:center;margin-top:16px">${ok ? `<a class="btn pri lg" href="#learn-${m.id}-ex">Continue to exercises ${ic("next")}</a><button class="btn lg" data-act="quiz-start">Retake</button>` : `<a class="btn pri lg" href="#learn-${m.id}-lesson">Review lesson</a><button class="btn lg" data-act="quiz-start">Retake</button>`}</div></div>`;
   }
   const q = m.quiz[quiz.i], a = quiz.answered;
   return `<div class="qprog">${m.quiz.map((_, j) => `<i class="${j < quiz.i ? (quiz.res[j] ? "ok" : "no") : j === quiz.i ? "cur" : ""}"></i>`).join("")}</div>
@@ -932,7 +1000,8 @@ function exView(m) {
       <label class="row"><input type="checkbox" class="ck" data-done="${m.id}:ex:${i}" ${S.done[`${m.id}:ex:${i}`] ? "checked" : ""}><span>I've met every "done when" point</span></label></div>`).join("")}`;
 }
 function reflView(m) {
-  return `${(m.reflection || []).map(r => `<p style="font-size:19px;font-weight:700;color:var(--ink)">${esc(r)}</p>`).join("")}
+  const nm = MODS[MODS.indexOf(m) + 1];
+  return `${modDone(m) ? `<div class="fb ok" style="margin:0 0 20px"><b>Module complete.</b> ${nm && nm.pillar === m.pillar ? `Module ${nm.idx + 1}, ${esc(nm.title)}, is ready.` : "Next: the capstone project."}</div>` : `<p class="sm mut">This completes the module once you write 40 or more characters.</p>`}${(m.reflection || []).map(r => `<p style="font-size:19px;font-weight:700;color:var(--ink)">${esc(r)}</p>`).join("")}
     <textarea data-refl="${m.id}" placeholder="One honest paragraph tied to your real work">${esc(S.refl[m.id])}</textarea>
     <h3 style="margin:24px 0 6px">Notes</h3><p class="sm mut">Takeaways from the readings, open questions, ideas for a blog post.</p>
     <textarea data-notes="${m.id}" placeholder="Three bullets per reading">${esc(S.notes[m.id])}</textarea><p class="xs mut">Saved automatically on this device.</p>`;
@@ -981,7 +1050,7 @@ function vProgress() {
     <div class="sec"><h2>Courses</h2></div><div class="card">${D.pillars.map(p => `<a class="prow" href="#course-${p.id}">${photo(p.id)}<span><b>${esc(p.title)}</b><span style="display:block;margin-top:6px">${bar(coursePct(p), col(p))}</span></span><span class="sm mut">${Math.round(coursePct(p) * 100)}%</span></a>`).join("")}</div>
     <div class="sec"><h2>Certificates</h2></div><div class="badges">${D.pillars.map(p => `<a class="card badge ${courseDone(p) ? "" : "off"}" href="#cert-${p.id}">${bi(CI[p.id], 64)}<b class="sm">${esc(p.title)}</b></a>`).join("")}</div>
     <div class="sec"><h2>Badges</h2><span class="mut sm">${Object.keys(S.badges).length}/${BADGES.length}</span></div><div class="badges">${BADGES.map(([id, label, icon]) => `<div class="card badge ${S.badges[id] ? "" : "off"}">${bi(icon, 64)}<b class="sm">${label}</b>${S.badges[id] ? `<div class="xs mut">${new Date(S.badges[id]).toLocaleDateString(undefined, { day: "numeric", month: "short" })}</div>` : ""}</div>`).join("")}</div>
-    <p style="margin-top:24px"><a href="#settings">Settings and backup</a></p>${footer()}</div>`;
+    <div style="margin-top:24px">${backupNag() || `<a href="#settings">Settings and backup</a>`}</div>${footer()}</div>`;
 }
 const avgQuiz = () => { const v = Object.values(S.quiz); return v.length ? Math.round(v.reduce((a, q) => a + q.best, 0) / v.length * 100) : 0; };
 function vSettings() {
@@ -989,7 +1058,7 @@ function vSettings() {
     <label><b>Your name</b> <span class="sm mut">(shown on certificates)</span><input type="text" data-set="name" value="${esc(S.name)}" style="margin-top:6px"></label>
     <label><b>Weekly goal</b><select data-set="goalMin" style="margin-top:6px">${[120, 180, 240, 360, 480, 600].map(v => `<option value="${v}" ${S.goalMin === v ? "selected" : ""}>${v / 60} hours a week</option>`).join("")}</select></label></div>
     <h2 style="margin:28px 0 12px">Backup and restore</h2><div class="card" style="padding:20px">
-    <p style="color:var(--ink2)">Progress is saved on this device. Back it up regularly, and use the backup to move to another device.</p>
+    <p style="color:var(--ink2)">Progress is saved on this device only. Back it up regularly, and use the backup to move to another device.</p><p class="sm"><b>Last backup:</b> ${S.lastBackup ? new Date(S.lastBackup).toLocaleString() : "never"}</p>
     <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn pri" data-act="export">Copy backup</button><button class="btn" data-act="download">Download backup</button><label class="btn" for="imp">Restore from file</label><input id="imp" type="file" accept=".json,application/json,text/plain" hidden></div>
     <textarea id="exp" readonly hidden style="margin-top:12px"></textarea><h3 style="margin:20px 0 8px">Restore by pasting</h3><textarea id="imptxt" placeholder="Paste a backup here"></textarea>
     <p style="margin-top:10px"><button class="btn" data-act="import-text">Restore pasted backup</button></p><p class="sm mut" id="msg" role="status"></p></div>
@@ -1042,8 +1111,9 @@ function render() {
   document.querySelectorAll("[data-tab]").forEach(a => a.classList.toggle("on", a.dataset.tab === tab));
   if (r.view !== "learn" || (quiz && quiz.id !== r.mid)) quiz = null;
   app.innerHTML = ({ home: vHome, learning: vLearning, course: () => vCourse(r.pid), learn: () => vLearn(r.mid, r.step), cap: () => vCap(r.pid), cert: () => vCert(r.pid), review: vReview, progress: vProgress, settings: vSettings })[r.view]();
-  $("#streak-n").textContent = streak(); $("#streak-f").innerHTML = bi("calendar-check", 22, "bi", !streak());
+  $("#streak-n").textContent = streak(); $("#streak").title = $("#streak").ariaLabel = `${streak()}-day streak`; $("#streak-f").innerHTML = bi("calendar-check", 22, "bi", !streak());
   $("#avatar").textContent = (S.name || "A").trim()[0]?.toUpperCase() || "A";
+  document.body.classList.toggle("focus", !!$(".pl"));
   $(".syl a.on")?.scrollIntoView({ block: "center" });
   document.title = r.view === "learn" ? `${findMod(r.mid)?.title || ""} | AI Platform Mastery` : r.view === "course" ? `${pil(r.pid)?.title} | AI Platform Mastery` : "AI Platform Mastery";
 }
@@ -1052,6 +1122,7 @@ function closeOverlays() { $("#drawer").classList.remove("open"); $("#sov").clas
 
 /* ---------- events ---------- */
 document.addEventListener("click", async e => {
+  const lk = e.target.closest("[data-locked]"); if (lk) { e.preventDefault(); toast(lk.dataset.locked); return; }
   const hrefEl = e.target.closest("[data-href]"); if (hrefEl) { e.preventDefault(); location.hash = hrefEl.dataset.href; return; }
   const sc = e.target.closest("[data-scroll]"); if (sc) { e.preventDefault(); document.querySelectorAll("[data-scroll]").forEach(a => a.classList.toggle("on", a === sc)); $("#s-" + sc.dataset.scroll)?.scrollIntoView({ behavior: "smooth" }); return; }
   const sg = e.target.closest("[data-seg]"); if (sg) { seg = sg.dataset.seg; render(); return; }
@@ -1082,8 +1153,8 @@ document.addEventListener("click", async e => {
   else if (act === "drawer-close") $("#drawer").classList.remove("open");
   else if (act === "search") { $("#sov").classList.add("open"); const i = $("#sq"); i.value = ""; runSearch(""); setTimeout(() => i.focus(), 30); }
   else if (act === "search-close") $("#sov").classList.remove("open");
-  else if (act === "export") { const txt = JSON.stringify(S), box = $("#exp"); box.hidden = false; box.value = txt; box.select(); try { await navigator.clipboard.writeText(txt); $("#msg").textContent = "Backup copied. Paste it somewhere safe."; } catch (err) { $("#msg").textContent = "Select the text above and copy it."; } }
-  else if (act === "download") { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 1)], { type: "application/json" })); a.download = `ai-platform-mastery-backup-${today()}.json`; a.click(); }
+  else if (act === "export") { S.lastBackup = Date.now(); save(); const txt = JSON.stringify(S), box = $("#exp"); box.hidden = false; box.value = txt; box.select(); try { await navigator.clipboard.writeText(txt); $("#msg").textContent = "Backup copied. Paste it somewhere safe."; } catch (err) { $("#msg").textContent = "Select the text above and copy it."; } }
+  else if (act === "download") { S.lastBackup = Date.now(); save(); const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([JSON.stringify(S, null, 1)], { type: "application/json" })); a.download = `ai-platform-mastery-backup-${today()}.json`; a.click(); }
   else if (act === "import-text") restore($("#imptxt").value);
   else if (act === "reset") { if (t.dataset.confirm) { S = blank(); save(); render(); toast("Progress reset"); } else { t.dataset.confirm = 1; t.textContent = "Tap again to erase everything"; } }
   else if (act === "install" && deferredInstall) { deferredInstall.prompt(); await deferredInstall.userChoice; deferredInstall = null; render(); }
@@ -1091,6 +1162,10 @@ document.addEventListener("click", async e => {
 });
 document.addEventListener("keydown", e => {
   if (e.key === "Escape") closeOverlays();
+  if (!/input|textarea|select/i.test(document.activeElement.tagName) && ["learn", "review"].includes(parse().view)) {
+    if (/^[1-4]$/.test(e.key)) { const b = document.querySelector(`[data-ans="${+e.key - 1}"]:not([disabled]),[data-rans="${+e.key - 1}"]:not([disabled])`); if (b) { e.preventDefault(); b.click(); return; } }
+    if (e.key === "Enter") { const b = document.querySelector('[data-act="quiz-next"]'); if (b) { e.preventDefault(); b.click(); return; } }
+  }
   if (e.key === "/" && !/input|textarea/i.test(document.activeElement.tagName)) { e.preventDefault(); $("[data-act=search]").click(); }
   if ((e.key === "Enter" || e.key === " ") && document.activeElement.classList.contains("search")) { e.preventDefault(); document.activeElement.click(); }
 });

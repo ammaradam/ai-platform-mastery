@@ -113,7 +113,7 @@ setInterval(() => {
 const BADGES = [
   ["first-lesson", "First lesson", "rocket", () => Object.keys(S.done).some(k => k.endsWith(":lesson"))],
   ["first-quiz", "First quiz passed", "cap", () => MODS.some(m => passed(m.id))],
-  ["streak-3", "3-day streak", "flame-1", () => streak() >= 3], ["streak-7", "7-day streak", "flame-2", () => streak() >= 7], ["streak-30", "30-day streak", "flame-3", () => streak() >= 30],
+  ["streak-3", "3-day streak", "calendar-check", () => streak() >= 3], ["streak-7", "7-day streak", "calendar-star", () => streak() >= 7], ["streak-30", "30-day streak", "calendar-medal", () => streak() >= 30],
   ["hours-10", "10 hours", "hourglass", () => totalMin() >= 600], ["hours-50", "50 hours", "stopwatch", () => totalMin() >= 3000],
   ["mods-5", "5 modules", "books", () => MODS.filter(modDone).length >= 5], ["mods-all", "All 25 modules", "trophy", () => MODS.every(modDone)],
   ["perfect", "100% on a quiz", "target", () => Object.values(S.quiz).some(q => q.best >= 1)],
@@ -164,7 +164,7 @@ function vHome() {
   h += `</div><aside class="rail">
     <div class="card"><h3 style="margin-bottom:14px">Weekly goal</h3><div class="goalrow">${ring(Math.min(1, wk / S.goalMin), "var(--blue)", 72)}<div><b style="font-size:20px">${fmtMin(wk)}</b> <span class="mut">of ${fmtMin(S.goalMin)}</span><div class="sm mut">${wk >= S.goalMin ? "Goal met" : `${fmtMin(Math.max(0, S.goalMin - wk))} left this week`}</div></div></div>
       <div class="week">${weekDays().map((d, i) => `<div><span>${"MTWTFSS"[i]}</span><i class="${d.on ? "on" : ""} ${d.today ? "today" : ""}">${d.on ? ic("check", "ic wk") : ""}</i></div>`).join("")}</div></div>
-    <div class="card"><div class="stats3"><div>${bi("flame-1", 28, "bi", !streak())}<b>${streak()}</b><span>day streak</span></div><div>${bi("cap", 28)}<b>${MODS.filter(m => passed(m.id)).length}</b><span>quizzes passed</span></div><div>${bi("trophy", 28)}<b>${Object.keys(S.badges).length}</b><span>badges</span></div></div></div>
+    <div class="card"><div class="stats3"><div>${bi("calendar-check", 28, "bi", !streak())}<b>${streak()}</b><span>day streak</span></div><div>${bi("cap", 28)}<b>${MODS.filter(m => passed(m.id)).length}</b><span>quizzes passed</span></div><div>${bi("trophy", 28)}<b>${Object.keys(S.badges).length}</b><span>badges</span></div></div></div>
     ${rv ? `<a class="card" href="#review" style="display:flex;gap:14px;align-items:center;color:inherit;text-decoration:none"><span style="color:var(--blue)">${ic("review")}</span><div><b>${rv} question${rv > 1 ? "s" : ""} to review</b><div class="sm mut">From quizzes you took</div></div></a>` : ""}
   </aside></div>${footer()}</div>`;
   return h;
@@ -356,7 +356,7 @@ function vProgress() {
   const lvl = v => v < 0 ? "x" : v === 0 ? 0 : v < 15 ? 1 : v < 45 ? 2 : v < 90 ? 3 : 4;
   return `<div class="wrap" style="padding-top:28px"><h1>Progress</h1><p class="mut">Started ${new Date(S.started).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })}</p>
     <div class="kpis" style="margin-top:18px"><div class="card kpi">${ring(overall(), "var(--blue)", 58)}<div><b>${MODS.filter(modDone).length}/${MODS.length}</b><span class="mut sm">modules complete</span></div></div>
-      <div class="card kpi">${bi("flame-1", 40, "bi", !streak())}<div><b>${streak()}</b><span class="mut sm">day streak</span></div></div>
+      <div class="card kpi">${bi("calendar-check", 40, "bi", !streak())}<div><b>${streak()}</b><span class="mut sm">day streak</span></div></div>
       <div class="card kpi">${bi("hourglass", 40)}<div><b>${fmtMin(tm)}</b><span class="mut sm">active time</span></div></div><div class="card kpi">${bi("target", 40)}<div><b>${avgQuiz()}%</b><span class="mut sm">avg best quiz</span></div></div></div>
     <div class="sec"><h2>Learning activity</h2><span class="mut sm">last 16 weeks</span></div><div class="card"><div class="heat">${days.map(v => `<i data-l="${lvl(v)}" style="${v < 0 ? "visibility:hidden" : ""}" title="${v > 0 ? fmtMin(v) : ""}"></i>`).join("")}</div></div>
     <div class="sec"><h2>Courses</h2></div><div class="card">${D.pillars.map(p => `<a class="prow" href="#course-${p.id}">${photo(p.id)}<span><b>${esc(p.title)}</b><span style="display:block;margin-top:6px">${bar(coursePct(p), col(p))}</span></span><span class="sm mut">${Math.round(coursePct(p) * 100)}%</span></a>`).join("")}</div>
@@ -423,7 +423,7 @@ function render() {
   document.querySelectorAll("[data-tab]").forEach(a => a.classList.toggle("on", a.dataset.tab === tab));
   if (r.view !== "learn" || (quiz && quiz.id !== r.mid)) quiz = null;
   app.innerHTML = ({ home: vHome, learning: vLearning, course: () => vCourse(r.pid), learn: () => vLearn(r.mid, r.step), cap: () => vCap(r.pid), cert: () => vCert(r.pid), review: vReview, progress: vProgress, settings: vSettings })[r.view]();
-  $("#streak-n").textContent = streak(); $("#streak-f").innerHTML = bi("flame-1", 22, "bi", !streak());
+  $("#streak-n").textContent = streak(); $("#streak-f").innerHTML = bi("calendar-check", 22, "bi", !streak());
   $("#avatar").textContent = (S.name || "A").trim()[0]?.toUpperCase() || "A";
   $(".syl a.on")?.scrollIntoView({ block: "center" });
   document.title = r.view === "learn" ? `${findMod(r.mid)?.title || ""} | AI Platform Mastery` : r.view === "course" ? `${pil(r.pid)?.title} | AI Platform Mastery` : "AI Platform Mastery";

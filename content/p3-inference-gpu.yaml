@@ -1,0 +1,495 @@
+id: p3
+order: 3
+title: LLM inference and GPU economics
+status: gap
+goal: >
+  Reason from first principles about LLM serving performance and cost: why decode
+  is memory-bound, how KV cache and batching shape throughput, which optimisations
+  to apply, and how to size and price a deployment.
+why_now: >
+  This is the scarcest platform skill. Anyone can call an API; few can tell a CFO
+  what self-hosting will cost per million tokens and defend the number.
+capstone:
+  title: Self-hosting vs API cost study
+  brief: >
+    Deploy an open-weights model with vLLM on a single GPU, benchmark it under
+    realistic load, and produce a cost model comparing self-hosting vs a managed API
+    for a Pickles use case (e.g. the auction assistant).
+  deliverables:
+    - Benchmark results - TTFT, TPOT/ITL, throughput vs concurrency, at 2 quantisation levels
+    - Cost model spreadsheet (cost per 1M tokens vs utilisation)
+    - 2-page recommendation with break-even traffic level
+  rubric:
+    - Benchmark uses a realistic prompt/output length distribution, not one fixed prompt
+    - Cost model makes utilisation explicit and shows sensitivity
+    - Recommendation states when the decision would flip
+modules:
+  - id: p3m1
+    title: Transformer inference arithmetic
+    hours: 8
+    objectives:
+      - Explain prefill vs decode and why decode is memory-bandwidth bound
+      - Estimate KV cache size for a model and context length
+      - Estimate memory and latency lower bounds from first principles
+    lesson: |
+      ## Two phases
+      - **Prefill** — process the whole prompt in parallel. Large matrix-matrix
+        multiplies → **compute-bound**. Dominates **time to first token (TTFT)**.
+      - **Decode** — generate one token at a time per sequence. Each step must read
+        all model weights from GPU memory to produce just one token per sequence →
+        **memory-bandwidth-bound** at small batch sizes. Dominates **time per output
+        token (TPOT)**, a.k.a. inter-token latency.
+
+      ## The key back-of-envelope
+      At batch size 1, a decode step reads every weight once. A 7B model in FP16 is
+      ~14 GB. On a GPU with ~2 TB/s memory bandwidth, the floor is roughly
+      14 GB / 2 TB/s ≈ 7 ms per token, no matter how many FLOPs the GPU has.
+      **Batching** amortises that weight read across many sequences, which is why
+      throughput rises with batch size until compute becomes the limit.
+
+      ## Arithmetic intensity
+      FLOPs per byte moved. Each GPU has a ratio (peak FLOPs / bandwidth). Below it
+      you're memory-bound; above it, compute-bound. Decode at small batch is far
+      below; prefill is above.
+
+      ## KV cache
+      To avoid recomputing attention over past tokens, each layer stores keys and
+      values for every token. Size per token:
+
+      `2 (K and V) × layers × kv_heads × head_dim × bytes_per_value`
+
+      Example (Llama-2-7B-like: 32 layers, 32 KV heads, head_dim 128, FP16 = 2 bytes):
+      2 × 32 × 32 × 128 × 2 = 524,288 bytes ≈ **0.5 MB per token**. A 4,096-token
+      sequence ≈ 2 GB. KV cache — not weights — usually limits how many concurrent
+      requests you can serve. **Grouped-query attention (GQA)** cuts KV heads (e.g.
+      8 instead of 32), shrinking the cache 4×.
+
+      ## Memory budget
+      GPU memory = weights + KV cache + activations/overhead. Weights: params ×
+      bytes (FP16 = 2, INT8 = 1, INT4 = 0.5). A 70B model in FP16 (~140 GB) doesn't
+      fit on one 80 GB GPU → tensor parallelism across GPUs, or quantisation.
+
+      ## Metrics vocabulary
+      TTFT, TPOT/ITL, end-to-end latency = TTFT + TPOT × (output tokens − 1),
+      throughput (tokens/s across all users), goodput (throughput that meets the
+      latency SLO).
+    readings:
+      - title: Transformer Inference Arithmetic
+        author: kipply
+        url: https://kipp.ly/transformer-inference-arithmetic/
+        type: blog
+        required: true
+        minutes: 60
+        focus: KV cache sizing, memory vs compute bound, the latency calculations.
+      - title: "LLM Inference Performance Engineering: Best Practices"
+        author: Databricks / MosaicML
+        url: https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices
+        type: blog
+        required: true
+        minutes: 30
+        focus: TTFT/TPOT definitions, memory bandwidth utilisation, batch-size trade-offs.
+      - title: Large Transformer Model Inference Optimization
+        author: Lilian Weng
+        url: https://lilianweng.github.io/posts/2023-01-10-inference-optimization/
+        type: blog
+        required: false
+        minutes: 60
+        focus: Survey of optimisation methods; good map for p3m3.
+      - title: AI Engineering (Ch. 9 — Inference Optimization)
+        author: Chip Huyen, O'Reilly 2025
+        url: https://www.oreilly.com/library/view/ai-engineering/9781098166298/
+        type: book
+        required: false
+        minutes: 90
+        focus: Practitioner framing of latency, throughput and cost.
+    quiz:
+      - q: Why is decode memory-bandwidth bound at small batch sizes?
+        options: ["Attention is quadratic", "Every step reads all weights to produce one token per sequence, so little compute per byte moved", "Tokenisation is slow", "The KV cache is on CPU"]
+        answer: 1
+        explain: Low arithmetic intensity — the weight read dominates.
+      - q: Which phase dominates time to first token?
+        options: ["Decode", "Prefill", "Detokenisation", "Sampling"]
+        answer: 1
+        explain: Prefill processes the whole prompt before the first token can be emitted.
+      - q: KV cache per token for 32 layers, 8 KV heads, head_dim 128, FP16?
+        options: ["~32 KB", "~128 KB", "~512 KB", "~2 MB"]
+        answer: 1
+        explain: 2 × 32 × 8 × 128 × 2 bytes = 131,072 bytes ≈ 128 KB (GQA shrinks it 4× vs 32 heads).
+      - q: A 7B FP16 model on a GPU with 2 TB/s bandwidth at batch size 1. Approximate floor on time per output token?
+        options: ["~0.7 ms", "~7 ms", "~70 ms", "~700 ms"]
+        answer: 1
+        explain: ~14 GB of weights / 2 TB/s ≈ 7 ms.
+      - q: What usually limits the number of concurrent sequences on a GPU during serving?
+        options: ["Tokeniser speed", "KV cache memory", "CPU cores", "Disk"]
+        answer: 1
+        explain: Each active sequence holds KV cache proportional to its length.
+      - q: Why does batching increase throughput during decode?
+        options: ["It reduces model size", "It amortises the weight read across many sequences", "It shortens prompts", "It skips layers"]
+        answer: 1
+        explain: One weight read serves the whole batch, raising arithmetic intensity.
+      - q: End-to-end latency for a response of N output tokens is approximately...
+        options: ["TTFT × N", "TTFT + TPOT × (N − 1)", "TPOT only", "TTFT / N"]
+        answer: 1
+        explain: First token after prefill, then one decode step per remaining token.
+    exercises:
+      - title: Inference calculator
+        level: core
+        task: Write a Python script that takes model config (params, layers, kv_heads, head_dim, dtype), GPU (memory, bandwidth, FLOPs) and workload (prompt and output lengths) and outputs weight memory, KV per token, max concurrent sequences, and TPOT floor.
+        deliverable: Script + results for 3 models on 2 GPUs.
+        acceptance:
+          - Numbers within 20% of published references or measured values
+      - title: Explain it to a manager
+        level: core
+        task: Write a 1-page explainer of "why our LLM gets slower and more expensive with longer conversations" using KV cache.
+        deliverable: Explainer with one diagram (also a LinkedIn post candidate).
+        acceptance:
+          - No jargon without definition; includes one number
+    reflection:
+      - Which latency metric matters most for the auction assistant, and why?
+
+  - id: p3m2
+    title: Serving engines — PagedAttention, continuous batching, prefix caching
+    hours: 8
+    objectives:
+      - Explain continuous (iteration-level) batching vs static batching
+      - Explain how PagedAttention reduces KV cache waste
+      - Know when prefix caching and chunked prefill help
+    lesson: |
+      ## Static vs continuous batching
+      **Static batching** waits for a batch, runs it until the longest sequence
+      finishes; short requests wait and GPU slots sit idle. **Continuous batching**
+      (introduced by Orca as iteration-level scheduling) re-forms the batch at every
+      decode step: finished sequences leave, new ones join. Large throughput gains on
+      real traffic with mixed output lengths.
+
+      ## PagedAttention (vLLM)
+      Naively, each request reserves a contiguous KV region sized for its maximum
+      length → internal and external fragmentation; the vLLM paper reports large
+      waste in prior systems. **PagedAttention** splits KV cache into fixed-size
+      **blocks** (like OS memory pages) mapped through a block table, allocated on
+      demand. Near-zero waste → more concurrent sequences → higher throughput. Blocks
+      can also be **shared** (copy-on-write) for parallel sampling and common
+      prefixes.
+
+      ## Prefix caching
+      Many requests share a prefix (system prompt, few-shot examples, a long
+      document). Caching the KV for that prefix skips its prefill. SGLang's
+      **RadixAttention** keeps prefixes in a radix tree for automatic reuse; vLLM
+      supports automatic prefix caching. Big win for agents with long, stable system
+      prompts and tool definitions — order your prompt so stable parts come first.
+
+      ## Chunked prefill and disaggregation
+      A long prefill can stall everyone's decode steps (latency spikes). **Chunked
+      prefill** splits prompts into chunks interleaved with decode. **Prefill/decode
+      disaggregation** runs the two phases on different GPU pools because they have
+      different bottlenecks.
+
+      ## The landscape
+      vLLM (most common open-source server), SGLang, TensorRT-LLM (NVIDIA-optimised),
+      Hugging Face TGI, plus managed endpoints. On Kubernetes: KServe or plain
+      Deployments, ideally scaled on queue/KV metrics.
+    readings:
+      - title: Efficient Memory Management for Large Language Model Serving with PagedAttention
+        author: Kwon et al., SOSP 2023
+        url: https://arxiv.org/abs/2309.06180
+        type: paper
+        required: true
+        minutes: 60
+        focus: Sections on KV fragmentation, block tables and sharing.
+      - title: "vLLM: Easy, Fast, and Cheap LLM Serving with PagedAttention"
+        author: vLLM team blog
+        url: https://blog.vllm.ai/2023/06/20/vllm.html
+        type: blog
+        required: true
+        minutes: 15
+        focus: Visual explanation of PagedAttention.
+      - title: How continuous batching enables 23x throughput in LLM inference
+        author: Anyscale
+        url: https://www.anyscale.com/blog/continuous-batching-llm-inference
+        type: blog
+        required: true
+        minutes: 20
+        focus: Static vs continuous batching diagrams.
+      - title: "Orca: A Distributed Serving System for Transformer-Based Generative Models"
+        author: Yu et al., OSDI 2022
+        url: https://www.usenix.org/conference/osdi22/presentation/yu
+        type: paper
+        required: false
+        minutes: 45
+        focus: Iteration-level scheduling.
+      - title: "SGLang: Efficient Execution of Structured Language Model Programs"
+        author: Zheng et al., 2023
+        url: https://arxiv.org/abs/2312.07104
+        type: paper
+        required: false
+        minutes: 45
+        focus: RadixAttention and prefix reuse.
+      - title: vLLM documentation
+        author: vLLM
+        url: https://docs.vllm.ai/
+        type: docs
+        required: true
+        minutes: 45
+        focus: Serving, automatic prefix caching, chunked prefill flags.
+    quiz:
+      - q: What is the main advantage of continuous batching over static batching?
+        options: ["Smaller models", "Finished sequences leave and new ones join every step, so GPU slots aren't wasted", "No KV cache needed", "Lower precision"]
+        answer: 1
+        explain: Iteration-level scheduling keeps the batch full with mixed output lengths.
+      - q: PagedAttention primarily solves...
+        options: ["Slow tokenisation", "KV cache memory fragmentation and over-reservation", "Quantisation error", "Network latency"]
+        answer: 1
+        explain: Fixed-size blocks allocated on demand avoid reserving max-length contiguous memory.
+      - q: An agent sends the same 6,000-token system prompt and tool definitions with every request. Which feature helps most?
+        options: ["Speculative decoding", "Prefix caching", "Larger batch timeout", "INT4 quantisation"]
+        answer: 1
+        explain: Caching the shared prefix KV skips repeated prefill.
+      - q: Users see latency spikes whenever someone submits a very long document. What helps?
+        options: ["Chunked prefill", "Lower temperature", "Removing the KV cache", "Static batching"]
+        answer: 0
+        explain: Chunking the prefill lets decode steps continue between chunks.
+      - q: To maximise prefix cache hits, how should prompts be structured?
+        options: ["Put user input first", "Put stable content (system prompt, tools, docs) first and variable content last", "Randomise order", "Order doesn't matter"]
+        answer: 1
+        explain: Caching works on shared prefixes, so the stable part must be at the start.
+      - q: Why might you disaggregate prefill and decode onto different GPU pools?
+        options: ["Licensing", "They have different bottlenecks (compute vs memory bandwidth)", "Decode needs CPUs", "Prefill needs no GPU"]
+        answer: 1
+        explain: Separating them lets each pool be sized and tuned for its bottleneck.
+    exercises:
+      - title: First vLLM deployment
+        level: core
+        task: Serve a small open model (e.g. Qwen 1.5-3B class) with vLLM's OpenAI-compatible server on a GPU (Azure ML compute or AKS). Call it from Python.
+        deliverable: Run script + notes on startup flags used.
+        acceptance:
+          - Can explain every flag set (max-model-len, gpu-memory-utilization, etc.)
+      - title: Prefix caching experiment
+        level: core
+        task: Benchmark 200 requests sharing a 4k-token prefix with prefix caching on vs off. Measure TTFT.
+        deliverable: Results table + chart.
+        acceptance:
+          - Clear TTFT difference explained using prefill cost
+    reflection:
+      - How would you restructure the auction assistant's prompt to maximise cache hits?
+
+  - id: p3m3
+    title: Optimisation — quantisation, speculative decoding, FlashAttention
+    hours: 8
+    objectives:
+      - Choose a quantisation scheme and measure its quality cost
+      - Explain speculative decoding and when it helps
+      - Explain FlashAttention's IO-aware idea
+    lesson: |
+      ## Quantisation
+      Store weights (and sometimes activations or KV cache) in fewer bits.
+      - **Weight-only INT8/INT4** — shrinks memory and speeds memory-bound decode.
+        Methods: **GPTQ** (approximate second-order, layer-wise), **AWQ**
+        (activation-aware: protect the small fraction of salient weights).
+      - **FP8** — on newer GPUs (e.g. H100), FP8 weights/activations with hardware
+        support; good quality/speed trade-off.
+      - **KV cache quantisation** — more concurrent sequences.
+      Rule: quantisation is a **quality** change, so it must pass your evals
+      (Pillar 4), not just perplexity. Quality loss is often uneven — check your
+      languages (e.g. BM/Manglish) and tasks separately.
+
+      ## Speculative decoding
+      A small **draft** model proposes k tokens; the large **target** model verifies
+      them in one forward pass. Accepted tokens are kept; on the first mismatch the
+      target's token is used. The sampling scheme guarantees the output distribution
+      equals the target model's — **no quality loss**, just speed. Helps most when
+      the draft's acceptance rate is high and you're latency-bound at low batch
+      sizes; gains shrink at high batch where you're compute-bound. Variants: n-gram
+      / prompt lookup, Medusa heads, EAGLE.
+
+      ## FlashAttention
+      Standard attention materialises the full N×N attention matrix in slow GPU HBM.
+      **FlashAttention** tiles the computation so blocks stay in fast on-chip SRAM,
+      using an online softmax — exact attention with far fewer memory reads/writes.
+      The lesson generalises: on GPUs, **moving data is often the cost, not maths**.
+
+      ## Other levers
+      Smaller/distilled models, shorter prompts, output length limits, structured
+      output, routing easy requests to a small model, caching full responses for
+      repeated questions. Often the cheapest optimisation is not in the GPU at all.
+    readings:
+      - title: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness"
+        author: Dao et al., 2022
+        url: https://arxiv.org/abs/2205.14135
+        type: paper
+        required: true
+        minutes: 45
+        focus: Introduction and the IO-complexity argument.
+      - title: Fast Inference from Transformers via Speculative Decoding
+        author: Leviathan et al., 2022
+        url: https://arxiv.org/abs/2211.17192
+        type: paper
+        required: true
+        minutes: 40
+        focus: Why the output distribution is preserved.
+      - title: "GPTQ: Accurate Post-Training Quantization for Generative Pre-trained Transformers"
+        author: Frantar et al., 2022
+        url: https://arxiv.org/abs/2210.17323
+        type: paper
+        required: false
+        minutes: 40
+        focus: Abstract, method overview, results tables.
+      - title: "AWQ: Activation-aware Weight Quantization for LLM Compression and Acceleration"
+        author: Lin et al., 2023
+        url: https://arxiv.org/abs/2306.00978
+        type: paper
+        required: true
+        minutes: 40
+        focus: The salient-weights insight.
+    quiz:
+      - q: Speculative decoding (with proper rejection sampling) affects output quality how?
+        options: ["Lowers it slightly", "Preserves the target model's output distribution exactly", "Raises it", "Depends on temperature only"]
+        answer: 1
+        explain: Verification by the target guarantees identical distribution; it's a pure speed optimisation.
+      - q: When does speculative decoding help least?
+        options: ["Low batch, latency-bound serving", "High batch sizes where serving is already compute-bound", "High acceptance rates", "Predictable outputs like code"]
+        answer: 1
+        explain: Extra verification compute competes with an already full GPU.
+      - q: AWQ's key insight is...
+        options: ["All weights matter equally", "A small fraction of salient weights (identified via activations) should be protected", "Quantise activations only", "Use FP32 for KV cache"]
+        answer: 1
+        explain: Activation-aware scaling protects important channels.
+      - q: FlashAttention speeds up attention mainly by...
+        options: ["Approximating attention", "Reducing reads/writes to HBM by tiling in on-chip SRAM", "Using INT4", "Skipping layers"]
+        answer: 1
+        explain: It's exact attention made IO-aware.
+      - q: You quantise to INT4 and perplexity barely changes. What should you do before shipping?
+        options: ["Ship it", "Run task-level evals, including per-language slices", "Increase temperature", "Retrain"]
+        answer: 1
+        explain: Perplexity hides uneven task and language regressions.
+      - q: Why does weight-only quantisation speed up decode?
+        options: ["Fewer layers", "Fewer bytes to read per step in a memory-bound phase", "Shorter prompts", "Better tokeniser"]
+        answer: 1
+        explain: Decode is bandwidth-bound; smaller weights mean faster reads.
+    exercises:
+      - title: Quantisation quality vs speed
+        level: core
+        task: Serve the same model in FP16 (or BF16) and an AWQ/GPTQ INT4 variant. Measure TPOT, throughput and quality on a 50-item eval set with BM and English items.
+        deliverable: Comparison table + recommendation.
+        acceptance:
+          - Quality reported per language slice
+      - title: Speculative decoding trial
+        level: stretch
+        task: Enable speculative decoding (draft model or n-gram) in vLLM and measure speed-up at batch 1 and batch 32.
+        deliverable: Results + explanation of the difference.
+        acceptance:
+          - Explains the batch-size effect correctly
+    reflection:
+      - Which optimisation would you try first for the auction assistant and why?
+
+  - id: p3m4
+    title: Benchmarking, capacity planning and cost per token
+    hours: 8
+    objectives:
+      - Benchmark an LLM endpoint correctly under realistic load
+      - Convert throughput into cost per million tokens
+      - Find the break-even between self-hosting and an API
+    lesson: |
+      ## Benchmark correctly
+      - Use a **realistic distribution** of input and output lengths from real or
+        representative traffic, not one fixed prompt.
+      - Sweep **concurrency** (1, 2, 4 … 64+) and plot throughput vs latency
+        percentiles (p50/p95/p99 TTFT and TPOT). The curve's knee is your operating
+        point.
+      - Measure **goodput**: throughput where requests meet the SLO.
+      - Warm up first; separate cold-start from steady state.
+      - Tools: vLLM's benchmark scripts, NVIDIA GenAI-Perf, LLMPerf.
+
+      ## Cost per million tokens
+      `cost per 1M tokens = (GPU hourly cost) / (tokens per second × 3600) × 1,000,000`
+
+      Example: a GPU at $4/hour sustaining 2,000 output tokens/s at your SLO:
+      4 / (2,000 × 3,600) × 1,000,000 ≈ **$0.56 per 1M output tokens** — at 100%
+      utilisation. At 25% average utilisation, effective cost is 4× higher
+      (~$2.22). **Utilisation is the whole game.** APIs charge per token so you pay
+      nothing when idle; self-hosting charges per hour.
+
+      ## Break-even thinking
+      Self-hosting wins when traffic is high and steady, data must stay in your
+      environment, or you need a fine-tuned/custom model. APIs win for spiky or low
+      traffic, frontier-quality needs, and small teams (ops cost is real: on-call,
+      upgrades, security patching). Include engineer time in the model.
+
+      ## Capacity planning
+      Required replicas ≈ peak tokens/s ÷ per-replica goodput, plus headroom (N+1
+      for failure, ~30% for spikes). Scale on queue depth / in-flight requests.
+      Consider autoscaling lag: model loading can take minutes — keep a warm minimum
+      or use faster loading (cached weights on local NVMe).
+
+      ## Gateway layer
+      An AI gateway (APIM in your Foundry platform; LiteLLM or Envoy-based gateways
+      elsewhere) centralises auth, quotas, token metering per team, routing,
+      fallback between providers and caching — essential for chargeback.
+    readings:
+      - title: vLLM documentation — Benchmarking
+        author: vLLM
+        url: https://docs.vllm.ai/
+        type: docs
+        required: true
+        minutes: 30
+        focus: Benchmark serving script and its metrics.
+      - title: LLMPerf
+        author: Ray Project
+        url: https://github.com/ray-project/llmperf
+        type: tool
+        required: false
+        minutes: 20
+        focus: Load-testing method and metrics definitions.
+      - title: "LLM Inference Performance Engineering: Best Practices (revisit)"
+        author: Databricks / MosaicML
+        url: https://www.databricks.com/blog/llm-inference-performance-engineering-best-practices
+        type: blog
+        required: true
+        minutes: 15
+        focus: Latency vs throughput trade-off and hardware comparisons.
+      - title: Azure API Management — AI gateway capabilities
+        author: Microsoft Learn
+        url: https://learn.microsoft.com/en-us/azure/api-management/genai-gateway-capabilities
+        type: docs
+        required: true
+        minutes: 25
+        focus: Token limits, token metrics, semantic caching, load balancing.
+    quiz:
+      - q: A GPU costs $2/hour and sustains 1,000 tokens/s at your SLO. Cost per 1M tokens at full utilisation?
+        options: ["~$0.06", "~$0.56", "~$5.60", "~$56"]
+        answer: 1
+        explain: 2 / (1,000 × 3,600) × 1,000,000 ≈ $0.56.
+      - q: The same deployment runs at 20% average utilisation. Effective cost per 1M tokens becomes...
+        options: ["Unchanged", "About 5× higher", "About 20% higher", "Lower"]
+        answer: 1
+        explain: You pay for the idle hours too; cost scales with 1/utilisation.
+      - q: Why benchmark across a concurrency sweep instead of one load level?
+        options: ["To find the knee where latency rises sharply as throughput saturates", "Because tools require it", "To test networking", "To warm the cache"]
+        answer: 0
+        explain: The throughput-latency curve shows the best operating point.
+      - q: What is goodput?
+        options: ["Throughput including failed requests", "Throughput of requests that meet the latency SLO", "Peak FLOPs", "Token accuracy"]
+        answer: 1
+        explain: Raw throughput can hide SLO violations.
+      - q: Which scenario most favours a managed API over self-hosting?
+        options: ["High, steady traffic with a fine-tuned model", "Spiky, low-volume traffic needing frontier quality", "Strict data residency on-prem", "Custom architecture"]
+        answer: 1
+        explain: Per-token pricing avoids paying for idle GPUs; frontier models may not be self-hostable.
+      - q: What is a key role of an AI gateway for platform teams?
+        options: ["Training models", "Central auth, quotas, per-team token metering, routing and fallback", "Replacing evals", "Storing weights"]
+        answer: 1
+        explain: Gateways make shared LLM capacity governable and chargeable.
+    exercises:
+      - title: Load test your vLLM endpoint
+        level: core
+        task: Sweep concurrency 1-64 with a realistic length distribution; plot throughput vs p95 TTFT and p95 TPOT; mark the SLO-compliant operating point.
+        deliverable: Charts + operating point.
+        acceptance:
+          - Length distribution documented and justified
+      - title: Cost model
+        level: core
+        task: Build a spreadsheet computing cost per 1M tokens vs utilisation (10-100%) for your measured goodput, and compare to 2 API prices. Add engineer time.
+        deliverable: Spreadsheet + break-even chart.
+        acceptance:
+          - Break-even utilisation clearly marked
+    reflection:
+      - What utilisation would the auction assistant realistically have across a week?

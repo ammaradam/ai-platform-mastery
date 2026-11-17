@@ -1,0 +1,506 @@
+id: p2
+order: 2
+title: Platform engineering and Kubernetes for AI
+status: partial
+goal: >
+  Design an internal AI platform as a product: golden paths, team boundaries,
+  multi-tenant Kubernetes with GPU scheduling, and infrastructure delivered
+  through IaC, GitOps and policy-as-code.
+why_now: >
+  Global platform roles assume deep Kubernetes and IaC. You are Azure-native and
+  have designed AKS-based platforms; this pillar makes you fluent below the
+  managed-service layer.
+capstone:
+  title: Reference AI platform on Kubernetes
+  brief: >
+    Build a small multi-tenant AI platform on a local or AKS cluster: GitOps-managed,
+    with GPU (or simulated) quotas per team, policy guardrails and a golden-path
+    template that ships a model service end to end.
+  deliverables:
+    - Terraform for the cluster + Argo CD bootstrap
+    - Two tenant namespaces with quotas, network policies and RBAC
+    - A golden-path template (repo template) that deploys a model service with metrics
+    - Policy-as-code rules that block at least 3 unsafe patterns
+    - Architecture doc with ADRs for 3 key decisions
+  rubric:
+    - A new team can ship a model service from template in under 30 minutes
+    - Policies are tested (a violating manifest is rejected in CI and in-cluster)
+    - Everything reproducible from git; no manual kubectl changes
+modules:
+  - id: p2m1
+    title: Platform as a product, golden paths and team topologies
+    hours: 6
+    objectives:
+      - Define an internal developer platform and its value
+      - Apply Team Topologies to an AI/ML organisation
+      - Design a golden path and measure platform success
+    lesson: |
+      ## What a platform is
+      The CNCF Platforms white paper defines a platform as a collection of
+      capabilities, documentation and tools that support developing, deploying and
+      operating products — offered as **self-service** and run **as a product** for
+      internal users. The test of a platform is not the tech; it is whether teams
+      choose to use it.
+
+      ## Team Topologies in one page
+      Four team types:
+      - **Stream-aligned** — owns a slice of business value end to end (e.g. the
+        pricing data science team).
+      - **Platform** — provides internal services that reduce stream-aligned teams'
+        cognitive load (your role).
+      - **Enabling** — temporarily helps teams adopt new capabilities (coaching DS on
+        MLOps practices).
+      - **Complicated-subsystem** — owns a part needing deep specialist knowledge
+        (e.g. a CV damage-detection model or an inference engine).
+      Three interaction modes: **collaboration**, **X-as-a-service**,
+      **facilitating**. A healthy platform moves from collaboration to
+      X-as-a-service as it matures. The guiding metric is **cognitive load** on
+      stream-aligned teams.
+
+      ## Golden paths
+      Spotify defines the Golden Path as "the opinionated and supported path" to
+      build something. Key properties: optional (not mandated), opinionated,
+      documented, supported, and kept short through templates and automation. For AI:
+      a template that gives a new model project CI, tests, registry, deployment,
+      monitoring and eval hooks on day one.
+
+      ## Measuring a platform
+      - Adoption (voluntary usage rate), time-to-first-deploy for a new team.
+      - DORA metrics: deployment frequency, lead time for changes, change failure
+        rate, time to restore service.
+      - Developer satisfaction surveys; support ticket volume.
+      Your "two weeks to two days" release story is a lead-time improvement — say it
+      in DORA language.
+    readings:
+      - title: CNCF Platforms White Paper
+        author: CNCF TAG App Delivery, Platforms WG
+        url: https://tag-app-delivery.cncf.io/whitepapers/platforms/
+        type: whitepaper
+        required: true
+        minutes: 45
+        focus: Attributes of successful platforms and how to measure them.
+      - title: How We Use Golden Paths to Solve Fragmentation in Our Software Ecosystem
+        author: Spotify Engineering, 2020
+        url: https://engineering.atspotify.com/2020/8/how-we-use-golden-paths-to-solve-fragmentation-in-our-software-ecosystem
+        type: blog
+        required: true
+        minutes: 15
+        focus: Why golden paths are opinionated but optional.
+      - title: Team Topologies
+        author: Matthew Skelton & Manuel Pais
+        url: https://teamtopologies.com/book
+        type: book
+        required: true
+        minutes: 300
+        focus: Chapters on team types, interaction modes and cognitive load.
+      - title: CNCF Platform Engineering Maturity Model
+        author: CNCF TAG App Delivery
+        url: https://tag-app-delivery.cncf.io/whitepapers/platform-eng-maturity-model/
+        type: whitepaper
+        required: false
+        minutes: 30
+        focus: Place your Pickles platform on each dimension.
+    quiz:
+      - q: In Team Topologies, a team that coaches data scientists to adopt MLOps practices and then steps away is a...
+        options: ["Platform team", "Enabling team", "Stream-aligned team", "Complicated-subsystem team"]
+        answer: 1
+        explain: Enabling teams help others acquire capabilities temporarily.
+      - q: What is the primary thing a platform team should reduce for stream-aligned teams?
+        options: ["Cloud cost", "Cognitive load", "Headcount", "Number of models"]
+        answer: 1
+        explain: Team Topologies centres platform value on lowering cognitive load.
+      - q: Which property is essential to Spotify's definition of a golden path?
+        options: ["Mandatory for all teams", "Opinionated and supported, but optional", "Built only in Backstage", "No documentation needed"]
+        answer: 1
+        explain: Golden paths guide rather than force; they are supported and documented.
+      - q: '"Releases went from two weeks to two days" improves which DORA metric most directly?'
+        options: ["Change failure rate", "Lead time for changes", "Time to restore service", "Availability"]
+        answer: 1
+        explain: Lead time measures commit-to-production time.
+      - q: A mature platform's main interaction mode with stream-aligned teams should be...
+        options: ["Permanent collaboration", "X-as-a-service", "Facilitating", "None"]
+        answer: 1
+        explain: Collaboration is for discovery; mature capabilities are consumed as a service.
+      - q: Which is the strongest signal of platform success?
+        options: ["Number of features built", "Voluntary adoption and time-to-first-deploy", "Lines of Terraform", "Number of clusters"]
+        answer: 1
+        explain: Platforms are products; adoption and user outcomes matter.
+    exercises:
+      - title: Map Pickles with Team Topologies
+        level: core
+        task: Draw your AI/ML org, Architecture team and Infra team as Team Topologies types with interaction modes. Identify one interaction that should change.
+        deliverable: Diagram + half-page recommendation.
+        acceptance:
+          - Each team labelled with type and interaction mode
+      - title: Golden path spec for a model service
+        level: core
+        task: Write the golden path for "ship a new pricing model" — steps, template contents, what is automated, what is optional.
+        deliverable: Golden path doc (max 2 pages).
+        acceptance:
+          - Includes a time-to-first-deploy target and how you'd measure it
+    reflection:
+      - Which part of your platform do data scientists avoid, and why?
+
+  - id: p2m2
+    title: Kubernetes internals for platform engineers
+    hours: 12
+    objectives:
+      - Explain the control loop, controllers and the operator pattern
+      - Trace what happens from kubectl apply to a running pod
+      - Configure requests, limits, QoS and autoscaling correctly
+    lesson: |
+      ## The control loop
+      Kubernetes is a set of **controllers** that continuously compare **desired
+      state** (objects stored in etcd via the API server) to **actual state** and act
+      to close the gap. This is level-triggered reconciliation, not one-off scripts.
+
+      ## kubectl apply to running pod
+      1. `kubectl` sends the object to the **API server** (authn → authz/RBAC →
+         admission controllers, including mutating and validating webhooks).
+      2. Object persisted in **etcd**.
+      3. The Deployment controller creates a ReplicaSet; the ReplicaSet controller
+         creates Pods.
+      4. The **scheduler** picks a node for each unscheduled Pod (filtering, then
+         scoring), writes the binding.
+      5. The **kubelet** on that node sees the Pod, asks the container runtime (via
+         CRI) to pull images and start containers, sets up networking (CNI) and volumes
+         (CSI), and reports status.
+
+      ## Operators and CRDs
+      A **CustomResourceDefinition** adds a new API type; an **operator** is a custom
+      controller that reconciles it using domain knowledge (e.g. KServe's
+      InferenceService, the NVIDIA GPU Operator). This is how ML platforms extend
+      Kubernetes.
+
+      ## Resources and QoS
+      - **Requests** are what the scheduler reserves; **limits** cap usage.
+      - CPU over limit → throttled. Memory over limit → **OOMKilled**.
+      - QoS classes: **Guaranteed** (requests = limits for all containers),
+        **Burstable**, **BestEffort** (none set; evicted first).
+
+      ## Autoscaling
+      - **HPA** scales replicas on metrics (CPU, custom metrics like queue depth).
+      - **VPA** adjusts requests.
+      - **Cluster Autoscaler / Karpenter** add or remove nodes when pods can't schedule.
+      - **KEDA** scales on event sources and can scale to zero.
+      For LLM serving, CPU is a poor scaling signal — use queue length, in-flight
+      requests or KV-cache utilisation (Pillar 3).
+    readings:
+      - title: Kubernetes docs — Controllers
+        author: Kubernetes
+        url: https://kubernetes.io/docs/concepts/architecture/controller/
+        type: docs
+        required: true
+        minutes: 15
+        focus: Control loops and desired vs actual state.
+      - title: Kubernetes docs — Operator pattern
+        author: Kubernetes
+        url: https://kubernetes.io/docs/concepts/extend-kubernetes/operator/
+        type: docs
+        required: true
+        minutes: 15
+        focus: CRDs and custom controllers.
+      - title: Kubernetes docs — Resource management for Pods and Containers
+        author: Kubernetes
+        url: https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+        type: docs
+        required: true
+        minutes: 30
+        focus: Requests, limits and what happens when they're exceeded.
+      - title: Kubernetes The Hard Way
+        author: Kelsey Hightower
+        url: https://github.com/kelseyhightower/kubernetes-the-hard-way
+        type: tutorial
+        required: false
+        minutes: 480
+        focus: Build a cluster by hand once; you'll never forget the components.
+      - title: KEDA documentation
+        author: KEDA
+        url: https://keda.sh/docs/
+        type: docs
+        required: false
+        minutes: 30
+        focus: Event-driven autoscaling and scale-to-zero.
+    quiz:
+      - q: Which component decides which node an unscheduled Pod runs on?
+        options: ["kubelet", "kube-scheduler", "API server", "etcd"]
+        answer: 1
+        explain: The scheduler filters and scores nodes and binds the Pod.
+      - q: A container exceeds its memory limit. What happens?
+        options: ["It is throttled", "It is OOMKilled", "It is moved to another node", "Nothing"]
+        answer: 1
+        explain: Memory is incompressible; exceeding the limit kills the container. CPU is throttled instead.
+      - q: Pods with requests equal to limits for every container get which QoS class?
+        options: ["BestEffort", "Burstable", "Guaranteed", "Critical"]
+        answer: 2
+        explain: Guaranteed requires requests == limits for CPU and memory in all containers.
+      - q: What is an operator?
+        options: ["A human on call", "A custom controller that reconciles a custom resource using domain logic", "A Helm chart", "A node type"]
+        answer: 1
+        explain: Operators extend the control-loop pattern to new resource types.
+      - q: Where are admission webhooks applied?
+        options: ["In the kubelet", "In the API server request path, before persistence", "In the scheduler", "In the container runtime"]
+        answer: 1
+        explain: Mutating and validating admission run in the API server before objects are stored.
+      - q: Why is CPU utilisation a poor HPA signal for LLM inference pods?
+        options: ["LLMs don't use CPU", "The bottleneck is GPU memory/queueing, so CPU doesn't track load", "HPA can't read CPU", "It's too expensive"]
+        answer: 1
+        explain: Scale on queue depth, in-flight requests or KV-cache usage instead.
+    exercises:
+      - title: Trace a deployment
+        level: core
+        task: On kind or minikube, deploy an app and use kubectl get events, describe and API server audit logs to write the full timeline from apply to Running.
+        deliverable: Annotated timeline.
+        acceptance:
+          - Names every component involved in order
+      - title: Break it on purpose
+        level: core
+        task: Trigger OOMKilled, CPU throttling, an unschedulable Pod and an image pull failure. Diagnose each from kubectl output only.
+        deliverable: Short troubleshooting guide with symptoms → cause → fix.
+        acceptance:
+          - Four distinct failure modes diagnosed
+      - title: Write a tiny operator
+        level: stretch
+        task: Using kopf (Python) or kubebuilder, write an operator for a ModelEndpoint CRD that creates a Deployment + Service.
+        deliverable: Repo folder with CRD, controller and demo.
+        acceptance:
+          - Deleting or editing the Deployment is reconciled back to desired state
+    reflection:
+      - Which Kubernetes concept do you still treat as magic?
+
+  - id: p2m3
+    title: GPUs, scheduling and multi-tenancy on Kubernetes
+    hours: 10
+    objectives:
+      - Explain how GPUs are exposed to Kubernetes and shared
+      - Design quotas and fair-share scheduling for multiple teams
+      - Choose between MIG, time-slicing and dedicated GPUs
+    lesson: |
+      ## How GPUs reach a Pod
+      GPUs are **extended resources** advertised by a **device plugin** (e.g.
+      `nvidia.com/gpu`). Pods request them in `limits`; GPUs are not overcommitted —
+      a requested GPU is exclusively assigned by default. The **NVIDIA GPU Operator**
+      installs and manages the drivers, container toolkit, device plugin, DCGM
+      monitoring and MIG manager as Kubernetes-managed components.
+
+      ## Sharing a GPU
+      - **MIG (Multi-Instance GPU)** — on supported data-centre GPUs (e.g. A100,
+        H100), hardware-partitions one GPU into isolated instances with dedicated
+        memory and compute. Strong isolation; fixed profiles.
+      - **Time-slicing** — multiple Pods share a GPU by taking turns. No memory
+        isolation; one tenant can OOM others. Fine for dev, notebooks, light
+        inference.
+      - **MPS** — concurrent processes share a GPU with better utilisation than
+        time-slicing; limited isolation.
+      - **Dedicated** — whole GPUs for training or large LLM serving.
+
+      ## Multi-tenancy
+      Soft multi-tenancy (trusted internal teams) usually means one namespace per
+      team or workload with: **ResourceQuota** (including GPU counts),
+      **LimitRange**, **RBAC**, **NetworkPolicy**, and separate node pools via
+      **taints/tolerations** and node affinity for GPU nodes. Hard multi-tenancy
+      (untrusted tenants) usually needs separate clusters or strong sandboxing.
+
+      ## Batch and fair-share
+      The default scheduler places Pods one at a time; distributed training needs
+      **gang scheduling** (all workers or none). **Kueue** adds job queueing, quotas
+      per queue, borrowing between teams, and preemption on top of the standard
+      scheduler. Volcano is an alternative batch scheduler.
+
+      ## Cost
+      GPUs dominate AI platform cost. Track utilisation via DCGM metrics; idle
+      reserved GPUs are the biggest waste. Scale-to-zero for spiky inference, spot
+      nodes for fault-tolerant training.
+    readings:
+      - title: Kubernetes docs — Schedule GPUs
+        author: Kubernetes
+        url: https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/
+        type: docs
+        required: true
+        minutes: 15
+        focus: Device plugins and how GPUs are requested.
+      - title: NVIDIA GPU Operator documentation
+        author: NVIDIA
+        url: https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/index.html
+        type: docs
+        required: true
+        minutes: 45
+        focus: Components it manages; MIG and time-slicing configuration pages.
+      - title: Kueue documentation — Overview
+        author: Kubernetes SIG Scheduling
+        url: https://kueue.sigs.k8s.io/docs/overview/
+        type: docs
+        required: true
+        minutes: 30
+        focus: ClusterQueues, LocalQueues, cohorts and borrowing.
+      - title: Kubernetes docs — Multi-tenancy
+        author: Kubernetes
+        url: https://kubernetes.io/docs/concepts/security/multi-tenancy/
+        type: docs
+        required: true
+        minutes: 30
+        focus: Soft vs hard multi-tenancy and isolation controls.
+    quiz:
+      - q: How does Kubernetes learn that a node has GPUs?
+        options: ["The scheduler detects them", "A device plugin advertises them as extended resources", "etcd scans hardware", "kube-proxy reports them"]
+        answer: 1
+        explain: Device plugins register extended resources like nvidia.com/gpu with the kubelet.
+      - q: Two teams share an A100 for inference and need memory isolation so one can't OOM the other. Best option?
+        options: ["Time-slicing", "MIG", "BestEffort pods", "Higher limits"]
+        answer: 1
+        explain: MIG provides hardware-isolated memory and compute; time-slicing does not isolate memory.
+      - q: A distributed training job needs all 8 workers to start together or not at all. What capability is needed?
+        options: ["HPA", "Gang scheduling (e.g. via Kueue or Volcano)", "Pod disruption budgets", "Node affinity"]
+        answer: 1
+        explain: Gang scheduling avoids partial starts that hold GPUs idle.
+      - q: Which object caps the number of GPUs a team namespace can request?
+        options: ["LimitRange", "ResourceQuota", "NetworkPolicy", "PriorityClass"]
+        answer: 1
+        explain: ResourceQuota can limit extended resources such as requests.nvidia.com/gpu.
+      - q: How do you keep non-GPU workloads off expensive GPU nodes?
+        options: ["Taint GPU nodes and give tolerations only to GPU workloads", "Use a ConfigMap", "Set CPU limits", "Use a Service"]
+        answer: 0
+        explain: Taints repel Pods without matching tolerations.
+      - q: For untrusted external tenants, what's usually required?
+        options: ["Namespaces are enough", "Hard multi-tenancy — separate clusters or strong sandboxing", "Just RBAC", "Just quotas"]
+        answer: 1
+        explain: Namespaces provide soft isolation suitable for trusted internal teams.
+    exercises:
+      - title: Multi-tenant namespaces
+        level: core
+        task: Create two team namespaces with ResourceQuota (incl. GPU count), LimitRange, RBAC and a default-deny NetworkPolicy. Prove isolation.
+        deliverable: Manifests + test script showing cross-namespace traffic and over-quota requests are blocked.
+        acceptance:
+          - Over-quota pod is rejected with a clear message
+      - title: Kueue fair share
+        level: stretch
+        task: Install Kueue on kind with fake GPU resources; create two ClusterQueues in a cohort with borrowing; show preemption when the owner team returns.
+        deliverable: Manifests + recording or logs of borrowing and preemption.
+        acceptance:
+          - Borrowed capacity is reclaimed when the lending queue gets work
+      - title: GPU sharing decision matrix
+        level: core
+        task: For 5 workloads (notebooks, CV batch scoring, LLM chat serving, fine-tuning, eval jobs) choose dedicated / MIG / time-slicing and justify.
+        deliverable: Decision table.
+        acceptance:
+          - Each choice addresses isolation, utilisation and cost
+    reflection:
+      - What would your GPU utilisation be if you measured it honestly today?
+
+  - id: p2m4
+    title: IaC, GitOps and policy as code
+    hours: 10
+    objectives:
+      - Structure Terraform for multiple environments and teams
+      - Run GitOps with Argo CD and explain pull-based reconciliation
+      - Enforce guardrails with policy as code (Kyverno or OPA Gatekeeper)
+    lesson: |
+      ## Terraform structure
+      - **Modules** are reusable building blocks (e.g. a "foundry-workload" module).
+      - **Root modules** per environment/workload compose modules.
+      - **Remote state** with locking; one state per blast-radius unit (don't put all
+        environments in one state).
+      - Pin provider and module versions; run `plan` in CI and require review on
+        `apply`.
+      - Detect **drift** (resources changed outside Terraform) with scheduled plans.
+
+      ## GitOps
+      GitOps (OpenGitOps principles): desired state is **declarative**, **versioned
+      and immutable** in git, **pulled automatically** by agents, and **continuously
+      reconciled**. Argo CD runs in the cluster, watches git, and syncs manifests —
+      the same control-loop idea as Kubernetes itself. Benefits: audit trail,
+      rollback via git revert, no CI system holding cluster-admin credentials.
+      Typical split: Terraform for cloud resources (clusters, networks, identities),
+      GitOps for in-cluster resources.
+
+      ## Policy as code
+      Admission controllers enforce rules at the API server:
+      - **Kyverno** — policies written as Kubernetes YAML; validate, mutate,
+        generate, verify images.
+      - **OPA Gatekeeper** — policies in Rego via ConstraintTemplates.
+      Example AI-platform guardrails: no containers without resource limits; GPU
+      pods only in approved namespaces; images only from your registry and signed;
+      no public LoadBalancers; required labels for cost allocation (team, model).
+      Also run the same policies in CI (shift-left) so developers see failures
+      before deploying.
+
+      ## Secrets and identity
+      Prefer workload identity (Azure Workload Identity, IRSA on AWS) over static
+      secrets. You already used workload identity federation for Foundry agents —
+      that's the pattern.
+    readings:
+      - title: Terraform docs — Modules
+        author: HashiCorp
+        url: https://developer.hashicorp.com/terraform/language/modules
+        type: docs
+        required: true
+        minutes: 30
+        focus: Module composition and versioning.
+      - title: OpenGitOps principles
+        author: CNCF OpenGitOps
+        url: https://opengitops.dev/
+        type: docs
+        required: true
+        minutes: 10
+        focus: The four principles.
+      - title: Argo CD documentation — Core concepts
+        author: Argo Project
+        url: https://argo-cd.readthedocs.io/en/stable/core_concepts/
+        type: docs
+        required: true
+        minutes: 30
+        focus: Applications, sync, health and the app-of-apps pattern.
+      - title: Kyverno documentation
+        author: Kyverno
+        url: https://kyverno.io/docs/
+        type: docs
+        required: true
+        minutes: 45
+        focus: Validate and mutate policies; testing policies with the CLI.
+      - title: OPA Gatekeeper documentation
+        author: Open Policy Agent
+        url: https://open-policy-agent.github.io/gatekeeper/website/docs/
+        type: docs
+        required: false
+        minutes: 30
+        focus: ConstraintTemplates and Rego basics.
+    quiz:
+      - q: Which is a core GitOps principle?
+        options: ["CI pushes changes to the cluster with admin credentials", "Desired state is pulled from git and continuously reconciled", "Manual kubectl in emergencies is normal", "State lives in the cluster only"]
+        answer: 1
+        explain: GitOps uses pull-based agents that reconcile from versioned declarative state.
+      - q: Why split Terraform state by environment or workload?
+        options: ["Faster typing", "To limit blast radius and lock contention", "Terraform requires it", "To avoid modules"]
+        answer: 1
+        explain: Smaller states reduce the damage of a bad apply and contention between teams.
+      - q: A policy rejects any Pod without CPU and memory limits. Where is it enforced in-cluster?
+        options: ["kubelet", "Admission control in the API server", "Scheduler", "CNI plugin"]
+        answer: 1
+        explain: Kyverno and Gatekeeper run as admission webhooks.
+      - q: What language does OPA Gatekeeper use for policies?
+        options: ["YAML only", "Rego", "HCL", "Python"]
+        answer: 1
+        explain: Gatekeeper ConstraintTemplates embed Rego; Kyverno uses YAML.
+      - q: Someone changed a resource in the Azure portal. How do you detect it?
+        options: ["You can't", "Scheduled terraform plan shows drift", "Argo CD reports it automatically for all Azure resources", "Check etcd"]
+        answer: 1
+        explain: A plan compares real infrastructure with code and reveals drift.
+      - q: What's the best way for pods to access cloud services?
+        options: ["Static keys in env vars", "Workload identity federation", "Keys in the image", "Shared admin service principal"]
+        answer: 1
+        explain: Short-lived federated tokens avoid static secret sprawl.
+    exercises:
+      - title: GitOps bootstrap
+        level: core
+        task: Use Terraform to create a cluster (kind via a provider, or AKS), install Argo CD, and use app-of-apps to deploy the two tenant namespaces from p2m3.
+        deliverable: Repo with infra/ and gitops/ folders.
+        acceptance:
+          - Deleting a namespace manually is restored by Argo CD
+      - title: Five AI-platform policies
+        level: core
+        task: Write Kyverno (or Gatekeeper) policies for limits required, GPU only in approved namespaces, approved registries only, required cost labels, no public LoadBalancer. Test them in CI with the CLI.
+        deliverable: Policies + test cases (pass and fail manifests).
+        acceptance:
+          - Each policy has at least one passing and one failing test
+    reflection:
+      - Which manual step in your current infra still lives in someone's head?

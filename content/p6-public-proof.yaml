@@ -1,0 +1,358 @@
+id: p6
+order: 6
+title: Public proof and technical leadership
+status: gap
+parallel: true
+goal: >
+  Become known for your expertise: write design docs and public posts that people
+  share, give talks, maintain open source, and operate at staff level — leading
+  without authority.
+why_now: >
+  "Global level" means people outside your company know your work. This pillar
+  runs in parallel with all others: every module's exercises are raw material.
+capstone:
+  title: Public body of work
+  brief: >
+    Over the curriculum, publish a coherent body of work on production AI platforms
+    and evals, with a Malaysian angle.
+  deliverables:
+    - 6+ technical blog posts on ammaradam.dev (one per pillar minimum)
+    - 1 conference or meetup talk submitted, 1 delivered
+    - MLOps-Toolbox release with docs, a PriceCatcher demo and at least one external contributor or user
+    - 1 upstream contribution (docs or code) to a project you use (vLLM, Feast, Kueue, OTel, Langfuse...)
+    - Malaysian code-switching eval set published openly (from p4m5)
+  rubric:
+    - Each post teaches one thing with evidence from real work
+    - Talk abstract states a clear takeaway and audience
+    - Open-source work has a README a stranger can follow in 15 minutes
+modules:
+  - id: p6m1
+    title: Technical writing — design docs, ADRs and posts
+    hours: 6
+    objectives:
+      - Write design docs that get decisions made
+      - Write ADRs that future engineers can trust
+      - Write public posts that teach one thing with evidence
+    lesson: |
+      ## Design docs
+      Google-style design docs capture context and scope, goals and **non-goals**,
+      the proposed design, **alternatives considered**, and cross-cutting concerns
+      (security, privacy, cost, observability). Their main value is surfacing
+      disagreement early and recording *why*. Keep them as short as the decision
+      allows; a doc nobody reads didn't help.
+
+      ## ADRs
+      Michael Nygard's Architecture Decision Record: **Title, Status, Context,
+      Decision, Consequences**. One decision per record, immutable once accepted
+      (supersede, don't edit). You already use ADRs — make "Consequences" honest,
+      including the downsides you accept.
+
+      ## Public posts
+      What works for practitioner writing:
+      - **One idea per post**, with evidence from real work (numbers, diagrams,
+        code).
+      - **Write what you just learned** — "TIL"-style posts are valuable and quick.
+      - Show the failure, not only the success.
+      - Title says the takeaway.
+      - Never invent results; anonymise company data.
+      Simon Willison's advice: write about things you've done and learned; a short
+      post published beats a long one in drafts.
+
+      ## Your pipeline
+      Every module's exercises produce material. Convert each pillar capstone into a
+      post on ammaradam.dev, then a short LinkedIn version linking to it.
+    readings:
+      - title: Design Docs at Google
+        author: Malte Ubl
+        url: https://www.industrialempathy.com/posts/design-docs-at-google/
+        type: blog
+        required: true
+        minutes: 20
+        focus: Sections of a design doc and when not to write one.
+      - title: Documenting Architecture Decisions
+        author: Michael Nygard, 2011
+        url: https://cognitect.com/blog/2011/11/15/documenting-architecture-decisions
+        type: blog
+        required: true
+        minutes: 10
+        focus: The ADR format.
+      - title: What to blog about
+        author: Simon Willison
+        url: https://simonwillison.net/2022/Nov/6/what-to-blog-about/
+        type: blog
+        required: true
+        minutes: 10
+        focus: TILs and writing about projects.
+    quiz:
+      - q: Which section of a design doc most prevents scope creep?
+        options: ["Background", "Non-goals", "Appendix", "Timeline"]
+        answer: 1
+        explain: Explicit non-goals stop reviewers expanding the scope.
+      - q: An accepted ADR turns out to be wrong. What do you do?
+        options: ["Edit it", "Write a new ADR that supersedes it and mark the old one superseded", "Delete it", "Ignore it"]
+        answer: 1
+        explain: ADRs are an immutable log of decisions.
+      - q: Which is the best structure for a practitioner blog post?
+        options: ["A list of 10 generic lessons", "One idea, backed by evidence from real work", "A product announcement", "A summary of the news"]
+        answer: 1
+        explain: Specific, evidence-backed posts build credibility.
+      - q: The five sections of a Nygard ADR are Title, Status, Context, Decision and...
+        options: ["Owner", "Consequences", "Timeline", "Budget"]
+        answer: 1
+        explain: Consequences record the trade-offs you accept.
+    exercises:
+      - title: Post from p1 or p4
+        level: core
+        task: Turn one completed exercise into a post (800-1,200 words) with one diagram. Publish on ammaradam.dev.
+        deliverable: Published post URL.
+        acceptance:
+          - Title states the takeaway
+          - Contains at least one real number or artefact
+      - title: ADR backlog
+        level: core
+        task: Write ADRs for 3 decisions you already made on the agent platform (e.g. self-hosted agents over hosted agents, APIM as gateway, one Foundry resource per workload per environment).
+        deliverable: 3 ADRs in a docs/adr folder.
+        acceptance:
+          - Each lists rejected alternatives and accepted downsides
+    reflection:
+      - What have you learned this month that 100 engineers would want to know?
+
+  - id: p6m2
+    title: Talks and conferences
+    hours: 6
+    objectives:
+      - Write a talk proposal (CFP) that gets accepted
+      - Structure a 25-minute technical talk
+      - Build a talk pipeline from meetups to international conferences
+    lesson: |
+      ## Where to speak (ladder)
+      Local meetups (PyData KL, Kubernetes/CNCF KL, GDG, AWS/Azure user groups) →
+      PyCon MY / regional conferences (PyCon APAC, KubeCon + CloudNativeCon events,
+      MLOps-focused conferences) → global conferences. You've spoken at PyCon
+      Malaysia — you're already on the ladder.
+
+      ## Writing a CFP that works
+      Reviewers read hundreds. Make theirs easy:
+      - **Title** — specific, promises a takeaway ("What 100 agent traces taught us
+        about evals in Manglish").
+      - **Abstract** — problem, why it matters, what you'll show, what attendees
+        leave with. Concrete beats clever.
+      - **Audience and level** stated clearly.
+      - **Evidence you can deliver** — real system, real numbers, links to prior
+        talks or posts.
+      - Original material: talks about your own production experience beat survey
+        talks.
+
+      ## Structuring a 25-minute talk
+      1. Hook: the problem in one story (2 min).
+      2. Context: just enough background (3 min).
+      3. 3 key points max, each with evidence or a demo (15 min).
+      4. What to do Monday morning (3 min).
+      5. Resources slide (2 min).
+      Rehearse out loud at least three times; time it; cut 20%.
+
+      ## Reuse
+      One body of work → blog post → meetup talk → conference talk → video → posts.
+    readings:
+      - title: Open Source Guides — Building Community (for speaking and community)
+        author: GitHub
+        url: https://opensource.guide/building-community/
+        type: guide
+        required: false
+        minutes: 20
+        focus: Community and visibility habits that transfer to speaking.
+      - title: Tips for Your First KubeCon Presentation (Part 1)
+        author: Kubernetes blog, 2018
+        url: https://kubernetes.io/blog/2018/10/18/tips-for-your-first-kubecon-presentation-part-1/
+        type: blog
+        required: true
+        minutes: 15
+        focus: Submitting a good talk and preparing; applies to any conference.
+    quiz:
+      - q: Which talk title is most likely to be accepted?
+        options: ['"An Introduction to MLOps"', '"How we cut model release time from two weeks to two days at an auction company"', '"AI: The Future"', '"Kubernetes Tips"']
+        answer: 1
+        explain: Specific, experience-based, with a clear takeaway.
+      - q: What should a strong abstract always state?
+        options: ["Your job title", "What attendees will leave with", "Your company's revenue", "All tools used"]
+        answer: 1
+        explain: Reviewers select for audience value.
+      - q: How many key points should a 25-minute talk have?
+        options: ["10+", "About 3", "1 slide", "As many as possible"]
+        answer: 1
+        explain: Three well-supported points are remembered; ten are not.
+      - q: After rehearsing, your talk runs 30 minutes for a 25-minute slot. Best fix?
+        options: ["Talk faster", "Cut content by around 20%", "Skip Q&A", "Remove the demo always"]
+        answer: 1
+        explain: Cutting is better than rushing.
+    exercises:
+      - title: Submit a CFP
+        level: core
+        task: Write and submit a talk proposal to a meetup or conference based on Pillar 4 or Pillar 3 work.
+        deliverable: Submitted abstract (save the text in the repo).
+        acceptance:
+          - Title has a specific takeaway; abstract under 300 words
+      - title: Deliver a meetup talk
+        level: core
+        task: Give a 20-25 minute talk at a local meetup; record it if allowed.
+        deliverable: Slides + recording link.
+        acceptance:
+          - Rehearsed and timed at least 3 times
+    reflection:
+      - What story from your work makes people lean in when you tell it?
+
+  - id: p6m3
+    title: Open source as proof of skill
+    hours: 6
+    objectives:
+      - Make MLOps-Toolbox easy to adopt
+      - Make a first upstream contribution successfully
+      - Build visibility through useful, small, finished things
+    lesson: |
+      ## Your own project: MLOps-Toolbox
+      Adoption depends less on code quality than on: a README that explains the
+      problem in one paragraph, a 5-minute quickstart, a realistic demo
+      (PriceCatcher), clear contribution guide, tagged releases, and issues labelled
+      "good first issue". Write the docs for a stranger.
+
+      ## Upstream contributions
+      Start with docs and small fixes in projects you use (vLLM, Feast, Kueue,
+      OpenTelemetry, Langfuse, Evidently). Steps: read CONTRIBUTING, find a
+      well-scoped issue, comment before starting, keep the PR small, include tests,
+      respond to review quickly. One merged PR in a well-known project carries real
+      signal.
+
+      ## Small finished things beat big unfinished ones
+      A published eval dataset, a tiny CLI, a Kubernetes manifest example, a
+      benchmark notebook — each is shareable proof. Your side-project list is long;
+      choose open-source work that **reinforces your expertise story** (platform +
+      evals + Malaysia) and pause the rest.
+    readings:
+      - title: Open Source Guides — How to Contribute to Open Source
+        author: GitHub
+        url: https://opensource.guide/how-to-contribute/
+        type: guide
+        required: true
+        minutes: 20
+        focus: Finding a project and making a first contribution.
+      - title: Open Source Guides — Starting an Open Source Project
+        author: GitHub
+        url: https://opensource.guide/starting-a-project/
+        type: guide
+        required: true
+        minutes: 20
+        focus: README, contributing guide, code of conduct.
+    quiz:
+      - q: What most increases adoption of a small open-source library?
+        options: ["More features", "A clear README, 5-minute quickstart and realistic demo", "A logo", "Rewriting in Rust"]
+        answer: 1
+        explain: People adopt what they can understand and try quickly.
+      - q: Before starting work on an issue in a big project, you should...
+        options: ["Open a 2,000-line PR", "Read CONTRIBUTING and comment on the issue first", "Email maintainers privately", "Fork and never upstream"]
+        answer: 1
+        explain: Coordination avoids wasted effort and duplicate work.
+      - q: Which side project best reinforces an "AI platform + evals + Malaysia" expertise story?
+        options: ["A kids' quiz app", "An open Malaysian code-switching eval dataset", "A rent tracker", "A family tree app"]
+        answer: 1
+        explain: It directly showcases the niche you want to be known for.
+      - q: What is usually the best first contribution to a large project like vLLM?
+        options: ["A major new feature", "A docs fix or small, well-scoped bug fix with tests", "Reformatting the codebase", "A new logo"]
+        answer: 1
+        explain: Small, well-scoped PRs get reviewed and merged, building trust for bigger work.
+    exercises:
+      - title: MLOps-Toolbox adoption pass
+        level: core
+        task: Rewrite the README with problem, quickstart and PriceCatcher demo; add CONTRIBUTING and 3 good-first-issues; tag a release.
+        deliverable: Release URL.
+        acceptance:
+          - A friend can run the quickstart in 15 minutes without help
+      - title: First upstream PR
+        level: core
+        task: Make a docs or small code contribution to a project from this curriculum.
+        deliverable: PR link.
+        acceptance:
+          - PR merged or actively in review
+    reflection:
+      - Which of your side projects should you pause to make room for this?
+
+  - id: p6m4
+    title: Staff-level leadership without authority
+    hours: 6
+    objectives:
+      - Describe staff engineer archetypes and pick yours
+      - Use writing, sponsorship and influence to lead across teams
+      - Decide between the staff IC and manager tracks with evidence
+    lesson: |
+      ## Staff archetypes (Will Larson)
+      - **Tech Lead** — guides one team's approach and execution.
+      - **Architect** — direction and quality across a critical area.
+      - **Solver** — parachutes into hard problems.
+      - **Right Hand** — extends an executive's leadership across the org.
+      Your current role (platform direction, governance, coaching DS) mixes Tech
+      Lead and Architect.
+
+      ## Staff work (Tanya Reilly's framing)
+      Three pillars: **big-picture thinking** (strategy, vision, technical
+      direction), **project execution** (leading hard, ambiguous projects to done),
+      and **levelling up others** (mentoring, setting standards, reviews). Much of it
+      is "glue work" — make it visible and tie it to outcomes.
+
+      ## Influence tools
+      - Written strategy and vision docs (connect to p6m1).
+      - Getting sponsors: managers and execs who will spend capital on your ideas.
+      - Being "in the room" — and earning it by bringing data.
+      - Making others successful (coaching DS to "drive on the roads").
+
+      ## IC vs manager
+      Managers own people outcomes (hiring, performance, growth); staff ICs own
+      technical outcomes across teams. Both lead. Look at your energy: do you prefer
+      1:1s and growing people, or deep technical direction? Your coaching + visionary
+      style fits either; the job you pick should match what you want to spend most
+      days doing.
+    readings:
+      - title: "Staff Engineer: Leadership beyond the management track"
+        author: Will Larson
+        url: https://staffeng.com/book
+        type: book
+        required: true
+        minutes: 300
+        focus: Archetypes and "operating at staff".
+      - title: The Staff Engineer's Path
+        author: Tanya Reilly, O'Reilly 2022
+        url: https://www.oreilly.com/library/view/the-staff-engineers/9781098118723/
+        type: book
+        required: true
+        minutes: 360
+        focus: The three pillars; chapters on strategy and finishing projects.
+    quiz:
+      - q: Which staff archetype extends an executive's leadership across the organisation?
+        options: ["Solver", "Right Hand", "Tech Lead", "Architect"]
+        answer: 1
+        explain: Larson's Right Hand acts as an extension of a senior leader.
+      - q: Which is NOT one of Tanya Reilly's three pillars of staff work?
+        options: ["Big-picture thinking", "Project execution", "Levelling up others", "People management"]
+        answer: 3
+        explain: Staff ICs lead without line management.
+      - q: What's the best way to make glue work count toward promotion?
+        options: ["Do it quietly", "Make it visible and tie it to outcomes", "Stop doing it", "Delegate it"]
+        answer: 1
+        explain: Unseen glue work is rarely rewarded.
+      - q: The clearest difference between manager and staff IC tracks is...
+        options: ["Salary", "Managers own people outcomes; staff ICs own technical outcomes across teams", "Only managers lead", "ICs can't influence strategy"]
+        answer: 1
+        explain: Both lead, through different levers.
+    exercises:
+      - title: Technical vision doc
+        level: core
+        task: Write a 2-page, 12-18 month technical vision for AI at Pickles (or a target employer) — platform, evals, governance.
+        deliverable: Vision doc.
+        acceptance:
+          - States current state, target state, and 3 bets with how you'll measure them
+      - title: Archetype and track decision
+        level: core
+        task: Log a week of your work by archetype and by IC vs management activity; write a 1-page decision on which track to pursue next.
+        deliverable: Activity log + decision.
+        acceptance:
+          - Decision references the log, not just preference
+    reflection:
+      - Who are your sponsors today, and who should they be?

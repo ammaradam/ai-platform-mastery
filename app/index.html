@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Platform Mastery</title>
+<style>
+:root{--bg:#f7f7f5;--card:#fff;--ink:#1d1d1b;--mut:#6b6a65;--line:#e4e2dc;--acc:#0f6e56;--acc-bg:#e1f5ee;--warn:#854f0b;--warn-bg:#faeeda;--bad:#a32d2d;--bad-bg:#fcebeb;--ok:#3b6d11;--ok-bg:#eaf3de;--r:12px}
+@media (prefers-color-scheme:dark){:root{--bg:#161615;--card:#1f1f1d;--ink:#ecebe6;--mut:#a3a19a;--line:#33322f;--acc:#5dcaa5;--acc-bg:#0d3a2f;--warn:#fac775;--warn-bg:#3d2a0b;--bad:#f09595;--bad-bg:#3d1616;--ok:#97c459;--ok-bg:#22330f}}
+*{box-sizing:border-box}
+body{margin:0;font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:calc(72px + env(safe-area-inset-bottom))}
+a{color:var(--acc)}
+header{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px}
+header h1{font-size:17px;font-weight:600;margin:0}
+.bar{height:6px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:8px}
+.bar>i{display:block;height:100%;background:var(--acc);border-radius:99px;transition:width .3s}
+main{max-width:760px;margin:0 auto;padding:16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin-bottom:14px}
+.row{display:flex;align-items:center;gap:10px}
+.sp{justify-content:space-between}
+.mut{color:var(--mut);font-size:14px}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px}
+.strong{background:var(--ok-bg);color:var(--ok)}.partial{background:var(--warn-bg);color:var(--warn)}.gap{background:var(--bad-bg);color:var(--bad)}
+.mod{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--line);cursor:pointer;color:inherit;text-decoration:none}
+.mod.locked{opacity:.45;cursor:default}
+.dot{flex:0 0 28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;border:2px solid var(--line)}
+.dot.pass{background:var(--acc-bg);border-color:var(--acc);color:var(--acc)}
+.dot.done{background:var(--acc);border-color:var(--acc);color:var(--card)}
+.dot.open{border-color:var(--acc);color:var(--acc)}
+h2{font-size:20px;margin:0 0 6px}h3{font-size:16px;margin:18px 0 8px}
+.lesson h2{font-size:17px;margin-top:20px}.lesson code{background:var(--bg);padding:1px 5px;border-radius:5px;font-size:14px}
+.lesson table{border-collapse:collapse;width:100%;font-size:14px}.lesson td,.lesson th{border:1px solid var(--line);padding:6px}
+button,.btn{font:inherit;font-weight:600;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:10px 16px;border-radius:10px;cursor:pointer}
+.btn-p{background:var(--acc);border-color:var(--acc);color:var(--card)}
+button:disabled{opacity:.4;cursor:default}
+.btn{text-decoration:none;display:inline-block}
+.opt:disabled{opacity:1}.opt:disabled:not(.right):not(.wrong){opacity:.55}
+.opt{display:block;width:100%;text-align:left;margin:8px 0;font-weight:400;line-height:1.4}
+.opt.right{background:var(--ok-bg);border-color:var(--ok);color:var(--ok)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad);color:var(--bad)}
+.fb{padding:12px;border-radius:10px;margin-top:10px;font-size:15px}
+.fb.ok{background:var(--ok-bg)}.fb.no{background:var(--bad-bg)}
+label.chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;cursor:pointer}
+label.chk input{margin-top:5px;width:18px;height:18px;accent-color:var(--acc)}
+textarea,input[type=url],input[type=text]{width:100%;font:inherit;font-size:15px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink)}
+textarea{min-height:90px}
+nav{position:fixed;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--line);display:flex;padding-bottom:env(safe-area-inset-bottom);z-index:6}
+nav a{flex:1;text-align:center;padding:12px 0;font-size:13px;font-weight:600;color:var(--mut);text-decoration:none}
+nav a.on{color:var(--acc)}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 14px;padding-bottom:4px}
+.tabs button{padding:7px 12px;font-size:14px;white-space:nowrap}
+.tabs button.on{background:var(--acc-bg);border-color:var(--acc);color:var(--acc)}
+.stat{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.stat div{background:var(--bg);border-radius:10px;padding:12px}
+.stat b{display:block;font-size:24px}
+.back{display:inline-block;margin-bottom:10px;font-size:14px;text-decoration:none}
+.tag{font-size:12px;color:var(--mut);border:1px solid var(--line);border-radius:6px;padding:1px 6px;margin-left:6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+</style>
+</head>
+<body>
+<header>
+  <div class="row sp"><h1>AI Platform Mastery</h1><span class="mut" id="hdr-pct"></span></div>
+  <div class="bar" aria-hidden="true"><i id="hdr-bar" style="width:0"></i></div>
+</header>
+<main id="app" aria-live="polite"></main>
+<nav aria-label="Main">
+  <a href="#/" data-r="path">Path</a>
+  <a href="#/review" data-r="review">Review</a>
+  <a href="#/stats" data-r="stats">Progress</a>
+  <a href="#/settings" data-r="settings">Settings</a>
+</nav>
+<script id="curriculum-data" type="application/json">__CURRICULUM_JSON__</script>
+<script>
+(() => {
+const KEY = "apm-progress-v1";
+let D, S, mem = null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function blank(){ return {modules:{}, capstones:{}, review:{}, log:[], created:Date.now()}; }
+function load(){ try { const v = localStorage.getItem(KEY); return v ? JSON.parse(v) : blank(); } catch(e){ return mem || blank(); } }
+function save(){ mem = S; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} }
+function ms(id){ return S.modules[id] || (S.modules[id] = {best:0, attempts:0, readings:{}, ex:{}, links:{}, notes:"", reflection:"", passedAt:null}); }
+
+const allMods = () => D.pillars.flatMap(p => p.modules.map(m => ({...m, pillar:p})));
+const findMod = id => allMods().find(m => m.id === id);
+const passed = id => (S.modules[id]?.best || 0) >= D.pass_mark;
+
+function isUnlocked(m){
+  if (!m.pillar) m = findMod(m.id);
+  const p = m.pillar, i = p.modules.findIndex(x => x.id === m.id);
+  if (i > 0) return passed(p.modules[i-1].id);
+  if (p.parallel) return true;
+  const seq = D.pillars.filter(x => !x.parallel), pi = seq.findIndex(x => x.id === p.id);
+  if (pi <= 0) return true;
+  const prev = seq[pi-1]; return passed(prev.modules[prev.modules.length-1].id);
+}
+function isDone(m){
+  const s = S.modules[m.id]; if (!s || !passed(m.id)) return false;
+  const reqR = m.readings.every((r,i) => !r.required || s.readings[i]);
+  const coreE = m.exercises.every((e,i) => e.level !== "core" || s.ex[i]);
+  return reqR && coreE;
+}
+function state(m){ return isDone(m) ? "done" : passed(m.id) ? "pass" : isUnlocked(m) ? "open" : "locked"; }
+
+function progress(){
+  const mods = allMods(); let pts = 0, max = 0;
+  mods.forEach(m => { max += 3; if (passed(m.id)) pts += 1; const s = S.modules[m.id];
+    if (s){ const rq = m.readings.filter(r=>r.required).length; pts += rq ? m.readings.filter((r,i)=>r.required && s.readings[i]).length/rq : 1;
+      const ce = m.exercises.filter(e=>e.level==="core").length; pts += ce ? m.exercises.filter((e,i)=>e.level==="core" && s.ex[i]).length/ce : 1; } });
+  return max ? pts/max : 0;
+}
+function header(){ const p = Math.round(progress()*100); $("#hdr-pct").textContent = p + "% complete"; $("#hdr-bar").style.width = p + "%"; }
+function logDay(){ const d = new Date().toISOString().slice(0,10); if (!S.log.includes(d)) S.log.push(d); }
+function streak(){ let n = 0; const set = new Set(S.log); const d = new Date();
+  if (!set.has(d.toISOString().slice(0,10))) d.setDate(d.getDate()-1);
+  while (set.has(d.toISOString().slice(0,10))) { n++; d.setDate(d.getDate()-1); } return n; }
+
+const STATUS = {strong:"strong", partial:"partial", gap:"gap"};
+function nextUp(){ return allMods().find(m => isUnlocked(m) && !passed(m.id) && !m.pillar.parallel) || allMods().find(m => isUnlocked(m) && !passed(m.id)); }
+
+function viewPath(){
+  const n = nextUp();
+  let h = "";
+  if (n) h += `<div class="card"><div class="mut">Up next</div><h2>${esc(n.title)}</h2><div class="mut">${esc(n.pillar.title)} · ~${n.hours} h</div><p><a class="btn btn-p" href="#/m/${n.id}">Continue</a></p></div>`;
+  D.pillars.forEach(p => {
+    const done = p.modules.filter(m => passed(m.id)).length, pct = Math.round(done/p.modules.length*100);
+    h += `<div class="card"><div class="row sp"><strong>${p.id.toUpperCase()} · ${esc(p.title)}</strong><span class="pill ${STATUS[p.status]}">${p.status}</span></div>`;
+    h += `<div class="mut">${p.parallel ? "Runs in parallel · " : ""}${done}/${p.modules.length} passed</div><div class="bar"><i style="width:${pct}%"></i></div>`;
+    p.modules.forEach((m,i) => { const st = state(m), lock = st === "locked";
+      const icon = st === "done" ? "✓" : st === "pass" ? "✓" : lock ? "🔒" : i+1;
+      h += `<${lock ? "div" : "a href=\"#/m/" + m.id + "\""} class="mod ${lock ? "locked" : ""}"><span class="dot ${st}">${icon}</span><span><span>${esc(m.title)}</span><br><span class="mut">~${m.hours} h · ${st === "done" ? "complete" : st === "pass" ? "quiz passed — finish readings and exercises" : lock ? "locked" : "open"}</span></span></${lock ? "div" : "a"}>`;
+    });
+    const capOpen = p.modules.every(m => passed(m.id));
+    h += `<${capOpen ? "a href=\"#/c/" + p.id + "\"" : "div"} class="mod ${capOpen ? "" : "locked"}"><span class="dot ${capOpen ? "open" : ""}">★</span><span>Capstone: ${esc(p.capstone.title)}<br><span class="mut">${capOpen ? capPct(p) + "% of deliverables" : "unlocks when all quizzes are passed"}</span></span></${capOpen ? "a" : "div"}>`;
+    h += `</div>`;
+  });
+  return h;
+}
+function capPct(p){ const c = S.capstones[p.id] || {}; const n = p.capstone.deliverables.filter((d,i)=>c[i]).length; return Math.round(n/p.capstone.deliverables.length*100); }
+
+let tab = "learn", quiz = null;
+function viewModule(id){
+  const m = findMod(id); if (!m) return `<p>Not found.</p>`;
+  if (!isUnlocked(m)) { const ms_ = allMods(), prev = ms_.slice(0, ms_.findIndex(x => x.id === m.id)).reverse().find(x => !passed(x.id) && !x.pillar.parallel);
+    return `<a class="back" href="#/">← Path</a><div class="card"><div class="mut">Locked</div><h2>${esc(m.title)}</h2><p>Pass the quiz for the module before it (80%) to unlock this one.</p>${prev ? `<a class="btn btn-p" href="#/m/${prev.id}">Go to ${esc(prev.title)}</a>` : ""}</div>`; }
+  const s = ms(m.id);
+  const tabs = [["learn","Lesson"],["read","Read"],["quiz","Quiz"],["build","Build"],["reflect","Reflect"]];
+  let h = `<a class="back" href="#/">← Path</a><div class="mut">${m.pillar.id.toUpperCase()} · ${esc(m.pillar.title)}</div><h2>${esc(m.title)}</h2><div class="mut" style="margin-bottom:12px">~${m.hours} h · best quiz ${Math.round(s.best*100)}% · ${state(m) === "done" ? "complete ✓" : passed(m.id) ? "quiz passed" : "pass mark 80%"}</div>`;
+  h += `<div class="tabs" role="tablist">` + tabs.map(([k,l]) => `<button role="tab" aria-selected="${tab===k}" class="${tab===k?"on":""}" data-tab="${k}">${l}</button>`).join("") + `</div>`;
+  if (tab === "learn") {
+    h += `<div class="card"><h3 style="margin-top:0">You will be able to</h3><ul>${m.objectives.map(o=>`<li>${esc(o)}</li>`).join("")}</ul></div><div class="card lesson">${m.lesson_html}</div><p><button class="btn-p" data-tab="read">Next: readings →</button></p>`;
+  } else if (tab === "read") {
+    h += `<div class="card">` + m.readings.map((r,i) => `<label class="chk"><input type="checkbox" data-read="${i}" ${s.readings[i]?"checked":""}><span><a href="${esc(r.url)}" target="_blank" rel="noopener">${esc(r.title)}</a><span class="tag">${r.required?"required":"optional"}</span><br><span class="mut">${esc(r.author)} · ${esc(r.type)} · ${r.minutes} min</span><br><span class="mut">Focus: ${esc(r.focus)}</span></span></label>`).join("") + `</div><p><button class="btn-p" data-tab="quiz">Next: quiz →</button></p>`;
+  } else if (tab === "quiz") {
+    h += viewQuiz(m);
+  } else if (tab === "build") {
+    h += m.exercises.map((e,i) => `<div class="card"><div class="row sp"><strong>${esc(e.title)}</strong><span class="tag">${e.level}</span></div><p>${esc(e.task)}</p><p class="mut"><strong>Deliverable:</strong> ${esc(e.deliverable)}</p><div class="mut"><strong>Done when:</strong><ul>${e.acceptance.map(a=>`<li>${esc(a)}</li>`).join("")}</ul></div><input type="url" placeholder="Link to your work (repo, doc, post)" data-link="${i}" value="${esc(s.links[i]||"")}"><label class="chk"><input type="checkbox" data-ex="${i}" ${s.ex[i]?"checked":""}><span>I've met every "done when" criterion</span></label></div>`).join("");
+  } else {
+    h += `<div class="card"><h3 style="margin-top:0">Reflection</h3>${(m.reflection||[]).map(r=>`<p>${esc(r)}</p>`).join("")}<textarea data-field="reflection" placeholder="One honest paragraph tied to your real work">${esc(s.reflection)}</textarea><h3>Notes and reading takeaways</h3><textarea data-field="notes" placeholder="Three bullets per reading">${esc(s.notes)}</textarea><p class="mut">Saved automatically.</p></div>`;
+  }
+  return h;
+}
+
+function viewQuiz(m){
+  const s = ms(m.id);
+  if (!quiz || quiz.id !== m.id) return `<div class="card"><h3 style="margin-top:0">${m.quiz.length} questions · pass mark 80%</h3><p class="mut">${s.attempts ? `Attempts: ${s.attempts} · best ${Math.round(s.best*100)}%` : "Already know this? Take it cold to test out."}</p><button class="btn-p" data-act="start-quiz">Start quiz</button></div>`;
+  if (quiz.i >= m.quiz.length) {
+    const sc = quiz.correct / m.quiz.length, ok = sc >= D.pass_mark;
+    return `<div class="card"><h2>${Math.round(sc*100)}%</h2><p>${quiz.correct} of ${m.quiz.length} correct. ${ok ? "<strong>Passed.</strong> " + (nextInPath(m) ? "Next module unlocked." : "") : "Not yet — re-read the lesson sections you missed and try again."}</p><p class="mut">Missed questions were added to your Review deck.</p><div class="row"><button data-act="start-quiz">Retake</button>${ok && nextInPath(m) ? `<a class="btn btn-p" href="#/m/${nextInPath(m).id}">Next module →</a>` : ""}</div></div>`;
+  }
+  const q = m.quiz[quiz.i], a = quiz.answered;
+  let h = `<div class="card"><div class="mut">Question ${quiz.i+1} of ${m.quiz.length}</div><p><strong>${esc(q.q)}</strong></p>`;
+  q.options.forEach((o,j) => { const cls = a == null ? "" : j === q.answer ? "right" : j === a ? "wrong" : "";
+    h += `<button class="opt ${cls}" data-ans="${j}" ${a != null ? "disabled" : ""}>${String.fromCharCode(65+j)}) ${esc(o)}</button>`; });
+  if (a != null) h += `<div class="fb ${a === q.answer ? "ok" : "no"}"><strong>${a === q.answer ? "Correct." : "Not quite."}</strong> ${esc(q.explain)}</div><p><button class="btn-p" data-act="next-q">${quiz.i+1 < m.quiz.length ? "Next question" : "See result"}</button></p>`;
+  return h + `</div>`;
+}
+function nextInPath(m){ const mods = allMods(), i = mods.findIndex(x => x.id === m.id); return mods.slice(i+1).find(x => isUnlocked(x) && !passed(x.id)); }
+
+function viewCap(pid){
+  const p = D.pillars.find(x => x.id === pid), c = S.capstones[pid] || (S.capstones[pid] = {});
+  return `<a class="back" href="#/">← Path</a><div class="mut">${p.id.toUpperCase()} capstone</div><h2>${esc(p.capstone.title)}</h2><div class="card"><p>${esc(p.capstone.brief)}</p><h3>Deliverables</h3>${p.capstone.deliverables.map((d,i)=>`<label class="chk"><input type="checkbox" data-cap="${i}" ${c[i]?"checked":""}><span>${esc(d)}</span></label>`).join("")}<h3>Graded on</h3><ul>${p.capstone.rubric.map(r=>`<li>${esc(r)}</li>`).join("")}</ul><input type="url" placeholder="Link to the write-up" data-caplink value="${esc(c.link||"")}"></div>`;
+}
+
+let rv = null;
+function reviewItems(){ return Object.keys(S.review).map(k => { const [mid, qi] = k.split(":"); const m = findMod(mid); return m && m.quiz[+qi] ? {k, m, q:m.quiz[+qi]} : null; }).filter(Boolean); }
+function viewReview(){
+  const items = reviewItems();
+  if (!items.length) return `<div class="card"><h2>Review</h2><p>Nothing to review. Questions you miss in quizzes land here until you get them right twice.</p></div>`;
+  if (!rv || !S.review[rv.k]) rv = {k: items[0].k, a: null};
+  const it = items.find(x => x.k === rv.k), q = it.q, a = rv.a;
+  let h = `<div class="card"><div class="mut">${items.length} to review · ${esc(it.m.title)}</div><p><strong>${esc(q.q)}</strong></p>`;
+  q.options.forEach((o,j) => { const cls = a == null ? "" : j === q.answer ? "right" : j === a ? "wrong" : "";
+    h += `<button class="opt ${cls}" data-rans="${j}" ${a != null ? "disabled" : ""}>${String.fromCharCode(65+j)}) ${esc(o)}</button>`; });
+  if (a != null) h += `<div class="fb ${a === q.answer ? "ok" : "no"}">${esc(q.explain)}</div><p><button class="btn-p" data-act="next-r">Next</button></p>`;
+  return h + `</div>`;
+}
+
+function viewStats(){
+  const mods = allMods(), passedN = mods.filter(m => passed(m.id)).length, doneN = mods.filter(isDone).length;
+  const hrs = mods.filter(isDone).reduce((a,m) => a + m.hours, 0), tot = mods.reduce((a,m)=>a+m.hours,0);
+  const rd = mods.reduce((a,m) => a + m.readings.filter((r,i) => S.modules[m.id]?.readings[i]).length, 0), rt = mods.reduce((a,m)=>a+m.readings.length,0);
+  const ex = mods.reduce((a,m) => a + m.exercises.filter((e,i) => S.modules[m.id]?.ex[i]).length, 0), et = mods.reduce((a,m)=>a+m.exercises.length,0);
+  let h = `<div class="card"><h2>Progress</h2><div class="stat"><div><b>${passedN}/${mods.length}</b><span class="mut">quizzes passed</span></div><div><b>${doneN}</b><span class="mut">modules complete</span></div><div><b>${hrs}/${tot} h</b><span class="mut">study hours done</span></div><div><b>${streak()}</b><span class="mut">day streak</span></div><div><b>${rd}/${rt}</b><span class="mut">readings</span></div><div><b>${ex}/${et}</b><span class="mut">exercises</span></div></div></div>`;
+  h += `<div class="card"><h3 style="margin-top:0">By pillar</h3>` + D.pillars.map(p => { const d = p.modules.filter(isDone).length, ps = p.modules.filter(m=>passed(m.id)).length; return `<div style="margin:10px 0"><div class="row sp"><span>${p.id.toUpperCase()} · ${esc(p.title)}</span><span class="mut">${ps}/${p.modules.length}</span></div><div class="bar"><i style="width:${Math.round(ps/p.modules.length*100)}%"></i></div></div>`; }).join("") + `</div>`;
+  return h;
+}
+function viewSettings(){
+  return `<div class="card"><h2>Settings</h2><p>Progress is saved in this browser. Export it to back it up or move it to another device.</p><div class="row" style="flex-wrap:wrap"><button data-act="export">Export progress</button><label class="btn" for="imp">Import progress</label><input id="imp" type="file" accept="application/json" class="sr"></div><p class="mut" id="msg"></p><hr style="border:0;border-top:1px solid var(--line)"><button data-act="reset" style="color:var(--bad)">Reset all progress</button></div>`;
+}
+
+function route(){
+  const h = location.hash.replace(/^#\/?/, ""), [r, id] = h.split("/");
+  document.querySelectorAll("nav a").forEach(a => a.classList.toggle("on", a.dataset.r === (r === "m" || r === "c" || !r ? "path" : r)));
+  const app = $("#app");
+  if (r === "m") { if (quiz && quiz.id !== id) { quiz = null; } app.innerHTML = viewModule(id); }
+  else if (r === "c") app.innerHTML = viewCap(id);
+  else if (r === "review") app.innerHTML = viewReview();
+  else if (r === "stats") app.innerHTML = viewStats();
+  else if (r === "settings") app.innerHTML = viewSettings();
+  else app.innerHTML = viewPath();
+  header();
+}
+let lastRoute = "";
+window.addEventListener("hashchange", () => { if (location.hash !== lastRoute) { tab = "learn"; window.scrollTo(0,0); } lastRoute = location.hash; route(); });
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-tab],[data-act],[data-ans],[data-rans]"); if (!t) return;
+  const id = location.hash.split("/")[2], m = id && findMod(id);
+  if (t.dataset.tab) { tab = t.dataset.tab; route(); window.scrollTo(0,0); return; }
+  if (t.dataset.ans != null && m) { quiz.answered = +t.dataset.ans; const q = m.quiz[quiz.i], k = m.id + ":" + quiz.i;
+    if (quiz.answered === q.answer) quiz.correct++; else S.review[k] = {n:0};
+    logDay(); save(); route(); return; }
+  if (t.dataset.rans != null) { rv.a = +t.dataset.rans; const it = reviewItems().find(x => x.k === rv.k);
+    if (rv.a === it.q.answer) { S.review[rv.k].n++; } else S.review[rv.k].n = 0;
+    logDay(); save(); route(); return; }
+  const act = t.dataset.act;
+  if (act === "start-quiz") { quiz = {id:m.id, i:0, correct:0, answered:null}; route(); }
+  else if (act === "next-q") { quiz.i++; quiz.answered = null;
+    if (quiz.i >= m.quiz.length) { const s = ms(m.id), sc = quiz.correct/m.quiz.length; s.attempts++; if (sc > s.best) s.best = sc; if (sc >= D.pass_mark && !s.passedAt) s.passedAt = Date.now(); save(); }
+    route(); window.scrollTo(0,0); }
+  else if (act === "next-r") { const done = S.review[rv.k] && S.review[rv.k].n >= 2; if (done) delete S.review[rv.k];
+    const items = reviewItems(); const i = items.findIndex(x => x.k === rv.k); rv = items.length ? {k: items[(i+1) % items.length].k, a:null} : null; save(); route(); }
+  else if (act === "export") { const b = new Blob([JSON.stringify(S,null,1)], {type:"application/json"}); const a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = "ai-platform-mastery-progress.json"; a.click(); }
+  else if (act === "reset") { if (t.dataset.confirm) { S = blank(); save(); route(); } else { t.dataset.confirm = 1; t.textContent = "Tap again to erase everything"; } }
+});
+document.addEventListener("change", e => {
+  const t = e.target, id = location.hash.split("/")[2];
+  if (t.id === "imp" && t.files[0]) { t.files[0].text().then(x => { try { const v = JSON.parse(x); if (!v.modules) throw 0; S = v; save(); $("#msg").textContent = "Imported."; header(); } catch(err){ $("#msg").textContent = "That file isn't a valid progress export."; } }); return; }
+  if (t.dataset.read != null) { ms(id).readings[t.dataset.read] = t.checked; }
+  else if (t.dataset.ex != null) { ms(id).ex[t.dataset.ex] = t.checked; }
+  else if (t.dataset.cap != null) { (S.capstones[id] = S.capstones[id] || {})[t.dataset.cap] = t.checked; }
+  else return;
+  logDay(); save(); header();
+});
+document.addEventListener("input", e => {
+  const t = e.target, id = location.hash.split("/")[2];
+  if (t.dataset.field) ms(id)[t.dataset.field] = t.value;
+  else if (t.dataset.link != null) ms(id).links[t.dataset.link] = t.value;
+  else if (t.hasAttribute("data-caplink")) (S.capstones[id] = S.capstones[id] || {}).link = t.value;
+  else return;
+  save();
+});
+
+async function init(){
+  const raw = $("#curriculum-data").textContent.trim();
+  try { D = raw.startsWith("{") ? JSON.parse(raw) : await (await fetch("data/curriculum.json")).json(); }
+  catch(e){ $("#app").innerHTML = `<div class="card"><h2>Couldn't load the curriculum</h2><p>Serve this folder over HTTP (e.g. <code>python -m http.server</code>) so data/curriculum.json can load.</p></div>`; return; }
+  S = load(); lastRoute = location.hash; route();
+}
+init();
+})();
+</script>
+</body>
+</html>

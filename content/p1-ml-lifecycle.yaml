@@ -1,0 +1,498 @@
+id: p1
+order: 1
+title: Production ML lifecycle
+status: strong
+goal: >
+  Explain, design and defend an end-to-end production ML system at staff level:
+  where technical debt hides, how data and model contracts stop silent failures,
+  how releases are gated, and how drift is caught before the business notices.
+why_now: >
+  You already do most of this at Pickles. The goal here is to close the gap
+  between "I've done it" and "I can teach it, name the failure modes, and cite
+  the literature". Use the test-out quiz to skip modules you already own.
+capstone:
+  title: Production-readiness review of Beacon or Atlas
+  brief: >
+    Score one of your real pricing models against the ML Test Score rubric and
+    write a 2-page production-readiness review with a prioritised fix list.
+  deliverables:
+    - ML Test Score sheet (all 28 tests, scored 0 / 0.5 / 1) with evidence links
+    - 2-page review - top 5 risks, each with blast radius and fix cost
+    - One fix actually implemented (e.g. a skew check or a release gate)
+  rubric:
+    - Every score backed by evidence (code, dashboard, runbook), not memory
+    - Risks ranked by business impact, not by how interesting they are
+    - The implemented fix has a test proving it catches the failure
+modules:
+  - id: p1m1
+    title: ML systems and hidden technical debt
+    hours: 6
+    objectives:
+      - Name the main forms of ML technical debt and spot them in a real system
+      - Explain why ML code is a small fraction of a production ML system
+      - Apply the most important Rules of ML to a new project
+    lesson: |
+      ## The core idea
+      In 2015 Google's *Hidden Technical Debt in Machine Learning Systems* made one
+      picture famous: a tiny box labelled "ML code" surrounded by much bigger boxes —
+      configuration, data collection, feature extraction, data verification, serving
+      infrastructure, monitoring, process management. The point: **most of the cost
+      and risk of an ML system lives outside the model.**
+
+      ## Debt patterns you must be able to name
+      - **Entanglement (CACE)** — *Changing Anything Changes Everything*. Features
+        interact, so adding, removing or rescaling one input can shift the whole
+        model's behaviour. You cannot make isolated improvements.
+      - **Correction cascades** — model B is trained on model A's output to "fix"
+        a new case. Now improving A can break B.
+      - **Undeclared consumers** — other systems silently read your predictions or
+        log files. You change the model; their behaviour changes; nobody knows why.
+      - **Unstable data dependencies** — an input signal owned by another team
+        changes meaning or distribution without notice.
+      - **Underutilised data dependencies** — features that add almost nothing but
+        still add breakage risk (legacy, bundled, epsilon features).
+      - **Feedback loops** — direct (the model picks the data it learns from, like a
+        recommender) and hidden (two systems influence each other through the world).
+        Pricing models are especially prone: your predicted price shifts seller
+        behaviour, which shifts future prices.
+      - **Glue code and pipeline jungles** — large amounts of code exist only to
+        move data in and out of generic packages; pipelines grow by accretion.
+      - **Dead experimental codepaths** and **configuration debt** — configuration
+        often outgrows code and is rarely tested.
+
+      ## Rules of ML worth memorising
+      From Martin Zinkevich's *Rules of Machine Learning* (Google):
+      - Rule #1: Don't be afraid to launch a product without ML.
+      - Rule #4: Keep the first model simple and get the infrastructure right.
+      - Rule #5: Test the infrastructure independently from the ML.
+      - Rule #29: The best way to make sure you train like you serve is to save the
+        set of features used at serving time and pipe them to a log for training.
+      - Rule #32: Re-use code between your training pipeline and serving pipeline.
+
+      ## How a staff engineer uses this
+      When you review a system, walk the "boxes" around the ML code and ask, for each:
+      *who owns it, how is it tested, what happens when it silently changes?* That
+      question list is your review template for the capstone.
+    readings:
+      - title: Hidden Technical Debt in Machine Learning Systems
+        author: Sculley et al., NeurIPS 2015
+        url: https://papers.nips.cc/paper/2015/hash/86df7dcfd896fcaf2674f757a2463eba-Abstract.html
+        type: paper
+        required: true
+        minutes: 45
+        focus: Sections 2-8. Make a one-line definition for every debt type.
+      - title: Rules of Machine Learning
+        author: Martin Zinkevich, Google
+        url: https://developers.google.com/machine-learning/guides/rules-of-ml
+        type: guide
+        required: true
+        minutes: 60
+        focus: Phases I and II; note which rules Beacon already follows.
+      - title: Designing Machine Learning Systems (Ch. 1-2)
+        author: Chip Huyen, O'Reilly 2022
+        url: https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/
+        type: book
+        required: false
+        minutes: 90
+        focus: How ML systems differ from traditional software.
+      - title: "Operationalizing Machine Learning: An Interview Study"
+        author: Shankar et al., 2022
+        url: https://arxiv.org/abs/2209.09125
+        type: paper
+        required: false
+        minutes: 40
+        focus: The "three Vs" (velocity, validation, versioning) and pain points.
+    quiz:
+      - q: A team adds a new feature to a pricing model and accuracy on one vehicle segment drops while others improve. Which debt pattern best explains this?
+        options: ["Glue code", "CACE / entanglement", "Undeclared consumers", "Dead experimental codepaths"]
+        answer: 1
+        explain: Changing one input shifts learned interactions across the whole model, so improvements are not isolated.
+      - q: Model B is trained on Model A's output to handle a new region. What risk does this create?
+        options: ["Correction cascade — improving A can degrade B", "Training-serving skew", "Config debt", "Label leakage"]
+        answer: 0
+        explain: Stacking a corrective model on another creates a dependency where upstream improvements break downstream behaviour.
+      - q: Your pricing predictions are being read directly from a log table by the finance team's dashboard without your knowledge. This is an example of...
+        options: ["Feedback loop", "Unstable data dependency", "Undeclared consumer", "Pipeline jungle"]
+        answer: 2
+        explain: Anyone consuming your outputs without a contract is an undeclared consumer; your changes silently change their results.
+      - q: According to Rules of ML, what is the best way to ensure you train like you serve?
+        options: ["Retrain daily", "Log the features used at serving time and use them for training", "Use the same model architecture", "Freeze the feature list"]
+        answer: 1
+        explain: Rule #29 — logging serving-time features removes a whole class of skew bugs.
+      - q: Why are pricing models particularly exposed to hidden feedback loops?
+        options: ["They use tabular data", "Predicted prices influence seller and buyer behaviour, which becomes future training data", "They retrain too often", "They use LightGBM"]
+        answer: 1
+        explain: The model's outputs change the world that generates its future labels.
+      - q: Which statement best captures the central message of the Sculley et al. paper?
+        options: ["Deep learning reduces debt", "ML code is a small part of a real system; most risk sits in surrounding infrastructure", "Testing ML is impossible", "Feature stores eliminate debt"]
+        answer: 1
+        explain: The famous diagram shows ML code as a small box among much larger infrastructure components.
+    exercises:
+      - title: Debt audit of Beacon
+        level: core
+        task: Draw Beacon's full system (all boxes around the model). For each box list owner, test coverage and what happens if it silently changes.
+        deliverable: One diagram + a table of at least 8 debt items mapped to Sculley's categories.
+        acceptance:
+          - Every item names a concrete component, not a generic risk
+          - At least one feedback loop identified and explained
+      - title: Rules of ML scorecard
+        level: stretch
+        task: Score your current platform against Rules #1-#20 (follows / partially / no) and pick the 3 with the highest ROI to fix.
+        deliverable: Scorecard table + 3 short proposals.
+        acceptance:
+          - Each proposal states effort in days and the failure it prevents
+    reflection:
+      - Which debt type has actually cost you a production incident? What would have caught it earlier?
+
+  - id: p1m2
+    title: Data contracts, training-serving skew and feature stores
+    hours: 8
+    objectives:
+      - Define training-serving skew and its three root causes
+      - Design a data contract and decide where it is enforced
+      - Explain point-in-time correctness and why feature stores exist
+    lesson: |
+      ## Training-serving skew
+      Skew is any difference between what the model saw in training and what it sees
+      in production. Three root causes:
+      1. **Code skew** — features computed by different code paths (a Spark job for
+         training, a Python function at serving).
+      2. **Data skew** — the serving data distribution differs from training
+         (often a symptom of a pipeline bug, not real-world drift).
+      3. **Time skew / leakage** — training rows used information that would not have
+         been available at prediction time.
+
+      ## Point-in-time correctness
+      When you join features to labels for training, each feature value must be the
+      value **as of the label's timestamp**, never later. Getting this wrong is label
+      leakage: offline metrics look great, production performance collapses. A
+      point-in-time (as-of) join is the fix; feature stores automate it.
+
+      ## Feature stores
+      A feature store gives you: one feature definition used for both training and
+      serving; an **offline store** (history, for training via point-in-time joins);
+      an **online store** (latest values, low latency, for serving); and
+      materialisation jobs that keep them consistent. Uber's Michelangelo popularised
+      this; Feast is the main open-source option. A feature store is worth it when
+      several models share features or need low-latency online lookups — not for a
+      single batch model.
+
+      ## Data contracts
+      A data contract is an explicit, versioned agreement between a data producer and
+      consumers: schema, types, nullability, allowed ranges, semantics, freshness SLA,
+      and an owner. The key design question is **where it is enforced**:
+      - at the producer (best — bad data never lands),
+      - at ingestion into your pipeline (good — fail fast),
+      - at training/serving time (last line of defence).
+      Contracts should fail loudly in CI and in pipelines, and changes should go
+      through versioning (additive changes are safe; renames and type changes are
+      breaking).
+
+      ## Contract propagation
+      Your MLOps-Toolbox idea of propagating contracts from data → features → model →
+      API is exactly the staff-level move: the model signature becomes a contract that
+      serving validates against, so a schema change upstream fails a build, not a
+      customer request.
+    readings:
+      - title: "Meet Michelangelo: Uber's Machine Learning Platform"
+        author: Uber Engineering, 2017
+        url: https://www.uber.com/blog/michelangelo-machine-learning-platform/
+        type: blog
+        required: true
+        minutes: 25
+        focus: The feature store section and why shared features matter.
+      - title: Feast documentation — Concepts
+        author: Feast
+        url: https://docs.feast.dev/
+        type: docs
+        required: true
+        minutes: 45
+        focus: Offline vs online store, materialisation, point-in-time joins.
+      - title: Designing Machine Learning Systems (Ch. 4-5, 7)
+        author: Chip Huyen, O'Reilly 2022
+        url: https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/
+        type: book
+        required: false
+        minutes: 120
+        focus: Data leakage section in Ch. 5 is essential.
+      - title: Rules of Machine Learning (Rules #29-#37)
+        author: Martin Zinkevich, Google
+        url: https://developers.google.com/machine-learning/guides/rules-of-ml
+        type: guide
+        required: true
+        minutes: 20
+        focus: Training-serving skew rules.
+    quiz:
+      - q: Offline AUC is 0.95 but production performance is much worse. Training data was built by joining each auction to the latest available vehicle condition score. What is the most likely cause?
+        options: ["Concept drift", "Point-in-time leakage — features came from after the label timestamp", "Underfitting", "Class imbalance"]
+        answer: 1
+        explain: Joining to the latest value leaks future information; an as-of join on the label timestamp is required.
+      - q: Which is NOT one of the three main root causes of training-serving skew?
+        options: ["Different code paths for feature computation", "Different data distributions caused by pipeline bugs", "Using future information in training", "Using too many trees"]
+        answer: 3
+        explain: Model complexity is unrelated to skew; skew is about mismatch between training and serving inputs.
+      - q: When is a feature store most clearly justified?
+        options: ["A single nightly batch model", "Several models share features and some need low-latency online lookups", "Any model using SQL", "When using deep learning"]
+        answer: 1
+        explain: Feature stores pay off through reuse and consistent online/offline serving.
+      - q: What is the main purpose of the online store?
+        options: ["Store full feature history for training", "Serve latest feature values with low latency at inference time", "Run point-in-time joins", "Version models"]
+        answer: 1
+        explain: The offline store holds history; the online store holds fresh values for serving.
+      - q: Which data contract change is generally safe (non-breaking)?
+        options: ["Renaming a column", "Changing a column from int to string", "Adding a new nullable column", "Removing a column"]
+        answer: 2
+        explain: Additive, optional changes don't break existing consumers.
+      - q: Where is the best place to enforce a data contract?
+        options: ["At the producer, before data lands", "Only in the model", "In the dashboard", "Nowhere — monitor instead"]
+        answer: 0
+        explain: Producer-side enforcement stops bad data entering the system; downstream checks are fallbacks.
+    exercises:
+      - title: Point-in-time join from scratch
+        level: core
+        task: Using pandas merge_asof, build a training set where each label row gets feature values as of its timestamp. Then deliberately build the leaky version and compare offline metrics.
+        deliverable: Notebook showing both joins and the metric gap.
+        acceptance:
+          - Leaky version shows inflated offline metrics
+          - Correct version uses only past feature values (assert it)
+      - title: Write a data contract
+        level: core
+        task: Write a versioned contract (YAML or Pydantic/pandera) for Beacon's input table and enforce it in a pipeline step and in CI.
+        deliverable: Contract file + failing test showing a breaking change is caught.
+        acceptance:
+          - Includes owner, freshness SLA, ranges and nullability
+          - CI fails on a type change
+      - title: Feast quickstart with your data
+        level: stretch
+        task: Run Feast locally with one Beacon feature view; retrieve historical features and materialise to the online store.
+        deliverable: Repo folder with feature definitions and a short README.
+        acceptance:
+          - Same feature definition serves both training and online retrieval
+    reflection:
+      - Where in your pipelines would a silent upstream schema change hurt most today?
+
+  - id: p1m3
+    title: Testing, CI/CD and release strategies for ML
+    hours: 8
+    objectives:
+      - Use the ML Test Score rubric to assess production readiness
+      - Explain MLOps maturity levels and continuous training
+      - Choose between shadow, canary, A/B and blue-green releases for a model
+    lesson: |
+      ## The ML Test Score
+      Breck et al. (Google) proposed 28 tests in four groups — **data**, **model
+      development**, **infrastructure**, and **monitoring** — with a final score taken
+      as the *minimum* of the four group scores. Using the minimum is deliberate: a
+      system is only as ready as its weakest area. Examples: feature expectations are
+      captured in a schema; model staleness impact is known; the full pipeline is
+      integration-tested; models can be rolled back; training and serving features are
+      checked for skew.
+
+      ## MLOps maturity (Google's levels)
+      - **Level 0** — manual, notebook-driven, rare releases, no monitoring.
+      - **Level 1** — automated *training pipeline* with continuous training (CT),
+        data and model validation inside the pipeline, a model registry.
+      - **Level 2** — CI/CD *of the pipeline itself*: pipeline code is tested, built
+        and deployed automatically.
+      Key distinction: in ML you deploy a **pipeline that produces models**, not just a
+      model.
+
+      ## Release strategies
+      - **Shadow** — new model receives a copy of live traffic; predictions are logged
+        but not used. Zero user risk; validates latency, errors and prediction
+        distribution. Cannot measure business impact.
+      - **Canary** — a small percentage of real traffic uses the new model; expand if
+        healthy. Real impact on a few users; fast rollback.
+      - **A/B test** — randomised split to measure causal business impact with
+        statistical power. Slow; needs enough traffic.
+      - **Blue-green** — two full environments; switch all traffic at once; instant
+        rollback but no gradual exposure.
+      - **Interleaving / bandits** — common for ranking; out of scope here.
+
+      ## Release gates
+      A gate is an automated check that blocks promotion: schema checks, offline
+      metric thresholds vs the champion, slice-level checks (no segment regresses by
+      more than X), latency and size budgets, and — for LLM systems — eval scores
+      (Pillar 4). Gates must compare against the **current champion**, not a fixed
+      number, or the bar slowly drifts down.
+    readings:
+      - title: "The ML Test Score: A Rubric for ML Production Readiness and Technical Debt Reduction"
+        author: Breck et al., Google 2017
+        url: https://research.google/pubs/the-ml-test-score-a-rubric-for-ml-production-readiness-and-technical-debt-reduction/
+        type: paper
+        required: true
+        minutes: 45
+        focus: Memorise the four groups and how the final score is computed.
+      - title: "MLOps: Continuous delivery and automation pipelines in machine learning"
+        author: Google Cloud Architecture Center
+        url: https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning
+        type: guide
+        required: true
+        minutes: 40
+        focus: The differences between levels 0, 1 and 2.
+      - title: MLOps maturity model
+        author: Microsoft Azure Architecture Center
+        url: https://learn.microsoft.com/en-us/azure/architecture/ai-ml/guide/mlops-maturity-model
+        type: guide
+        required: false
+        minutes: 20
+        focus: Compare with Google's levels; place Pickles on both.
+    quiz:
+      - q: How is the final ML Test Score computed?
+        options: ["Sum of all 28 tests", "Average of the four group scores", "Minimum of the four group scores", "Maximum of the four group scores"]
+        answer: 2
+        explain: Taking the minimum means your weakest area defines readiness.
+      - q: What distinguishes Google MLOps Level 1 from Level 0?
+        options: ["Using GPUs", "An automated training pipeline with continuous training and validation", "Using Kubernetes", "A/B testing"]
+        answer: 1
+        explain: Level 1 automates the training pipeline so models are retrained and validated automatically.
+      - q: You want to verify a new model's latency and prediction distribution on live traffic with zero user impact. Which strategy?
+        options: ["Canary", "A/B test", "Shadow deployment", "Blue-green"]
+        answer: 2
+        explain: Shadow mode mirrors traffic and logs predictions without serving them.
+      - q: You need causal evidence that a new pricing model increases sell-through rate. Which strategy?
+        options: ["Shadow", "A/B test with enough traffic for statistical power", "Blue-green", "Offline backtest only"]
+        answer: 1
+        explain: Only a randomised experiment gives causal business impact.
+      - q: Why should release gates compare against the current champion rather than a fixed threshold?
+        options: ["It's faster", "Fixed thresholds let quality drift down over successive releases", "Champions never change", "Regulators require it"]
+        answer: 1
+        explain: Relative gates prevent regressions; absolute gates only prevent disasters.
+      - q: In mature MLOps, what is actually deployed to production?
+        options: ["Only the model file", "The training pipeline that produces models, plus the serving model", "Only notebooks", "Only the feature store"]
+        answer: 1
+        explain: Level 2 treats the pipeline itself as software that is built, tested and deployed.
+    exercises:
+      - title: Champion-challenger gate
+        level: core
+        task: Implement a CI step that loads the registered champion and a candidate, evaluates both on the same holdout, and fails if the candidate regresses overall or on any key slice by more than a set margin.
+        deliverable: Script + CI config + a failing run screenshot.
+        acceptance:
+          - Slice-level checks, not just global metric
+          - Gate reads thresholds from config, not code
+      - title: Release strategy decision record
+        level: core
+        task: Write an ADR choosing a release strategy for the next Beacon model, covering risk, traffic, rollback and measurement.
+        deliverable: ADR (max 1 page).
+        acceptance:
+          - Considers at least 3 strategies with explicit trade-offs
+    reflection:
+      - What is your current ML Test Score minimum group, honestly?
+
+  - id: p1m4
+    title: Monitoring, drift and incident response for ML
+    hours: 6
+    objectives:
+      - Distinguish data drift, prediction drift and concept drift
+      - Choose drift metrics and alert thresholds that avoid alert fatigue
+      - Write SLOs and a runbook for an ML service
+    lesson: |
+      ## Kinds of change
+      - **Data (covariate) drift** — P(X) changes: input distribution shifts (more
+        flood-damaged cars after a storm).
+      - **Prediction drift** — the distribution of model outputs shifts. Often the
+        earliest signal you can see.
+      - **Concept drift** — P(Y|X) changes: the relationship itself changes (same car,
+        different price because the market moved). Only detectable with labels or
+        proxies.
+      - **Label shift** — P(Y) changes.
+
+      ## Metrics
+      - **PSI** (Population Stability Index) — common in finance; rough guide: <0.1 no
+        significant change, 0.1–0.25 moderate, >0.25 significant.
+      - **KS test**, **Wasserstein distance**, **Jensen-Shannon divergence** for
+        numeric features; **chi-squared** for categoricals.
+      - Caution: with large samples, statistical tests flag tiny, irrelevant shifts as
+        "significant". Prefer effect-size metrics with thresholds tuned on history.
+
+      ## What to monitor (in priority order)
+      1. **Service health** — latency, errors, throughput (standard SRE).
+      2. **Data quality** — nulls, schema, ranges, freshness (cheapest, catches most
+         incidents).
+      3. **Prediction distribution** — drift in outputs.
+      4. **Model quality** — once labels arrive (for auctions: when the hammer price
+         is known), compute real error by segment.
+      5. **Business KPIs** — sell-through, margin.
+
+      ## SLOs and incidents
+      An SLO is a target on a user-visible indicator (e.g. 99.5% of pricing requests
+      return in <300 ms; weekly MAPE on settled auctions < X%). The **error budget**
+      is the allowed failure; spending it fast triggers action. Your public-holiday
+      pricing incident is a classic: a calendar effect the model had not seen → good
+      postmortem material. Postmortems are **blameless** and end with owned, dated
+      actions.
+    readings:
+      - title: Data drift — ML in production guide
+        author: Evidently AI
+        url: https://www.evidentlyai.com/ml-in-production/data-drift
+        type: guide
+        required: true
+        minutes: 30
+        focus: Drift types and why statistical tests over-alert at scale.
+      - title: "Site Reliability Engineering — Ch. 4: Service Level Objectives"
+        author: Google SRE book
+        url: https://sre.google/sre-book/service-level-objectives/
+        type: book
+        required: true
+        minutes: 40
+        focus: SLIs, SLOs, error budgets.
+      - title: "SRE book — Ch. 15: Postmortem Culture"
+        author: Google SRE book
+        url: https://sre.google/sre-book/postmortem-culture/
+        type: book
+        required: false
+        minutes: 25
+        focus: Blameless postmortems.
+      - title: Designing Machine Learning Systems (Ch. 8)
+        author: Chip Huyen, O'Reilly 2022
+        url: https://www.oreilly.com/library/view/designing-machine-learning/9781098107956/
+        type: book
+        required: false
+        minutes: 60
+        focus: Distribution shifts and monitoring.
+    quiz:
+      - q: After a flood, many more water-damaged cars enter auction, but the price for a given car condition is unchanged. This is...
+        options: ["Concept drift", "Data (covariate) drift", "Label leakage", "Training-serving skew"]
+        answer: 1
+        explain: Input distribution P(X) changed; the relationship P(Y|X) did not.
+      - q: Market prices for EVs fall sharply while EV listings look the same as before. This is...
+        options: ["Covariate drift", "Concept drift", "Prediction drift only", "Data quality issue"]
+        answer: 1
+        explain: The relationship between features and target changed.
+      - q: Why do KS tests often over-alert on large production datasets?
+        options: ["They are biased", "With large samples, tiny irrelevant differences become statistically significant", "They only work for categories", "They need labels"]
+        answer: 1
+        explain: Significance grows with sample size; use effect-size metrics and tuned thresholds.
+      - q: A PSI of 0.3 on a key feature usually indicates...
+        options: ["No change", "Moderate change", "Significant shift worth investigating", "A bug in PSI"]
+        answer: 2
+        explain: Common rule of thumb — above 0.25 is a significant shift.
+      - q: Which monitoring layer typically catches the most ML incidents most cheaply?
+        options: ["Business KPIs", "Data quality checks (nulls, schema, freshness)", "Concept drift detection", "Quarterly model reviews"]
+        answer: 1
+        explain: Most incidents are broken pipelines, not subtle drift.
+      - q: What is an error budget?
+        options: ["Money for incidents", "The allowed amount of unreliability implied by an SLO", "Number of bugs allowed", "Monthly cloud budget"]
+        answer: 1
+        explain: 1 minus the SLO target; spending it fast triggers reliability work.
+    exercises:
+      - title: Drift dashboard on PriceCatcher
+        level: core
+        task: Use Evidently (or your own code) on two time windows of PriceCatcher data; compute PSI and Wasserstein for key columns and tune thresholds on historical windows to cut false alarms.
+        deliverable: Notebook + chosen thresholds with justification.
+        acceptance:
+          - Thresholds justified by historical false-alarm rate
+      - title: SLOs and runbook for Beacon
+        level: core
+        task: Define 3 SLOs (latency, availability, quality) and write a runbook for "prediction distribution shifted".
+        deliverable: SLO doc + runbook with first 15 minutes of actions.
+        acceptance:
+          - Each SLO has an SLI, target, window and owner
+      - title: Rewrite the public-holiday postmortem
+        level: stretch
+        task: Rewrite your holiday pricing incident as a blameless postmortem using the SRE format.
+        deliverable: Postmortem doc (reusable as an interview story).
+        acceptance:
+          - Timeline, root cause, contributing factors, owned actions with dates
+    reflection:
+      - Which of your monitors has ever woken someone up for nothing? Why?

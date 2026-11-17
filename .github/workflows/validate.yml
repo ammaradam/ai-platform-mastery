@@ -1,0 +1,22 @@
+name: validate-curriculum
+
+on:
+  push:
+    paths: ["content/**", "scripts/**", "curriculum/**", "app/data/**", "CURRICULUM.md", "docs/reading-list.md"]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pyyaml markdown
+      - name: Validate content schema and quiz answers
+        run: python scripts/build.py --check
+      - name: Check generated files are up to date
+        run: |
+          python scripts/build.py
+          git diff --exit-code || (echo "Generated files are stale. Run: python scripts/build.py" && exit 1)

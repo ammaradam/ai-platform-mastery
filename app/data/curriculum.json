@@ -36,6 +36,9 @@
      "id": "p1m1",
      "title": "ML systems and hidden technical debt",
      "hours": 6,
+     "figures": [
+      "ml-code-small"
+     ],
      "objectives": [
       "Name the main forms of ML technical debt and spot them in a real system",
       "Explain why ML code is a small fraction of a production ML system",
@@ -460,6 +463,9 @@
      "id": "p1m4",
      "title": "Monitoring, drift and incident response for ML",
      "hours": 6,
+     "figures": [
+      "drift-types"
+     ],
      "objectives": [
       "Distinguish data drift, prediction drift and concept drift",
       "Choose drift metrics and alert thresholds that avoid alert fatigue",
@@ -637,6 +643,9 @@
      "id": "p4m1",
      "title": "Eval fundamentals and error analysis",
      "hours": 8,
+     "figures": [
+      "eval-flywheel"
+     ],
      "objectives": [
       "Define evals, graders and the three eval levels",
       "Run error analysis (open coding → axial coding → failure taxonomy)",
@@ -798,6 +807,9 @@
      "id": "p4m2",
      "title": "LLM-as-judge — building judges you can trust",
      "hours": 8,
+     "figures": [
+      "judge-matrix"
+     ],
      "objectives": [
       "Know the documented biases of LLM judges",
       "Build a judge with critique shadowing and measure agreement",
@@ -1415,6 +1427,10 @@
      "id": "p3m1",
      "title": "Transformer inference arithmetic",
      "hours": 8,
+     "figures": [
+      "prefill-decode",
+      "kv-cache"
+     ],
      "objectives": [
       "Explain prefill vs decode and why decode is memory-bandwidth bound",
       "Estimate KV cache size for a model and context length",
@@ -1566,6 +1582,9 @@
      "id": "p3m2",
      "title": "Serving engines — PagedAttention, continuous batching, prefix caching",
      "hours": 8,
+     "figures": [
+      "batching"
+     ],
      "objectives": [
       "Explain continuous (iteration-level) batching vs static batching",
       "Explain how PagedAttention reduces KV cache waste",
@@ -2031,6 +2050,9 @@
      "id": "p2m1",
      "title": "Platform as a product, golden paths and team topologies",
      "hours": 6,
+     "figures": [
+      "team-topologies"
+     ],
      "objectives": [
       "Define an internal developer platform and its value",
       "Apply Team Topologies to an AI/ML organisation",
@@ -2171,6 +2193,9 @@
      "id": "p2m2",
      "title": "Kubernetes internals for platform engineers",
      "hours": 12,
+     "figures": [
+      "control-loop"
+     ],
      "objectives": [
       "Explain the control loop, controllers and the operator pattern",
       "Trace what happens from kubectl apply to a running pod",
@@ -2654,6 +2679,9 @@
      "id": "p5m1",
      "title": "Risk frameworks — NIST AI RMF and ISO/IEC 42001",
      "hours": 6,
+     "figures": [
+      "nist-rmf"
+     ],
      "objectives": [
       "Explain the four NIST AI RMF functions and the GenAI Profile",
       "Explain what an AI management system (ISO/IEC 42001) is",
@@ -2934,6 +2962,9 @@
      "id": "p5m3",
      "title": "LLM and agent security",
      "hours": 8,
+     "figures": [
+      "trifecta"
+     ],
      "objectives": [
       "Explain the OWASP Top 10 for LLM Applications",
       "Explain direct and indirect prompt injection and realistic defences",

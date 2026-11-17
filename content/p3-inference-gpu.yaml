@@ -27,6 +27,7 @@ modules:
   - id: p3m1
     title: Transformer inference arithmetic
     hours: 8
+    figures: [prefill-decode, kv-cache]
     objectives:
       - Explain prefill vs decode and why decode is memory-bandwidth bound
       - Estimate KV cache size for a model and context length
@@ -150,6 +151,7 @@ modules:
   - id: p3m2
     title: Serving engines — PagedAttention, continuous batching, prefix caching
     hours: 8
+    figures: [batching]
     objectives:
       - Explain continuous (iteration-level) batching vs static batching
       - Explain how PagedAttention reduces KV cache waste

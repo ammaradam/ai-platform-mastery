@@ -230,11 +230,21 @@ def main() -> int:
     APP_DATA.parent.mkdir(parents=True, exist_ok=True)
     data = app_json(pillars)
     APP_DATA.write_text(json.dumps(data, ensure_ascii=False, indent=1))
-    # Self-contained single file (data inlined) for phones / artifact hosting.
-    html = (ROOT / "app" / "index.html").read_text()
+    # Service worker: version = hash of the shell, so updates roll out automatically.
+    app = ROOT / "app"
+    shell = ["index.html", "styles.css", "art.js", "app.js", "manifest.webmanifest"]
+    h = hashlib.sha256(APP_DATA.read_bytes() + b"".join((app / f).read_bytes() for f in shell)).hexdigest()[:10]
+    (app / "sw.js").write_text((ROOT / "scripts" / "sw.template.js").read_text().replace("__BUILD__", h))
+    # Self-contained single file (CSS, JS and data inlined) for sandboxed hosting.
+    html = (app / "index.html").read_text()
+    html = re.sub(r'<link rel="(manifest|apple-touch-icon|icon)"[^>]*>\n?', "", html)
+    html = html.replace('<link rel="stylesheet" href="styles.css">', "<style>" + (app / "styles.css").read_text() + "</style>")
     inline = json.dumps(data, ensure_ascii=False).replace("</", "<\\/")
-    (ROOT / "app" / "standalone.html").write_text(html.replace("__CURRICULUM_JSON__", inline))
-    print("Built curriculum/, CURRICULUM.md, docs/reading-list.md, app/data/curriculum.json, app/standalone.html")
+    html = html.replace("__CURRICULUM_JSON__", inline)
+    for js in ("art.js", "app.js"):
+        html = html.replace(f'<script src="{js}"></script>', "<script>" + (app / js).read_text().replace("</script", "<\\/script") + "</script>")
+    (app / "standalone.html").write_text(html)
+    print("Built curriculum/, CURRICULUM.md, docs/reading-list.md, app/data/curriculum.json, app/sw.js, app/standalone.html")
     return 0
 
 

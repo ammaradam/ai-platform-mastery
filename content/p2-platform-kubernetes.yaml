@@ -30,6 +30,7 @@ modules:
   - id: p2m1
     title: Platform as a product, golden paths and team topologies
     hours: 6
+    figures: [team-topologies]
     objectives:
       - Define an internal developer platform and its value
       - Apply Team Topologies to an AI/ML organisation
@@ -144,6 +145,7 @@ modules:
   - id: p2m2
     title: Kubernetes internals for platform engineers
     hours: 12
+    figures: [control-loop]
     objectives:
       - Explain the control loop, controllers and the operator pattern
       - Trace what happens from kubectl apply to a running pod

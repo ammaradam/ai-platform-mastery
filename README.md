@@ -53,10 +53,13 @@ Quiz options are shuffled at build time, so write the correct answer wherever yo
 
 ## Using the app
 
+A Coursera-style PWA: 6 illustrated courses, a 5-step lesson player (lesson → readings → quiz → exercises → reflect), graded quizzes that unlock the next module, capstones, certificates, badges, a review deck, an activity heatmap and active-time tracking.
+
+- **Install it:** open the deployed URL on your phone. Android/Chrome shows an Install button; on iPhone tap Share → Add to Home Screen. It works offline once loaded.
+- **Progress** is saved on the device in persistent storage. Use **Settings → Copy/Download backup** regularly, and restore on another device.
 - **Locally:** `cd app && python -m http.server 8000`, then open http://localhost:8000
-- **On your phone:** use the published artifact link, or GitHub Pages (Pages on a private repo needs a paid GitHub plan).
-- Progress is saved in your browser. Use **Copy progress** and **Import** in Settings to move it between devices.
-- `app/standalone.html` is the same app with the data built in, so it opens from a single file (no server needed).
+- `app/standalone.html` is a single-file build (no service worker) for sandboxed hosting.
+- Deploys: the `app/` folder is a static site, with no build step. Run `python scripts/build.py` before committing so `data/curriculum.json` and `sw.js` are current.
 
 ## Start here
 

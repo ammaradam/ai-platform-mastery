@@ -29,6 +29,7 @@ modules:
   - id: p5m1
     title: Risk frameworks — NIST AI RMF and ISO/IEC 42001
     hours: 6
+    figures: [nist-rmf]
     objectives:
       - Explain the four NIST AI RMF functions and the GenAI Profile
       - Explain what an AI management system (ISO/IEC 42001) is
@@ -261,6 +262,7 @@ modules:
   - id: p5m3
     title: LLM and agent security
     hours: 8
+    figures: [trifecta]
     objectives:
       - Explain the OWASP Top 10 for LLM Applications
       - Explain direct and indirect prompt injection and realistic defences

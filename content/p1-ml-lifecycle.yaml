@@ -27,6 +27,7 @@ modules:
   - id: p1m1
     title: ML systems and hidden technical debt
     hours: 6
+    figures: [ml-code-small]
     objectives:
       - Name the main forms of ML technical debt and spot them in a real system
       - Explain why ML code is a small fraction of a production ML system
@@ -382,6 +383,7 @@ modules:
   - id: p1m4
     title: Monitoring, drift and incident response for ML
     hours: 6
+    figures: [drift-types]
     objectives:
       - Distinguish data drift, prediction drift and concept drift
       - Choose drift metrics and alert thresholds that avoid alert fatigue

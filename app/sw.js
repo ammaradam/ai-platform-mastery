@@ -1,7 +1,8 @@
 /* Offline-first service worker. Bump VERSION when shell files change. */
-const VERSION = "apm-v2-df55c03203";
+const VERSION = "apm-v2-0cee761f5b";
 const SHELL = ["./", "index.html", "styles.css", "art.js", "app.js", "data/curriculum.json", "manifest.webmanifest",
-  "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png"];
+  "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/maskable-512.png", "icons/apple-touch-icon.png",
+  "img/hero.jpg", ...["p1", "p2", "p3", "p4", "p5", "p6"].flatMap(p => [`img/${p}.jpg`, `img/${p}-sm.jpg`])];
 self.addEventListener("install", e => { e.waitUntil(caches.open(VERSION).then(c => c.addAll(SHELL)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => { e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== VERSION).map(k => caches.delete(k)))).then(() => self.clients.claim())); });
 self.addEventListener("fetch", e => {

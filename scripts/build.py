@@ -233,7 +233,7 @@ def main() -> int:
     # Service worker: version = hash of the shell, so updates roll out automatically.
     app = ROOT / "app"
     shell = ["index.html", "styles.css", "art.js", "app.js", "manifest.webmanifest"]
-    h = hashlib.sha256(APP_DATA.read_bytes() + b"".join((app / f).read_bytes() for f in shell)).hexdigest()[:10]
+    h = hashlib.sha256(APP_DATA.read_bytes() + b"".join((app / f).read_bytes() for f in shell) + b"".join(f.read_bytes() for f in sorted((app / "img").glob("*.jpg")))).hexdigest()[:10]
     (app / "sw.js").write_text((ROOT / "scripts" / "sw.template.js").read_text().replace("__BUILD__", h))
     # Self-contained single file (CSS, JS and data inlined) for sandboxed hosting.
     html = (app / "index.html").read_text()
